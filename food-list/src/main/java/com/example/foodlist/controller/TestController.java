@@ -12,4 +12,10 @@ public class TestController {
         model.addAttribute("model","JSP");
         return "main";
     }
+
+    @RequestMapping("/eat")
+    public String eat(Model model) {
+        model.addAttribute("model","JSP");
+        return "eat";
+    }
 }

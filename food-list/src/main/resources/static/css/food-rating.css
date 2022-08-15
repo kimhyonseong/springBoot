@@ -1,0 +1,145 @@
+.food-info {
+    width: 600px;
+    max-height: 200vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 100px;
+    /*transition: padding 0.5s, height 0.5s, margin 0.5s,*/
+    /*visibility 0s, opacity 0.2s;*/
+    transition : all 0.3s, padding 0.5s, max-height 0.5s, margin 0.5s;
+}
+
+.food-info .food-img {
+    width: 350px;
+    height: 350px;
+    overflow: hidden;
+    border-radius: 100%;
+}
+
+.food-info .food-avr {
+    margin-top: 15px;
+    font-size: 20px;
+}
+
+.food-info .food-avr .avr {
+    font-size: 25px;
+    color: #ffc600;
+}
+
+.food-info .rating-star input[type=radio]{
+    display: none;
+}
+
+.food-info .rating-star {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 40px;
+    color: #8080805c;
+}
+
+.food-info .rating-star .star{
+    cursor: pointer;
+}
+
+.food-info .rating-star .text{
+    color: black;
+    font-size: 15px;
+}
+
+.food-info .rating-star .star.yellow {
+    color: #ffc600;
+    cursor: pointer;
+}
+.food-info .food-name {
+    margin: 10px;
+    font-size: 40px;
+    text-transform: capitalize;
+}
+
+.food-info .food-cate {
+    margin-bottom: 30px;
+}
+
+.food-info .food-comment {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.food-info .food-comment>textarea {
+    width: 80%;
+    resize: none;
+    padding: 15px;
+    font-size: 20px;
+    border-radius: 10px 0 0 10px;
+    border: 1px solid black;
+    border-right: 0;
+}
+
+.food-info .food-comment>textarea:focus {
+    border: 1px solid #0a6eeb;
+    border-right: 0;
+}
+
+.food-info .food-comment>button {
+    border-radius: 0 10px 10px 0;
+    border: 1px solid;
+    width: 10%;
+}
+
+.food-info .food-reply {
+    max-width: 100%;
+    text-align: center;
+}
+
+.food-info .food-reply .reply{
+    width: content-box;
+    margin-bottom: 15px;
+}
+
+.food-info .food-reply .reply .text{
+    border-bottom: 1px black solid;
+    line-height: 1.5rem;
+}
+
+.food-info .food-reply .reply .user_id {
+    margin-top: 10px;
+}
+
+.food-info.none {
+    visibility: hidden;
+    max-height: 0;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    transition: padding 0.5s, max-height 0.5s, margin 0.5s,
+    visibility 0s, opacity 0.2s;
+    transition-delay: 0.5s;
+}
+
+.food-info>*{
+    transition: padding 0.5s, height 0.5s, margin 0.5s,
+    visibility 0s, opacity 0.2s;
+}
+/*.food-info.none>* {*/
+/*    visibility: hidden;*/
+/*    height: 0;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    opacity: 0;*/
+/*    transition: padding 0.5s, height 0.5s, margin 0.5s,*/
+/*    visibility 0s, opacity 0.2s;*/
+/*}*/
+
+.food-info>.none {
+    visibility: hidden;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    transition: padding 0.5s, height 0.5s, margin 0.5s,
+    visibility 0s, opacity 0.2s;
+}
+

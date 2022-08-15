@@ -1,0 +1,71 @@
+.login {
+    margin: 130px 0;
+    transition : all 0.3s, height 0.5s, margin 0.5s;
+}
+.login form {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.login input[type=text],input[type=password]{
+    border: none;
+    border-bottom: #4C4C4C 1px solid;
+    margin-bottom: 45px;
+    transition: all 0.2s;
+    height: 40px;
+    padding: 0 2px;
+    font-size: 20px;
+}
+.login input[type=text]:focus, input[type=password]:focus{
+    border-bottom: #0a6eeb 1px solid;
+}
+
+.login label{
+    transition: all 0.2s;
+}
+
+.login label.focus {
+    color: #0a6eeb;
+    transform: translateY(-20px) translateX(-5px) scale(0.8);
+}
+
+.login label.font-black {
+    color: black;
+    /*transform: translateY(-20px) translateX(-5px) scale(0.8);*/
+}
+
+.login .id_placeholder {
+    position: absolute;
+    top: 9px;
+}
+
+.login .pw_placeholder {
+    position: absolute;
+    top: 97px;
+}
+
+.login .name_placeholder {
+    position: absolute;
+    top: 180px;
+}
+
+.login .buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 25px;
+}
+
+.login .buttons input{
+    width: 85px;
+}
+
+.login.none {
+    visibility: hidden;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    transition: padding 0.5s, height 0.5s, margin 0.5s,
+    visibility 0s, opacity 0.2s;
+}

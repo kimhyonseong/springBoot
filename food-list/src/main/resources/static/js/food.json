@@ -1,0 +1,182 @@
+[
+  {
+    "num": 0,
+    "name": "pizza",
+    "img": "/image/food/pizza.jpg",
+    "code": 2,
+    "comment": [
+      {
+        "no": 1,
+        "id": "khs",
+        "comment": "토마토는 신의 한수",
+        "star": 5
+      },
+      {
+        "no": 2,
+        "id": "khs1",
+        "comment": "기본에 충실한 피자 하지만 기대 이상",
+        "star": 4
+      }
+    ]
+  },
+  {
+    "num": 1,
+    "name": "pizza1",
+    "img": "/image/food/pizza1.jpg",
+    "code": 2,
+    "comment": [
+      {
+        "no": 1,
+        "id": "khs",
+        "comment": "올리브 좋아",
+        "star": 5
+      },
+      {
+        "no": 2,
+        "id": "khs1",
+        "comment": "바삭한 피자",
+        "star": 3
+      }
+    ]
+  },
+  {
+    "num": 2,
+    "name": "bread",
+    "img": "/image/food/bread.jpg",
+    "code": 2,
+    "comment": [
+      {
+        "no": 1,
+        "id": "khs",
+        "comment": "빵.",
+        "star": 3
+      },
+      {
+        "no": 2,
+        "id": "khs1",
+        "comment": "빵",
+        "star": 3
+      }
+    ]
+  },
+  {
+    "num": 3,
+    "name": "samgyub",
+    "img": "/image/food/samgyub.jpg",
+    "code": 1,
+    "comment": [
+      {
+        "no": 1,
+        "id": "khs",
+        "comment": "국룰",
+        "star": 5
+      },
+      {
+        "no": 2,
+        "id": "khs1",
+        "comment": "위대한 맛",
+        "star": 5
+      }
+    ]
+  },
+  {
+    "num": 4,
+    "name": "bibimbab",
+    "img": "/image/food/bibimbab.jpg",
+    "code": 1,
+    "comment": [
+      {
+        "no": 1,
+        "id": "khs",
+        "comment": "환상의 조합",
+        "star": 5
+      },
+      {
+        "no": 2,
+        "id": "khs1",
+        "comment": "조합을 더 할 수 있음. 칼로리는 스불재...",
+        "star": 5
+      }
+    ]
+  },
+  {
+    "num": 5,
+    "name": "burger",
+    "img": "/image/food/burger.jpg",
+    "code": 2,
+    "comment": [
+      {
+        "no": 1,
+        "id": "khs",
+        "comment": "참깨빵 위에 순쇠고기 패티 두 장 특별한 소스 양상추 치즈 피클 양파까지 빠라빠빠빠",
+        "star": 5
+      },
+      {
+        "no": 2,
+        "id": "khs1",
+        "comment": "나 죽어...",
+        "star": 5
+      }
+    ]
+  },
+  {
+    "num": 6,
+    "name": "sushi",
+    "img": "/image/food/sushi.jpg",
+    "code": 4,
+    "comment": [
+      {
+        "no": 1,
+        "id": "khs",
+        "comment": "일본풍",
+        "star": 5
+      },
+      {
+        "no": 2,
+        "id": "khs1",
+        "comment": "배탈남",
+        "star": 1
+      }
+    ]
+  },
+  {
+    "num": 7,
+    "name": "udong",
+    "img": "/image/food/udong.jpg",
+    "code": 4,
+    "comment": [
+      {
+        "no": 1,
+        "id": "khs",
+        "comment": "일본풍",
+        "star": 5
+      },
+      {
+        "no": 2,
+        "id": "khs1",
+        "comment": "맛있음",
+        "star": 3
+      }
+    ]
+  },
+  {
+    "num": 8,
+    "name": "bulgugi",
+    "img": "/image/food/bulgugi.jpg",
+    "code": 1,
+    "comment": [
+      {
+        "no": 1,
+        "id": "khs",
+        "comment": "뚝불",
+        "star": 5
+      },
+      {
+        "no": 2,
+        "id": "khs1",
+        "comment": "평정",
+        "star": 5
+      }
+    ]
+  }
+]

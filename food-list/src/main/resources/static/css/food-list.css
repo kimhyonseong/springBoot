@@ -1,0 +1,62 @@
+.food-list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 604px;
+    max-height: 100vh;
+    overflow: hidden;
+    margin: 50px 100px;
+    visibility: visible;
+    opacity: 1;
+    transition: max-height 1s, margin 0.5s, opacity 0.2s, visibility 0s;
+}
+
+/*푸드리스트 없애기*/
+.food-list.none {
+    overflow: hidden;
+    visibility: hidden;
+    max-height: 0;
+    margin: 0;
+    transition: max-height 0.5s, margin 0.5s, visibility 1s;
+}
+
+.food-list .food {
+    position: relative;
+    width: 125px;
+    height: 125px;
+    cursor: pointer;
+    border-radius: 100%;
+    margin: 13px;
+}
+
+.food-list .food .food-name {
+    position: absolute;
+    width: 125px;
+    height: 125px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background: rgba(0,0,0,0.4);
+    border-radius: 100%;
+    font-size: 20px;
+    transition: all 0.2s;
+    text-transform: capitalize;
+}
+
+.food-list .food .food-name.active {
+    opacity: 0;
+}
+
+.food-list .food .food-img {
+    position: absolute;
+    width: 125px;
+    height: 125px;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+.food-list .food .food-img img {
+    width: 200px;
+    height: auto;
+}
+
