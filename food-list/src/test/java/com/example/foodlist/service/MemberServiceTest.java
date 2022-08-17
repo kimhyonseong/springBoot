@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -53,8 +55,51 @@ class MemberServiceTest {
         memberRepository.save(member);
         memberRepository.flush();
 
-        System.out.println("null member : "+memberService.countId(null));
-        System.out.println("no member : "+memberService.countId("khs"));
-        System.out.println("already member : "+memberService.countId("khs6524"));
+        System.out.println("null member : "+countId(null));
+        System.out.println("special str member : "+countId("khs\\1"));
+        System.out.println("no member : "+countId("khs"));
+        System.out.println("already member : "+countId("khs6524"));
+    }
+
+    private int countId(String memberId) {
+        List<Member> count = null;
+
+        try {
+            if (!this.memberIdTest(memberId)) {
+                throw new RuntimeException("memberId pattern is wrong");
+            }
+            count = memberRepository.findByMemberId(memberId);
+
+            return count.size();
+        } catch (RuntimeException e) {
+            return -1;
+        }
+    }
+
+    private Boolean memberIdTest(String memberId) {
+        Pattern pattern = Pattern.compile("^[\\da-zA-Z]+$");
+
+        try {
+            if (memberId == null || memberId.equals("")) {
+                System.out.println("this is empty");
+                throw new Exception("id is empty");
+            }
+            Matcher matcher = pattern.matcher(memberId);
+            System.out.println(memberId+" is "+matcher.matches());
+            return matcher.matches();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Test
+    void memberIdTest() {
+        Boolean idTest = this.memberIdTest("khs6524");
+        Boolean idTest1 = this.memberIdTest("khs6524!");
+        Boolean idTest2 = this.memberIdTest("khs 6524");
+
+        assertEquals(idTest,true);
+        assertEquals(idTest1,false);
+        assertEquals(idTest2,false);
     }
 }

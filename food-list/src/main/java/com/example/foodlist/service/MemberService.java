@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
@@ -17,12 +18,12 @@ public class MemberService {
 
     public int put(Member newMember) {
         int result = 100;  // 정상
-        int countId = countId(newMember.getMemberId());
+        int count = countId(newMember.getMemberId());
 
-        switch (countId) {
+        switch (count) {
             case -1 :  // 에러
                 return 400;
-            case 0 :  // 존재하지 않는 아이디
+            case 0 :  // 존재하지 않는 아이디 - 진행
                 break;
             default:  // 이미 존재하는 아이디
                 return 200;
@@ -37,37 +38,32 @@ public class MemberService {
         return result;
     }
 
-    public int countId(String memberId) {
-        int result = 0;
+    private int countId(String memberId) {
         List<Member> count = null;
 
         try {
-            if (memberId == null || memberId.equals("")) {
-                throw new RuntimeException("null memberId");
+            if (!memberIdTest(memberId)) {
+                throw new RuntimeException("memberId pattern is wrong");
             }
             count = memberRepository.findByMemberId(memberId);
 
-            if (count.size() > 0) {
-                result++;
-            }
+            return count.size();
         } catch (RuntimeException e) {
             return -1;
         }
-        return result;
     }
 
-    public Boolean memberIdTest(String memberId) {
-        //String pattern = "";
-        Pattern pattern = Pattern.compile("[ !@#$%^&*(),.;'\"\\|<>\\-_=]");
+    private Boolean memberIdTest(String memberId) {
+        Pattern pattern = Pattern.compile("^[\\da-zA-Z]+$");
 
         try {
             if (memberId == null || memberId.equals("")) {
                 throw new Exception("id is empty");
             }
+            Matcher matcher = pattern.matcher(memberId);
+            return matcher.matches();
         } catch (Exception e) {
             return false;
         }
-
-        return true;
     }
 }
