@@ -9,4 +9,14 @@ public class mainController {
     public String mainView() {
         return "eat";
     }
+
+    @RequestMapping("login")
+    public String login_layout() {
+        return "login_layout";
+    }
+
+    @RequestMapping("test")
+    public String main_layout() {
+        return "main";
+    }
 }
