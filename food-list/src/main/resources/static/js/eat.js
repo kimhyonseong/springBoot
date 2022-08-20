@@ -16,11 +16,7 @@ let foodNum = parseInt(window.localStorage.getItem("currentFood")) || 0;  // 현
 const cate = document.querySelector('.category');
 const cateBtn = cate.querySelectorAll('label');
 
-const loginBox = document.querySelectorAll('.login');
-const loginInputs = loginBox.item(0).querySelectorAll('input');
 const regiInputs = loginBox.item(1).querySelectorAll('input');
-const loginBt = loginBox.item(0).querySelectorAll('.buttons>input');
-const loginForm = document.querySelector('form[class="loginForm"]');
 const registerForm = document.querySelector('form[class="registerForm"]');
 
 const searchForm = document.querySelector(".search-form");
@@ -420,16 +416,7 @@ function foodInfoClickEvent(e) {
 foodInfo.addEventListener("click", foodInfoClickEvent);
 foodInfo.addEventListener("mousemove", starMousemoveEvent);
 
-// 로그인
-loginInputs.forEach(input => input.addEventListener('focus', toggleLabel));
-loginInputs.forEach(input => input.addEventListener('focusout', toggleLabel));
-loginInputs.forEach(input =>
-    input.addEventListener('keypress', (e) => {
-        if (e.code.toLowerCase() === "space") {
-            e.preventDefault();
-        }
-    }));
-loginBt.forEach(bt => bt.addEventListener('click', loginAction))
+
 
 // 회원가입
 function valueEmpty(value) {

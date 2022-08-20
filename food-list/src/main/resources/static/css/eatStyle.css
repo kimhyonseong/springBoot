@@ -43,6 +43,11 @@ main {
     margin: 100px 0;
 }
 
+main.login {
+    padding-right: 0;
+    padding-left: 0;
+}
+
 .form-div {
     width: 400px;
     margin: 100px 100px 50px 100px;
