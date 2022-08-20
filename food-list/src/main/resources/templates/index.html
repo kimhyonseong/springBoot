@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/base}"
+>
+<th:block layout:fragment="css">
+    <link rel="stylesheet" href="/css/eatStyle.css">
+    <link rel="stylesheet" href="/css/food-list.css">
+    <link rel="stylesheet" href="/css/food-rating.css">
+</th:block>
+<th:block layout:fragment="content">
+    <div class="form-div">
+        <h3>Find Menu<br><span class="border-bottom">Choose Menu</span></h3>
+        <form class="search-form">
+            <div class="category">
+                <label>
+                    <input type="button" value="0">전체
+                </label>
+                <label>
+                    <input type="button" value="1">한식
+                </label>
+                <label>
+                    <input type="button" value="2">양식
+                </label>
+                <label>
+                    <input type="button" value="3">중식
+                </label>
+                <label>
+                    <input type="button" value="4">일식
+                </label>
+            </div>
+            <div class="search">
+                <label for="food" class="food_placeholder">Food name</label>
+                <input name="food" id="food" class="food-search">
+                <input type="submit" class="food-search-bt" value="Find">
+            </div>
+        </form>
+    </div>
+    <div class="food-list">
+        <div class="food">
+            <div class="food-img">
+                <img src="/image/food/pizza.jpg" alt="pizza">
+            </div>
+            <div class="food-name">
+                pizza
+            </div>
+        </div>
+    </div>
+    <div class="food-info none">
+        <div class="food-img">
+            <img src="/image/food/bread.jpg" alt="pizza">
+        </div>
+        <div class="food-avr">평점 <span class="avr">5.0</span></div>
+        <div class="rating-star">
+            <div class="text">내 평가</div>
+            <span class="star">
+                <label data-value="1">★
+                    <input type="radio" name="star" value="1">
+                </label>
+            </span>
+            <span class="star">
+                <label data-value="2">★
+                    <input type="radio" name="star" value="2">
+                </label>
+            </span>
+            <span class="star">
+                <label data-value="3">★
+                    <input type="radio" name="star" value="3">
+                </label>
+            </span>
+            <span class="star">
+                <label data-value="4">★
+                    <input type="radio" name="star" value="4">
+                </label>
+            </span>
+            <span class="star">
+                <label data-value="5">★
+                    <input type="radio" name="star" value="5">
+                </label>
+            </span>
+        </div>
+        <div class="food-name">pang</div>
+        <div class="food-cate">양식</div>
+        <div class="food-comment">
+            <textarea></textarea>
+            <input type="button" value="작성">
+        </div>
+        <div class="food-reply">
+            <div class="reply">
+                <div class="star">★★★★★</div>
+                <span class="text">부드럽고 바삭한 식감.</span>
+                <div class="user_id">-khs-</div>
+            </div>
+            <div class="reply">
+                <div class="star">★★★★★</div>
+                <span class="text">단연코 후회하지 않을 2022년도 최고의 맛과 감동. 역사적인 순간이 바로 지금 이 순간.</span>
+                <div class="user_id">-khs2-</div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>
