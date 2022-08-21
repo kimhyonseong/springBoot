@@ -16,11 +16,13 @@
             <label for="name" class="name_placeholder">Name</label>
             <input type="text" id="name" name="name" th:value="${name}">
             <div class="buttons">
-                <input type="button" data-value="goLogin" value="뒤로">
-                <input type="submit" value="회원가입">
+                <input type="button" data-value="goLogin" value="로그인">
+                <input type="submit" data-value="signup" value="회원가입">
             </div>
         </form>
     </div>
 </th:block>
-<th:block layout:fragment="javascript"></th:block>
+<th:block layout:fragment="javascript">
+    <script th:src="@{/js/login.js}" type="module"></script>
+</th:block>
 </html>

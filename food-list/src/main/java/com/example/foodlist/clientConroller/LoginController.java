@@ -24,11 +24,16 @@ public class LoginController {
     @PostMapping("login")
     public String loginProc(
             @RequestParam("loginId") String loginId,
-            @RequestParam("loginPw") String loginPw) {
+            @RequestParam("loginPw") String loginPw,
+            Model model) {
 
         // 로그인 시도
         int result = memberService.login(loginId,loginPw);
         // 실패 시 다시 로그인 페이지로
+        if (result == -1) {
+            model.addAttribute("error","아이디 또는 비밀번호가 잘못되었습니다.");
+            return "client/login";
+        }
 
         // 성공 시 전에 있던 페이지로 - 메인 페이지
         return "client/success";

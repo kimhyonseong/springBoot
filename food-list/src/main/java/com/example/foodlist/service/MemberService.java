@@ -19,6 +19,12 @@ public class MemberService {
     public int login(String loginId, String loginPw) {
         try {
             Member member = memberRepository.findByMemberIdAndMemberPw(loginId,loginPw);
+            System.out.println(member);
+            if (member.getId() == null ||
+                    member.getMemberId() == null
+            ) {
+                throw new RuntimeException("no member");
+            }
         } catch (RuntimeException e) {
             return -1;
         }

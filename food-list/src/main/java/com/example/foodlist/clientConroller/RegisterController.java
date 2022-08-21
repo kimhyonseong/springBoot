@@ -25,6 +25,8 @@ public class RegisterController {
         member.setMemberPw(signupPw);
         member.setName(name);
 
+        System.out.println(member);
+
         model.addAttribute("signupId",signupId);
         model.addAttribute("name",name);
 
@@ -33,6 +35,7 @@ public class RegisterController {
 
             switch (result) {
                 case 0:
+                    model.addAttribute("mainClass","login");
                     return "client/registerSuccess";
                 case -1:
                     throw new RuntimeException("error");

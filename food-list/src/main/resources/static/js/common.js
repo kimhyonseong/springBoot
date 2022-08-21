@@ -29,3 +29,14 @@ export function toggleActive() {
         this.classList.toggle('active');
     }
 }
+
+export function rexExp(value) {
+    // 특수문자 포함시 true
+    let specialStr = new RegExp(/[`~!@#$%^&*\[\]|'"()\-_+=,.\/\\?><]/, "gi");
+    return specialStr.test(value);
+}
+
+export function valueEmpty(value) {
+    // 비었으면 false
+    return value.trim() !== "";
+}
