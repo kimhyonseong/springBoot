@@ -1,10 +1,12 @@
 package com.example.foodlist.domain;
 
+import com.example.foodlist.annotation.NoSpecial;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
@@ -17,14 +19,17 @@ public class Member extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @Comment(value = "사용자 이름")
     @Column(length = 50, nullable = false)
     private String name;
 
+    @NoSpecial
     @Comment(value = "사용자 아이디")
     @Column(length = 50, nullable = false, unique = true)
     private String memberId;
 
+    @NotNull
     @Comment("사용자 비밀번호")
     @Column(length = 255, nullable = false)
     private String memberPw;

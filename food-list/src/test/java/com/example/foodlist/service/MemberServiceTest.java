@@ -23,15 +23,18 @@ class MemberServiceTest {
     void putTest() {
         Member member = new Member();
         member.setName("김현성");
-        member.setMemberId("khs6524");
+        member.setMemberId("!@khs6524");
+        member.setMemberPw("1234");
 
         Member member1 = new Member();
         member1.setName("이순신");
         member1.setMemberId("lss1545");
+        member1.setMemberPw("1234");
 
         Member member2 = new Member();
         member2.setName("이순신");
         member2.setMemberId("khs6524");
+        member2.setMemberPw("1234");
 
         Member member3 = new Member();
         member3.setName("이순신");
@@ -39,7 +42,7 @@ class MemberServiceTest {
         Member member4 = new Member();
         member4.setMemberId("lss1545");
 
-        System.out.println("khs6524 put : "+memberService.put(member));
+        System.out.println("!@khs6524 put : "+memberService.put(member));
         System.out.println("lss1545 put : "+memberService.put(member1));
         System.out.println("khs6524 2nd put : "+memberService.put(member2));
         System.out.println("no id put : "+memberService.put(member3));
@@ -65,9 +68,9 @@ class MemberServiceTest {
         List<Member> count = null;
 
         try {
-            if (!this.memberIdTest(memberId)) {
-                throw new RuntimeException("memberId pattern is wrong");
-            }
+//            if (!this.memberIdTest(memberId)) {
+//                throw new RuntimeException("memberId pattern is wrong");
+//            }
             count = memberRepository.findByMemberId(memberId);
 
             return count.size();
@@ -137,5 +140,15 @@ class MemberServiceTest {
         } catch (RuntimeException e) {
             System.out.println("error");
         }
+    }
+
+    @Test
+    void matchTest() {
+        String value= "khs652.4";
+        String pattern = "[ !@#$%^&*\\(\\)\\-\\.\\,\\\\_+=|\\/\\[\\]\\<\\>\\?'\"`~]";
+        //pattern = "[!@#]";
+
+        System.out.println(value);
+        System.out.println(!Pattern.compile(pattern).matcher(value).find());
     }
 }

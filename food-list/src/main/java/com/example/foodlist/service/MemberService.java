@@ -36,6 +36,7 @@ public class MemberService {
                     memberRepository.save(newMember);
                     return 0;
                 } catch (RuntimeException e) {
+                    System.out.println(e.getMessage());
                     return -1;  //에러 발생
                 }
             default:  // 이미 존재하는 아이디
@@ -47,9 +48,9 @@ public class MemberService {
         List<Member> count = null;
 
         try {
-            if (!memberIdTest(memberId)) {
-                throw new RuntimeException("memberId pattern is wrong");
-            }
+//            if (!memberIdTest(memberId)) {
+//                throw new RuntimeException("memberId pattern is wrong");
+//            }
             count = memberRepository.findByMemberId(memberId);
 
             return count.size();
