@@ -102,4 +102,40 @@ class MemberServiceTest {
         assertEquals(idTest1,false);
         assertEquals(idTest2,false);
     }
+
+
+    @Test
+    void login() {
+        Member member1 = new Member();
+        member1.setMemberId("khs6524");
+        member1.setMemberPw("1234");
+        member1.setName("김현성");
+
+        memberRepository.save(member1);
+        memberRepository.flush();
+
+        try {
+            Member member2 = memberRepository.findByMemberIdAndMemberPw("khs6524","1234");
+            System.out.println(member2.getMemberId());
+            System.out.println("success");
+        } catch (RuntimeException e) {
+            System.out.println("error");
+        }
+
+        try {
+            Member member3 = memberRepository.findByMemberIdAndMemberPw("khs6524","123");
+            System.out.println(member3.getMemberId());
+            System.out.println("success");
+        } catch (RuntimeException e) {
+            System.out.println("error");
+        }
+
+        try {
+            Member member4 = memberRepository.findByMemberIdAndMemberPw(null,"");
+            System.out.println(member4.getMemberId());
+            System.out.println("success");
+        } catch (RuntimeException e) {
+            System.out.println("error");
+        }
+    }
 }

@@ -16,26 +16,31 @@ import java.util.regex.Pattern;
 public class MemberService {
     private final MemberRepository memberRepository;
 
+    public int login(String loginId, String loginPw) {
+        try {
+            Member member = memberRepository.findByMemberIdAndMemberPw(loginId,loginPw);
+        } catch (RuntimeException e) {
+            return -1;
+        }
+        return 1;
+    }
+
     public int put(Member newMember) {
-        int result = 100;  // 정상
         int count = countId(newMember.getMemberId());
 
         switch (count) {
             case -1 :  // 에러
-                return 400;
+                return -1;
             case 0 :  // 존재하지 않는 아이디 - 진행
-                break;
+                try {
+                    memberRepository.save(newMember);
+                    return 0;
+                } catch (RuntimeException e) {
+                    return -1;  //에러 발생
+                }
             default:  // 이미 존재하는 아이디
-                return 200;
+                return 1;
         }
-
-        try {
-            memberRepository.save(newMember);
-        } catch (RuntimeException e) {
-            return 400;  //에러 발생
-        }
-
-        return result;
     }
 
     private int countId(String memberId) {

@@ -1,6 +1,7 @@
 package com.example.foodlist.clientConroller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -16,7 +17,8 @@ public class indexController {
     }
 
     @RequestMapping("/")
-    public String index() {
+    public String index(Model model) {
+        model.addAttribute("title","Main");
         return "index";
     }
 }

@@ -8,11 +8,11 @@
 </th:block>
 <th:block layout:fragment="content">
     <div class="login">
-        <form class="loginForm" method="post">
+        <form class="loginForm" method="post" action="/login">
             <label for="loginId" class="id_placeholder">ID</label>
-            <input type="text" id="loginId" name="user_id" value="" >
+            <input type="text" id="loginId" name="loginId" value="" >
             <label for="loginPw" class="pw_placeholder">PW</label>
-            <input type="password" id="loginPw" name="user_pw" value="">
+            <input type="password" id="loginPw" name="loginPw" value="">
             <div class="buttons">
                 <input type="submit" data-value="login" value="로그인">
                 <input type="button" data-value="register" value="회원가입">

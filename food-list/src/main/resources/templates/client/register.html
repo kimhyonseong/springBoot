@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</th:block>
+<th:block layout:fragment="content">
+    <div class="login register">
+        <p style="color: red;" th:text="${errorMsg}"></p>
+        <form class="registerForm" method="post" action="/register">
+            <label for="signupId" class="id_placeholder">ID</label>
+            <input type="text" id="signupId" name="signupId" th:value="${signupId}" >
+            <label for="signupPw" class="pw_placeholder">PW</label>
+            <input type="password" id="signupPw" name="signupPw">
+            <label for="name" class="name_placeholder">Name</label>
+            <input type="text" id="name" name="name" th:value="${name}">
+            <div class="buttons">
+                <input type="button" data-value="goLogin" value="뒤로">
+                <input type="submit" value="회원가입">
+            </div>
+        </form>
+    </div>
+</th:block>
+<th:block layout:fragment="javascript"></th:block>
+</html>
