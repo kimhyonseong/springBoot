@@ -9,6 +9,13 @@ const registerForm = document.querySelector('form[class="registerForm"]');
 
 // 로그인
 if (loginInputs != null) {
+    loginInputs.forEach(input => {
+        console.log(input);
+        if ((input.type === "text" || input.type === "password") && input.value !== "") {
+            document.querySelector(`label[for="${input.id}"]`).classList.add("focus");
+            document.querySelector(`label[for="${input.id}"]`).classList.add("font-black");
+        }
+    })
     loginInputs.forEach(input => input.addEventListener('focus', common.toggleLabel));
     loginInputs.forEach(input => input.addEventListener('focusout', common.toggleLabel));
     loginInputs.forEach(input =>
