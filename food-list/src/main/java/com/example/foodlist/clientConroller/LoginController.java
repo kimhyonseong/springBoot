@@ -31,6 +31,8 @@ public class LoginController {
         int result = memberService.login(loginId,loginPw);
         // 실패 시 다시 로그인 페이지로
         if (result == -1) {
+            model.addAttribute("title","Login");
+            model.addAttribute("mainClass","login");
             model.addAttribute("error","아이디 또는 비밀번호가 잘못되었습니다.");
             return "client/login";
         }

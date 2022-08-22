@@ -1,4 +1,16 @@
-파일위치  
+## 목표
+1. 회원가입
+   1. 특수문자 검사
+   2. 중복 아이디 검사
+2. 로그인
+   1. 특수문자 검사
+   2. 휴면계정 확인
+3. 스케줄러로 휴면 계정 만들기
+4. 음식 데이터 입력
+5. 음식 평가
+6. 음식 총점 확인
+
+### 파일위치  
 js - src/main/resources/static/js  
 css - src/main/resources/static/css  
 html - src/main/resources/templates  

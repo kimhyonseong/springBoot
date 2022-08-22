@@ -6,8 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.annotation.AnnotationTypeMismatchException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,12 +20,15 @@ public class MemberService {
 
     public int login(String loginId, String loginPw) {
         try {
-            Member member = memberRepository.findByMemberIdAndMemberPw(loginId,loginPw);
-            System.out.println(member);
-            if (member.getId() == null ||
-                    member.getMemberId() == null
-            ) {
+            List<Member> member = memberRepository.findByMemberId(loginId);
+            System.out.println(member.get(0));
+
+            if (member.get(0) == null) {
                 throw new RuntimeException("no member");
+            } else if (member.get(0).getState() != 10) {
+                throw new RuntimeException("제한된 사용자입니다.");
+            } else if (!Objects.equals(member.get(0).getMemberPw(), loginPw)) {
+                throw new RuntimeException("no match password");
             }
         } catch (RuntimeException e) {
             return -1;
@@ -41,6 +46,9 @@ public class MemberService {
                 try {
                     memberRepository.save(newMember);
                     return 0;
+                } catch (AnnotationTypeMismatchException e) {
+                    e.printStackTrace();
+                    return -2;  //에러 발생
                 } catch (RuntimeException e) {
                     System.out.println(e.getMessage());
                     return -1;  //에러 발생
