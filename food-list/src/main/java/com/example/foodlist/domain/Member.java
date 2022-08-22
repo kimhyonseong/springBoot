@@ -1,11 +1,14 @@
 package com.example.foodlist.domain;
 
 import com.example.foodlist.annotation.NoSpecial;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -19,7 +22,7 @@ public class Member extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotBlank
     @Comment(value = "사용자 이름")
     @Column(length = 50, nullable = false)
     private String name;
@@ -27,11 +30,13 @@ public class Member extends BaseEntity{
     @NoSpecial
     @Comment(value = "사용자 아이디")
     @Column(length = 50, nullable = false, unique = true)
+    @JsonProperty("member_id")
     private String memberId;
 
-    @NotNull
+    @NotEmpty
     @Comment("사용자 비밀번호")
     @Column(length = 255, nullable = false)
+    @JsonProperty("member_pw")
     private String memberPw;
 
     @Comment("사용자 상태 - 10:정상, 20:로그인 정지, 30:휴면, 90:탈퇴")

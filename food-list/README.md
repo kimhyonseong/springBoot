@@ -9,12 +9,12 @@
 4. 음식 데이터 입력
 5. 음식 평가
 6. 음식 총점 확인
-
+----
 ### 파일위치  
 js - src/main/resources/static/js  
 css - src/main/resources/static/css  
 html - src/main/resources/templates  
-
+----
 ### thymeleaf
 - 표현식
   - 변수 - ${변수이름}
@@ -26,3 +26,11 @@ html - src/main/resources/templates
   ex) layout:decorate="~{디렉토리/확장자 제외한 파일이름}"
   - th:fragment : 파편 이름 선언
   - layout:fragment : 파편과 이름을 동일시하면 속 내용 재정의
+----
+주요사항
+* 로그인 검증 어노테이션으로 하려면 @Valid를 붙여야함  
+```java
+public ResponseEntity<Member> registerSuccess(
+            @Valid @RequestBody Member newMember) 
+        {...}
+```
