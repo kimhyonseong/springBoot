@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD,ElementType.FIELD,ElementType.CONSTRUCTOR,ElementType.PARAMETER,ElementType.TYPE,ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = NoSpecialValidator.class)
-public @interface NoSpecial {
+public @interface NoSpecial{
     String message() default "특수문자 금지";
 
     Class[] groups() default {};

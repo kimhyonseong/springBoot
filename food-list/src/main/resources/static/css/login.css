@@ -69,3 +69,10 @@
     transition: padding 0.5s, height 0.5s, margin 0.5s,
     visibility 0s, opacity 0.2s;
 }
+
+.error_msg {
+    color: red;
+    position: absolute;
+    top: 50px;
+    font-size: 15px;
+}

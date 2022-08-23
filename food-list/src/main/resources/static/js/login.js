@@ -10,7 +10,6 @@ const registerForm = document.querySelector('form[class="registerForm"]');
 // 로그인
 if (loginInputs != null) {
     loginInputs.forEach(input => {
-        console.log(input);
         if ((input.type === "text" || input.type === "password") && input.value !== "") {
             document.querySelector(`label[for="${input.id}"]`).classList.add("focus");
             document.querySelector(`label[for="${input.id}"]`).classList.add("font-black");
@@ -32,8 +31,8 @@ function loginAction(e) {
 
     // 로그인 클릭
     if (this.dataset.value === 'login') {
-        const userId = loginForm.querySelector('input[name="loginId"]').value;
-        const password = loginForm.querySelector('input[name="loginPw"]').value;
+        const userId = loginForm.querySelector('input[name="memberId"]').value;
+        const password = loginForm.querySelector('input[name="memberPw"]').value;
 
         // 빈칸 확인
         if (!common.valueEmpty(userId) || !common.valueEmpty(password)) {
@@ -53,8 +52,8 @@ function loginAction(e) {
 
 function register() {
     const user = {
-        userId: registerForm.querySelector('input[name="signupId"]').value.trim(),
-        password: registerForm.querySelector('input[name="signupPw"]').value.trim(),
+        userId: registerForm.querySelector("#memberId").value.trim(),
+        password: registerForm.querySelector("#memberPw").value.trim(),
         name: registerForm.querySelector('input[name="name"]').value.trim()
     }
 
@@ -74,10 +73,10 @@ function validationUser(userInfo) {
         alert('유효한 값이 아닙니다.');
         return false;
     }
-    // if (common.rexExp(userInfo.userId) || common.rexExp(userInfo.name)) {
-    //     alert("아이디와 이름에는 특수문자 사용이 불가 합니다.");
-    //     return false;
-    // }
+    if (common.rexExp(userInfo.userId) || common.rexExp(userInfo.name)) {
+        alert("아이디와 이름에는 특수문자 사용이 불가 합니다.");
+        return false;
+    }
     if (!common.valueEmpty(userInfo.userId) || !common.valueEmpty(userInfo.name)) {
         alert('빈칸을 확인해주세요.');
         return false;

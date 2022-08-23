@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="background"></div>
-<main th:classappend="${mainClass != ''} ? ${mainClass} : ''">
+<main layout:fragment="main">
     <div layout:fragment="content"></div>
 </main>
 <th:block layout:fragment="javascript"></th:block>

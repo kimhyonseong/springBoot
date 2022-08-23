@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.annotation.AnnotationTypeMismatchException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -36,54 +37,29 @@ public class MemberService {
         return 1;
     }
 
-    public int put(Member newMember) {
-        int count = countId(newMember.getMemberId());
-
-        switch (count) {
-            case -1 :  // 에러
-                return -1;
-            case 0 :  // 존재하지 않는 아이디 - 진행
-                try {
-                    memberRepository.save(newMember);
-                    return 0;
-                } catch (AnnotationTypeMismatchException e) {
-                    e.printStackTrace();
-                    return -2;  //에러 발생
-                } catch (RuntimeException e) {
-                    System.out.println(e.getMessage());
-                    return -1;  //에러 발생
-                }
-            default:  // 이미 존재하는 아이디
-                return 1;
-        }
-    }
-
-    private int countId(String memberId) {
-        List<Member> count = null;
+    public int put(Member member) {
+        int count = this.countId(member.getMemberId());
+        Member newMember = null;
+        List<Member> list = new ArrayList<>();
 
         try {
-//            if (!memberIdTest(memberId)) {
-//                throw new RuntimeException("memberId pattern is wrong");
-//            }
-            count = memberRepository.findByMemberId(memberId);
-
-            return count.size();
+            newMember = memberRepository.save(member);
+            list.add(newMember);
         } catch (RuntimeException e) {
             return -1;
         }
+
+        return list.size();
     }
 
-    private Boolean memberIdTest(String memberId) {
-        Pattern pattern = Pattern.compile("^[\\da-zA-Z]+$");
+    public int countId(String memberId) {
+        List<Member> count = null;
 
         try {
-            if (memberId == null || memberId.equals("")) {
-                throw new Exception("id is empty");
-            }
-            Matcher matcher = pattern.matcher(memberId);
-            return matcher.matches();
-        } catch (Exception e) {
-            return false;
+            count = memberRepository.findByMemberId(memberId);
+            return count.size();
+        } catch (RuntimeException e) {
+            return -1;
         }
     }
 }

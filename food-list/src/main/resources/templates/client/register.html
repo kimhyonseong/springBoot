@@ -2,25 +2,33 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/base}">
+<head></head>
 <th:block layout:fragment="css">
     <link rel="stylesheet" th:href="@{/css/login.css}">
 </th:block>
-<th:block layout:fragment="content">
-    <div class="login register">
-        <p style="color: red;" th:text="${errorMsg}"></p>
-        <form class="registerForm" method="post" action="/register">
-            <label for="signupId" class="id_placeholder">ID</label>
-            <input type="text" id="signupId" name="signupId" th:value="${signupId}" >
-            <label for="signupPw" class="pw_placeholder">PW</label>
-            <input type="password" id="signupPw" name="signupPw">
-            <label for="name" class="name_placeholder">Name</label>
-            <input type="text" id="name" name="name" th:value="${name}">
-            <div class="buttons">
-                <input type="button" data-value="goLogin" value="로그인">
-                <input type="submit" data-value="signup" value="회원가입">
-            </div>
-        </form>
-    </div>
+<th:block layout:fragment="main">
+    <main class="login">
+        <div class="login register">
+            <form class="registerForm" method="post" action="/register">
+                <p th:class="error_msg" th:text="${memberIdError}"></p>
+                <label for="memberId" class="id_placeholder">ID</label>
+                <input type="text" id="memberId" name="memberId" th:value="${Member.memberId}" >
+
+                <p th:class="error_msg" th:text="${memberPwError}"></p>
+                <label for="memberPw" class="pw_placeholder">PW</label>
+                <input type="password" id="memberPw" name="memberPw">
+
+                <p th:class="error_msg" th:text="${nameError}"></p>
+                <label for="name" class="name_placeholder">Name</label>
+                <input type="text" id="name" name="name" th:value="${Member.name}">
+
+                <div class="buttons">
+                    <input type="button" data-value="goLogin" value="로그인">
+                    <input type="submit" data-value="signup" value="회원가입">
+                </div>
+            </form>
+        </div>
+    </main>
 </th:block>
 <th:block layout:fragment="javascript">
     <script th:src="@{/js/login.js}" type="module"></script>
