@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -17,6 +19,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@DynamicInsert
+@DynamicUpdate
 public class Member extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,5 +45,5 @@ public class Member extends BaseEntity{
 
     @Comment("사용자 상태 - 10:정상, 20:로그인 정지, 30:휴면, 90:탈퇴")
     @ColumnDefault("10")
-    private int state;
+    private Integer state;
 }
