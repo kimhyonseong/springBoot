@@ -7,24 +7,29 @@ const loginBt = loginBox?.item(0).querySelectorAll('.buttons>input');
 const loginForm = document.querySelector('form[class="loginForm"]');
 const registerForm = document.querySelector('form[class="registerForm"]');
 
-// 로그인
-if (loginInputs != null) {
-    loginInputs.forEach(input => {
+window.addEventListener("DOMContentLoaded", function () {
+    // 로그인
+    loginInputs?.forEach(input => {
         if ((input.type === "text" || input.type === "password") && input.value !== "") {
             document.querySelector(`label[for="${input.id}"]`).classList.add("focus");
             document.querySelector(`label[for="${input.id}"]`).classList.add("font-black");
         }
     })
-    loginInputs.forEach(input => input.addEventListener('focus', common.toggleLabel));
-    loginInputs.forEach(input => input.addEventListener('focusout', common.toggleLabel));
-    loginInputs.forEach(input =>
+    loginInputs?.forEach(input => input.addEventListener('focus', common.toggleLabel));
+    loginInputs?.forEach(input => input.addEventListener('focusout', common.toggleLabel));
+    loginInputs?.forEach(input =>
         input.addEventListener('keypress', (e) => {
             if (e.code.toLowerCase() === "space") {
                 e.preventDefault();
             }
         }));
-}
-loginBt?.forEach(bt => bt.addEventListener('click', loginAction))
+
+    loginBt?.forEach(bt => bt.addEventListener('click', loginAction))
+
+    registerForm?.querySelector('input[data-value="goLogin"]')
+        .addEventListener('click', history.back);
+})
+
 
 function loginAction(e) {
     e.preventDefault();
@@ -63,9 +68,6 @@ function register() {
         registerForm.submit();
     }
 }
-
-registerForm?.querySelector('input[data-value="goLogin"]')
-    .addEventListener('click', history.back);
 
 function validationUser(userInfo) {
     // 유효성 검사 - 모두 통과시 true

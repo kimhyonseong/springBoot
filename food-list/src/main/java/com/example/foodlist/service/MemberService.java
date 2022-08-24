@@ -21,25 +21,22 @@ public class MemberService {
 
     public int login(String loginId, String loginPw) {
         try {
-            List<Member> member = memberRepository.findByMemberId(loginId);
-            System.out.println(member.get(0));
+            Member member = memberRepository.findByMemberIdAndMemberPw(loginId,loginPw);
 
-            if (member.get(0) == null) {
-                throw new RuntimeException("no member");
-            } else if (member.get(0).getState() != 10) {
-                throw new RuntimeException("제한된 사용자입니다.");
-            } else if (!Objects.equals(member.get(0).getMemberPw(), loginPw)) {
-                throw new RuntimeException("no match password");
+            if (member == null ||
+                    (!Objects.equals(member.getMemberId(), loginId) ||
+                     !Objects.equals(member.getMemberPw(), loginPw))) {
+                return 0;
+            } else {
+                return member.getState();
             }
         } catch (RuntimeException e) {
             return -1;
         }
-        return 1;
     }
 
     public int put(Member member) {
-        int count = this.countId(member.getMemberId());
-        Member newMember = null;
+        Member newMember;
         List<Member> list = new ArrayList<>();
 
         try {
@@ -53,7 +50,7 @@ public class MemberService {
     }
 
     public int countId(String memberId) {
-        List<Member> count = null;
+        List<Member> count;
 
         try {
             count = memberRepository.findByMemberId(memberId);
