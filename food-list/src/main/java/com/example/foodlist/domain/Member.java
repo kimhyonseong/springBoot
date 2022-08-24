@@ -1,6 +1,7 @@
 package com.example.foodlist.domain;
 
 import com.example.foodlist.annotation.NoSpecial;
+import com.example.foodlist.domain.listener.MemberEntityListener;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -12,6 +13,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,10 +24,11 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = true)
 @DynamicInsert
 @DynamicUpdate
+@EntityListeners(value = {MemberEntityListener.class})
 public class Member extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idx;
 
     @NotBlank
     @Comment(value = "사용자 이름")
@@ -46,4 +50,9 @@ public class Member extends BaseEntity{
     @Comment("사용자 상태 - 10:정상, 20:로그인 정지, 30:휴면, 90:탈퇴")
     @ColumnDefault("10")
     private Integer state;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "idx",insertable = false, updatable = false)
+    @ToString.Exclude
+    private List<MemberHistory> memberHistories = new ArrayList<>();
 }
