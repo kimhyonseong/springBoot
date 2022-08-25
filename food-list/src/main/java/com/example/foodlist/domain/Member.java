@@ -56,7 +56,7 @@ public class Member extends BaseEntity{
     private LocalDateTime lastLoginDate;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "idx",insertable = false, updatable = false)
+    @JoinColumn(name = "member_idx",insertable = false, updatable = false)
     @ToString.Exclude
     private List<MemberHistory> memberHistories = new ArrayList<>();
 }

@@ -1,6 +1,8 @@
 package com.example.foodlist.service;
 
 import com.example.foodlist.domain.Member;
+import com.example.foodlist.domain.MemberHistory;
+import com.example.foodlist.repository.MemberHistoryRepository;
 import com.example.foodlist.repository.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class MemberServiceTest {
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private MemberHistoryRepository memberHistoryRepository;
     @Autowired
     private MemberService memberService;
 
@@ -161,18 +165,20 @@ class MemberServiceTest {
         member.setName("김현성");
 
         memberRepository.save(member);
-        memberRepository.flush();
 
         try {
             Member member2 = memberRepository.findByMemberIdAndMemberPw("khs6524","1234");
-            System.out.println(member2.getMemberId());
-            System.out.println("success");
+            System.out.println(member2);
+            memberHistoryRepository.flush();
+            List<MemberHistory> memberHistory = memberHistoryRepository.findAll();
+
+            System.out.println(memberHistory);
+            memberService.lastLoginRecoding(member2);
+
+            List<Member> members = memberRepository.findAll();
+            System.out.println(members);
         } catch (RuntimeException e) {
             System.out.println("error");
         }
-        memberService.lastLoginRecoding(member);
-
-        List<Member> members = memberRepository.findAll();
-        System.out.println(members);
     }
 }
