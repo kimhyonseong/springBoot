@@ -21,6 +21,7 @@ public class MemberEntityListener {
         memberHistory.setName(member.getName());
         memberHistory.setMemberId(member.getMemberId());
 
+        System.out.println(member);
         memberHistoryRepository.save(memberHistory);
     }
 }

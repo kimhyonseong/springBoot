@@ -13,6 +13,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +51,9 @@ public class Member extends BaseEntity{
     @Comment("사용자 상태 - 10:정상, 20:로그인 정지, 30:휴면, 90:탈퇴")
     @ColumnDefault("10")
     private Integer state;
+
+    @Comment("마지막 접속 날짜")
+    private LocalDateTime lastLoginDate;
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "idx",insertable = false, updatable = false)

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,6 +33,7 @@ public class LoginController {
             HttpServletResponse response) {
         String failPath = "client/login";
         String successPath = "client/success";
+        Member loginMember;
 
         response.setContentType("text/html; charset=utf-8");
 
@@ -42,12 +44,19 @@ public class LoginController {
         }
 
         // 로그인 시도
-        int result = memberService.login(member.getMemberId(), member.getMemberPw());
+        try {
+            loginMember = memberService.login(member.getMemberId(), member.getMemberPw(), response);
+        } catch (Exception e) {
+            return failPath;
+        }
 
         // 실패 시 다시 로그인 페이지로
-        if (result == 0) {
+        if (loginMember == null) {
             alertMsg(response,"아이디 또는 비밀번호가 일치하지 않습니다.");
             return failPath;
+        } else {
+            memberService.lastLoginRecoding(loginMember);
+            memberService.loginCookie(loginMember,response);
         }
 
         // 성공 시 전에 있던 페이지로 - 메인 페이지

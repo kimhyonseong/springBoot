@@ -17,3 +17,7 @@ spring:
       ddl-auto: create-drop   #프로젝트 실행할때마다 생성-삭제
     defer-datasource-initialization : true  #data.sql 실행 여부
     generate-ddl : true  #Entity에서 활용하는 테이블 자동 생성 여부
+
+logging:
+  level:
+    root: info

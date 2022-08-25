@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -150,5 +151,28 @@ class MemberServiceTest {
 
         System.out.println(value);
         System.out.println(!Pattern.compile(pattern).matcher(value).find());
+    }
+
+    @Test
+    void loginRecode() {
+        Member member = new Member();
+        member.setMemberId("khs6524");
+        member.setMemberPw("1234");
+        member.setName("김현성");
+
+        memberRepository.save(member);
+        memberRepository.flush();
+
+        try {
+            Member member2 = memberRepository.findByMemberIdAndMemberPw("khs6524","1234");
+            System.out.println(member2.getMemberId());
+            System.out.println("success");
+        } catch (RuntimeException e) {
+            System.out.println("error");
+        }
+        memberService.lastLoginRecoding(member);
+
+        List<Member> members = memberRepository.findAll();
+        System.out.println(members);
     }
 }

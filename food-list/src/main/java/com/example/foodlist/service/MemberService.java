@@ -6,8 +6,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.lang.annotation.AnnotationTypeMismatchException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -19,19 +23,19 @@ import java.util.regex.Pattern;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    public int login(String loginId, String loginPw) {
+    public Member login(String loginId, String loginPw, HttpServletResponse response) throws Exception {
         try {
             Member member = memberRepository.findByMemberIdAndMemberPw(loginId,loginPw);
 
             if (member == null ||
                     (!Objects.equals(member.getMemberId(), loginId) ||
                      !Objects.equals(member.getMemberPw(), loginPw))) {
-                return 0;
+                return null;
             } else {
-                return member.getState();
+                return member;
             }
         } catch (RuntimeException e) {
-            return -1;
+            throw new RuntimeException();
         }
     }
 
@@ -57,6 +61,27 @@ public class MemberService {
             return count.size();
         } catch (RuntimeException e) {
             return -1;
+        }
+    }
+
+    public void lastLoginRecoding(Member member) {
+        try {
+            if (member != null) {
+                member.setLastLoginDate(LocalDateTime.now());
+                memberRepository.save(member);
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loginCookie(Member member,HttpServletResponse response) {
+        if (member != null) {
+            Cookie loginId = new Cookie("loginId", member.getMemberId());
+            Cookie loginName = new Cookie("loginName", member.getName());
+
+            response.addCookie(loginId);
+            response.addCookie(loginName);
         }
     }
 }

@@ -24,5 +24,6 @@ public class MemberHistory extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "member_idx")
+    @ToString.Exclude
     private Member member;
 }
