@@ -63,25 +63,4 @@ public class MemberService {
             return -1;
         }
     }
-
-    public void lastLoginRecoding(Member member) {
-        try {
-            if (member != null) {
-                member.setLastLoginDate(LocalDateTime.now());
-                memberRepository.save(member);
-            }
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void loginCookie(Member member,HttpServletResponse response) {
-        if (member != null) {
-            Cookie loginId = new Cookie("loginId", member.getMemberId());
-            Cookie loginName = new Cookie("loginName", member.getName());
-
-            response.addCookie(loginId);
-            response.addCookie(loginName);
-        }
-    }
 }

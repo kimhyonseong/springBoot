@@ -52,11 +52,13 @@ public class Member extends BaseEntity{
     @ColumnDefault("10")
     private Integer state;
 
-    @Comment("마지막 접속 날짜")
-    private LocalDateTime lastLoginDate;
-
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_idx",insertable = false, updatable = false)
     @ToString.Exclude
     private List<MemberHistory> memberHistories = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_idx",insertable = false, updatable = false)
+    @ToString.Exclude
+    private List<MemberLogin> memberLogins = new ArrayList<>();
 }

@@ -5,6 +5,7 @@ import com.example.foodlist.domain.MemberHistory;
 import com.example.foodlist.domain.MemberLogin;
 import com.example.foodlist.repository.MemberHistoryRepository;
 import com.example.foodlist.repository.MemberLoginRepository;
+import com.example.foodlist.repository.MemberRepository;
 import com.example.foodlist.support.BeanUtils;
 
 import javax.persistence.PostPersist;
@@ -37,23 +38,6 @@ public class MemberEntityListener {
         }
 
         memberHistoryRepository.save(memberHistory);
-    }
 
-    @PostUpdate
-    public void memberLogin(Object o) {
-        MemberLoginRepository memberLoginRepository = BeanUtils.getBean(MemberLoginRepository.class);
-        Member member = (Member) o;
-
-        if (member.getLastLoginDate() != null) {
-            MemberLogin memberLogin = new MemberLogin();
-
-            memberLogin.setMemberId(member.getMemberId());
-            memberLogin.setLoginDate(member.getLastLoginDate());
-            memberLogin.setMember(member);
-            memberLogin.setWorkDate(LocalDateTime.now());
-            //memberLogin.setIp();
-
-            memberLoginRepository.save(memberLogin);
-        }
     }
 }

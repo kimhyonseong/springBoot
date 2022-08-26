@@ -170,7 +170,7 @@ class MemberServiceTest {
             List<MemberHistory> memberHistory = memberHistoryRepository.findAll();
 
             System.out.println(memberHistory);
-            memberService.lastLoginRecoding(member2);
+            //memberService.lastLoginRecoding(member2);
 
             List<Member> members = memberRepository.findAll();
             System.out.println(members);

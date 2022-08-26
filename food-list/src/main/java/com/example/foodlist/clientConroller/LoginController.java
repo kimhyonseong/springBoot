@@ -1,6 +1,7 @@
 package com.example.foodlist.clientConroller;
 
 import com.example.foodlist.domain.Member;
+import com.example.foodlist.service.MemberLoginService;
 import com.example.foodlist.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class LoginController {
     private final MemberService memberService;
+    private final MemberLoginService memberLoginService;
 
     @GetMapping("login")
     public String loginPage() {
@@ -55,8 +57,8 @@ public class LoginController {
             alertMsg(response,"아이디 또는 비밀번호가 일치하지 않습니다.");
             return failPath;
         } else {
-            memberService.lastLoginRecoding(loginMember);
-            memberService.loginCookie(loginMember,response);
+            memberLoginService.lastLoginRecoding(loginMember);
+            memberLoginService.loginCookie(loginMember,response);
         }
 
         // 성공 시 전에 있던 페이지로 - 메인 페이지
