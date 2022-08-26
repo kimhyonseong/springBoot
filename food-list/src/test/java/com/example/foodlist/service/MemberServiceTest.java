@@ -73,10 +73,7 @@ class MemberServiceTest {
         List<Member> count = null;
 
         try {
-//            if (!this.memberIdTest(memberId)) {
-//                throw new RuntimeException("memberId pattern is wrong");
-//            }
-            count = memberRepository.findByMemberId(memberId);
+            count = memberRepository.findAllByMemberId(memberId);
 
             return count.size();
         } catch (RuntimeException e) {

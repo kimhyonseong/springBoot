@@ -48,7 +48,7 @@ public class Member extends BaseEntity{
     @JsonProperty("member_pw")
     private String memberPw;
 
-    @Comment("사용자 상태 - 10:정상, 20:로그인 정지, 30:휴면, 90:탈퇴")
+    @Comment("사용자 상태 - 10:정상, 30:로그인 정지, 40:탈퇴, 50:휴면")
     @ColumnDefault("10")
     private Integer state;
 

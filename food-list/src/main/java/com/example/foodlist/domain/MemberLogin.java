@@ -5,26 +5,32 @@ import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@Entity
 @DynamicInsert
-public class MemberHistory extends BaseEntity{
+public class MemberLogin extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
 
-    private String name;
-
-    @Column(nullable = false)
+    @Comment("멤버 아이디")
     private String memberId;
 
-    @Comment("10:회원가입, 20:개인정보 변경, 30:로그인정지 전환, 40:일반탈퇴, 50:휴면계정 전환")
-    private Integer state;
+    @Comment("로그인 시간")
+    @NotBlank
+    private LocalDateTime loginDate;
+
+    @Comment("로그인 아이피")
+    private String ip;
+
+    private LocalDateTime workDate;
 
     @ManyToOne
     @JoinColumn(name = "member_idx")

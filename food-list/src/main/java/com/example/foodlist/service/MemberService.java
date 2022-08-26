@@ -57,7 +57,7 @@ public class MemberService {
         List<Member> count;
 
         try {
-            count = memberRepository.findByMemberId(memberId);
+            count = memberRepository.findAllByMemberId(memberId);
             return count.size();
         } catch (RuntimeException e) {
             return -1;
