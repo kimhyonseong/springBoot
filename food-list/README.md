@@ -27,10 +27,13 @@ html - src/main/resources/templates
   - th:fragment : 파편 이름 선언
   - layout:fragment : 파편과 이름을 동일시하면 속 내용 재정의
 ----
-주요사항
-* 로그인 검증 어노테이션으로 하려면 @Valid를 붙여야함  
-```java
-public ResponseEntity<Member> registerSuccess(
-            @Valid @RequestBody Member newMember) 
-        {...}
-```
+### 기능
+- 회원가입
+  - 아이디 / 비밀번호 / 이름
+  - 아이디 특수문자 불가
+- 로그인
+  - 아이디 / 비밀번호 매칭
+  - 휴면계정 체크(예정)
+- 스케줄러
+  - 휴면계정 전환
+  - 회원탈퇴 - 30일 이후 삭제 (예정)

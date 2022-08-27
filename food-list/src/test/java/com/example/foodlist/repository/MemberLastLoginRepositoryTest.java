@@ -52,4 +52,24 @@ class MemberLastLoginRepositoryTest {
         memberLoginRepository.findAll().forEach(System.out::println);
         memberLastLoginRepository.findAll().forEach(System.out::println);
     }
+
+    @Test
+    void dormancyMember() {
+        Member member = new Member();
+        member.setName("이순신");
+        member.setMemberId("lss1545");
+        member.setMemberPw("1234");
+
+        memberRepository.save(member);
+
+        Member saveMember = memberRepository.findByMemberId("lss1545");
+
+        MemberLastLogin memberLastLogin = new MemberLastLogin();
+        memberLastLogin.setMember(saveMember);
+        memberLastLogin.setMemberId(saveMember.getMemberId());
+        memberLastLogin.setLastLoginTime(LocalDateTime.now());
+        memberLastLoginRepository.save(memberLastLogin);
+
+        memberLastLoginRepository.findAllByLastLoginTimeLessThanEqual(LocalDateTime.now()).forEach(System.out::println);
+    }
 }

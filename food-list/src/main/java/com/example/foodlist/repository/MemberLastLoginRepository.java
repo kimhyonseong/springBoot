@@ -10,5 +10,7 @@ import java.util.List;
 public interface MemberLastLoginRepository extends JpaRepository<MemberLastLogin,Long> {
     List<MemberLastLogin> findAllByLastLoginTime(LocalDateTime time);
 
+    List<MemberLastLogin> findAllByLastLoginTimeLessThanEqual(LocalDateTime date);
+
     MemberLastLogin findByMember(Member member);
 }

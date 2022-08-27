@@ -8,11 +8,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class MemberLastLoginService {
     private final MemberLastLoginRepository lastLoginRepository;
+    private final MemberRepository memberRepository;
 
     public void lastLoginRecoding(Member loginMember) {
         if (loginMember != null) {
@@ -34,5 +37,20 @@ public class MemberLastLoginService {
                 System.out.println(e.getMessage());
             }
         }
+    }
+
+    public void changeDormancyMember() {
+        LocalDateTime oneYearAgo = LocalDateTime.now().minusYears(1L);
+        List<MemberLastLogin> lastLogin = lastLoginRepository.findAllByLastLoginTimeLessThanEqual(oneYearAgo);
+
+        List<Member> members = new ArrayList<>();
+
+        lastLogin.forEach(dormancyMember -> {
+            Member member = dormancyMember.getMember();
+            member.setState(50);
+            members.add(member);
+        });
+
+        memberRepository.saveAll(members);
     }
 }
