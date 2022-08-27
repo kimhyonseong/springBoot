@@ -2,6 +2,7 @@ package com.example.foodlist.repository;
 
 import com.example.foodlist.domain.Member;
 import com.example.foodlist.domain.MemberLogin;
+import com.example.foodlist.service.MemberLastLoginService;
 import com.example.foodlist.service.MemberLoginService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class MemberLoginRepositoryTest {
+    @Autowired
+    MemberLoginService loginService;
     @Autowired
     MemberRepository memberRepository;
     @Autowired
@@ -32,7 +35,7 @@ class MemberLoginRepositoryTest {
         Member member1 = memberRepository.findByMemberId("lss1545");
         System.out.println("1st select "+member1);
 
-        memberLoginService.lastLoginRecoding(member1);
+        loginService.loginRecoding(member1,"127.0.0.1");
         memberRepository.save(member1);
 
         memberLoginRepository.findAll().forEach(System.out::println);

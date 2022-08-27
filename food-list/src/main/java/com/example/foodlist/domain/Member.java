@@ -61,4 +61,9 @@ public class Member extends BaseEntity{
     @JoinColumn(name = "member_idx",insertable = false, updatable = false)
     @ToString.Exclude
     private List<MemberLogin> memberLogins = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "member_idx")
+    @ToString.Exclude
+    private MemberLastLogin memberLastLogin;
 }

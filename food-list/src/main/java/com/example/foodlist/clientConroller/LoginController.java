@@ -1,6 +1,8 @@
 package com.example.foodlist.clientConroller;
 
 import com.example.foodlist.domain.Member;
+import com.example.foodlist.repository.MemberLastLoginRepository;
+import com.example.foodlist.service.MemberLastLoginService;
 import com.example.foodlist.service.MemberLoginService;
 import com.example.foodlist.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -20,8 +23,9 @@ import java.time.LocalDateTime;
 @Controller
 @RequiredArgsConstructor
 public class LoginController {
+    private final MemberLastLoginService lastLoginService;
     private final MemberService memberService;
-    private final MemberLoginService memberLoginService;
+    private final MemberLoginService loginService;
 
     @GetMapping("login")
     public String loginPage() {
@@ -32,6 +36,7 @@ public class LoginController {
     public String loginProc(
             Member member,
             BindingResult bindingResult,
+            HttpServletRequest request,
             HttpServletResponse response) {
         String failPath = "client/login";
         String successPath = "client/success";
@@ -57,8 +62,9 @@ public class LoginController {
             alertMsg(response,"아이디 또는 비밀번호가 일치하지 않습니다.");
             return failPath;
         } else {
-            memberLoginService.lastLoginRecoding(loginMember);
-            memberLoginService.loginCookie(loginMember,response);
+            lastLoginService.lastLoginRecoding(loginMember);
+            loginService.loginRecoding(loginMember,request.getRemoteAddr());
+            loginService.loginCookie(loginMember,response);
         }
 
         // 성공 시 전에 있던 페이지로 - 메인 페이지

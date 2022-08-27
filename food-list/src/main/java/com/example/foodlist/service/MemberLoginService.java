@@ -15,12 +15,12 @@ import java.time.LocalDateTime;
 public class MemberLoginService {
     private final MemberLoginRepository memberLoginRepository;
 
-    public void lastLoginRecoding(Member member) {
+    public void loginRecoding(Member member,String ip) {
         MemberLogin memberLogin = new MemberLogin();
         memberLogin.setMember(member);
         memberLogin.setMemberId(member.getMemberId());
         memberLogin.setLoginDate(LocalDateTime.now());
-        //memberLogin.setIp();
+        memberLogin.setIp(ip);
 
         memberLoginRepository.save(memberLogin);
     }
