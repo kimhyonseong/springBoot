@@ -3,6 +3,7 @@ package com.example.foodlist.service;
 import com.example.foodlist.domain.Member;
 import com.example.foodlist.domain.MemberLastLogin;
 import com.example.foodlist.repository.MemberLastLoginRepository;
+import com.example.foodlist.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,14 +14,25 @@ import java.time.LocalDateTime;
 public class MemberLastLoginService {
     private final MemberLastLoginRepository lastLoginRepository;
 
-    public void lastLoginRecoding(Member member) {
-        if (member != null) {
-            MemberLastLogin lastLogin = new MemberLastLogin();
-            lastLogin.setMemberId(member.getMemberId());
-            lastLogin.setMember(member);
-            lastLogin.setLastLoginTime(LocalDateTime.now());
+    public void lastLoginRecoding(Member loginMember) {
+        if (loginMember != null) {
+            MemberLastLogin lastLogin;
 
-            lastLoginRepository.save(lastLogin);
+            try {
+                lastLogin = lastLoginRepository.findByMember(loginMember);
+
+                if (lastLogin == null) {
+                    lastLogin = new MemberLastLogin();
+
+                    lastLogin.setMember(loginMember);
+                    lastLogin.setMemberId(loginMember.getMemberId());
+                    lastLogin.setLastLoginTime(LocalDateTime.now());
+                }
+                lastLogin.setLastLoginTime(LocalDateTime.now());
+                lastLoginRepository.save(lastLogin);
+            } catch (RuntimeException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 }
