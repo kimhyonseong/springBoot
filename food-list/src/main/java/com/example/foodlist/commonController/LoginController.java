@@ -1,4 +1,4 @@
-package com.example.foodlist.clientConroller;
+package com.example.foodlist.commonController;
 
 import com.example.foodlist.domain.Member;
 import com.example.foodlist.repository.MemberLastLoginRepository;

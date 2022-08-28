@@ -18,8 +18,8 @@ public class Food extends BaseEntity{
     @Column(nullable = false)
     private String name;
 
-    //private String country;
-
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "category_code")
+    @ToString.Exclude
     private FoodCategory foodCategory;
 }
