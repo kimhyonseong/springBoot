@@ -27,6 +27,7 @@
             src="https://code.jquery.com/jquery-3.6.1.min.js"
             integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
             crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
 <header>
@@ -94,15 +95,34 @@
     </article>
 </main>
 <script>
-    document.querySelector("#foodImg").addEventListener("change", function () {
-        $.ajax({
-            url : "",
-            data : $(".foodImg").val(),
-            success : function (data) {
+    const getImg = async ()=> {
+        try {
+            const formData = new FormData();
+            formData.append("file",document.querySelector("#foodImg").files[0]);
 
-            }
-        })
-    })
+            let url = "/rest/foodImgUpload";
+            let response = await axios.post(url,formData);
+            console.log(response);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    document.querySelector("#foodImg").addEventListener("change", getImg);
+    // document.querySelector("#foodImg").addEventListener("change", function () {
+    //     let form = new FormData();
+    //     form.append("file",$("#foodImg")[0].files[0]);
+    //
+    //     $.ajax({
+    //         url : "/rest/foodImgUpload",
+    //         type:"POST",
+    //         processData : false,
+    //         contentType : false,
+    //         data : form,
+    //         success : function (data) {
+    //             console.log(data);
+    //         }
+    //     })
+    // });
 </script>
 </body>
 </html>
