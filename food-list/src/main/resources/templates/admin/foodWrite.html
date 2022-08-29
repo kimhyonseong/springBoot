@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/base}">
@@ -15,5 +15,94 @@
         </form>
     </main>
 </th:block>
+</body>
+</html>-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Food Write</title>
+    <link rel="stylesheet" href="/css/admin/foodWrite.css">
+    <script
+            src="https://code.jquery.com/jquery-3.6.1.min.js"
+            integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<header>
+    <section class="left_sec">
+        <a href="#" class="go_main">Admin</a>
+    </section>
+    <section class="right_sec">
+        <span>
+            로그인 유지 시간 : <span class="limit_time">29:59</span>
+            <a class="time_extension" href="#">연장</a>
+        </span>
+        <a href="#" class="logout">로그아웃</a>
+    </section>
+</header>
+<main>
+    <aside class="aside">
+        <section>
+            <article>
+                <h3>음식</h3>
+                <a href="#">음식 리스트</a>
+            </article>
+            <article>
+                <h3>평가</h3>
+                <a href="#">평가 관라</a>
+            </article>
+            <article>
+                <h3>회원</h3>
+                <a href="#">회원관리</a>
+            </article>
+        </section>
+    </aside>
+    <article class="content">
+        <form class="food_form" method="post" enctype="multipart/form-data">
+            <label for="foodName">음식이름</label>
+            <input type="text" id="foodName" name="foodName" value="">
+
+            <label for="country">나라</label>
+            <input type="text" id="country" name="country" value="">
+
+            <label for="state">상태</label>
+            <select id="state" name="state">
+                <option value="0">None</option>
+                <option value="10">New</option>
+                <option value="20">Best</option>
+                <option value="30">Hot</option>
+            </select>
+
+            <label for="display">노출여부</label>
+            <select id="display" name="display">
+                <option>노출</option>
+                <option>비노출</option>
+            </select>
+
+            <label for="foodImg">이미지</label>
+            <input type="file" id="foodImg" name="foodImg" value="">
+            <div class="img-box">
+                <img src="https://via.placeholder.com/300/09f/fff" alt="음식 이미지">
+            </div>
+
+            <div class="buttons">
+                <input type="submit" value="저장">
+                <input type="button" value="취소">
+            </div>
+        </form>
+    </article>
+</main>
+<script>
+    document.querySelector("#foodImg").addEventListener("change", function () {
+        $.ajax({
+            url : "",
+            data : $(".foodImg").val(),
+            success : function (data) {
+
+            }
+        })
+    })
+</script>
 </body>
 </html>
