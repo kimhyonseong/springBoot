@@ -101,7 +101,9 @@
             formData.append("file",document.querySelector("#foodImg").files[0]);
 
             let url = "/rest/foodImgUpload";
-            let response = await axios.post(url,formData);
+            let response = await axios.post(url,formData).then((Response)=>{
+                console.log(Response.data);
+            });
             console.log(response);
         } catch (error) {
             console.error(error);

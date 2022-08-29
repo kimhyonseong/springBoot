@@ -17,7 +17,7 @@ public class FoodImg extends BaseEntity{
 
     private String imgName;
 
-    private int size;
+    private Long size;
 
     private String extension;
 
