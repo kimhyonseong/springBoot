@@ -104,27 +104,11 @@
             let response = await axios.post(url,formData).then((Response)=>{
                 console.log(Response.data);
             });
-            console.log(response);
         } catch (error) {
             console.error(error);
         }
     }
     document.querySelector("#foodImg").addEventListener("change", getImg);
-    // document.querySelector("#foodImg").addEventListener("change", function () {
-    //     let form = new FormData();
-    //     form.append("file",$("#foodImg")[0].files[0]);
-    //
-    //     $.ajax({
-    //         url : "/rest/foodImgUpload",
-    //         type:"POST",
-    //         processData : false,
-    //         contentType : false,
-    //         data : form,
-    //         success : function (data) {
-    //             console.log(data);
-    //         }
-    //     })
-    // });
 </script>
 </body>
 </html>

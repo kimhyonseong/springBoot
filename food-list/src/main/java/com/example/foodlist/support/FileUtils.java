@@ -7,23 +7,35 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Component
 public class FileUtils {
-    public boolean isImgMimeType(MultipartFile multipartFile){
+    public Map<String,Object> isImgMimeType(MultipartFile multipartFile){
         final List<String> ALLOW_EXT = Arrays.asList("image/jpeg","image/pjpeg","image/png");
+        Map<String,Object> map = new HashMap<>();
+
         try {
             InputStream inputStream = multipartFile.getInputStream();
             String mimeType = new Tika().detect(inputStream);
 
             System.out.println(mimeType);
+            map.put("type",mimeType);
+            map.put("allow",ALLOW_EXT.stream().anyMatch(matchType -> matchType.equalsIgnoreCase(mimeType)));
 
-            return ALLOW_EXT.stream().anyMatch(matchType -> matchType.equalsIgnoreCase(mimeType));
+            return map;
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
+    }
+
+    public String fileReName(String originFileName) {
+        String newFileName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        int expPos = originFileName.lastIndexOf(".");
+        String exp = originFileName.substring(expPos,originFileName.length());
+
+        return newFileName+exp;
     }
 }

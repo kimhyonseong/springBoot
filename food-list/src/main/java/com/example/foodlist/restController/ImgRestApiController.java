@@ -6,13 +6,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.ServletContext;
-import javax.validation.Valid;
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -22,29 +25,51 @@ public class ImgRestApiController {
 
     @PostMapping("rest/foodImgUpload")
     public ResponseEntity<?> imgUpload(
-            @RequestPart(value = "file",required=false) MultipartFile file
-    ) throws Exception{
+            @RequestPart(value = "file",required=false) MultipartFile file,
+            HttpServletRequest request
+    ) throws Exception {
         FileUtils fileUtils = new FileUtils();
-        boolean isImg = fileUtils.isImgMimeType(file);
+        Map<String, Object> map = fileUtils.isImgMimeType(file);
+        boolean isImg = (boolean) map.get("allow");
+        String mimeType = (String) map.get("type");
 
         long fileSize = file.getSize();
-        final String UPLOAD_PATH = "C:\\Users\\khs13\\Desktop\\foodListSpringBoot\\food-list\\src\\main\\resources\\static\\image\\tmp";
-        final String webRoot = servletContext.getRealPath("/");  // webapp으로 설정되어있어 사용하면 안됨
-        System.out.println("file origin name : "+file.getOriginalFilename());
-        System.out.println("isImg : "+isImg);
-        System.out.println("file size : "+fileSize);
-        System.out.println("webRoot : "+webRoot);
+        String UPLOAD_PATH = servletContext.getRealPath("/")+"../resources/static/image/tmp";
+        String URL_PATH = "http://localhost:8080/image/tmp/";
+        String originFileName = file.getOriginalFilename();
 
-        if(isImg) {
+        if(isImg && originFileName != null) {
             try {
-                File newFile = new File(UPLOAD_PATH, Objects.requireNonNull(file.getOriginalFilename()));
-                file.transferTo(newFile);
+                Map<String, String> body = new HashMap<>();
+                body.put("file_path", URL_PATH);
+                body.put("file_type",mimeType);
+                body.put("file_size", String.valueOf(fileSize));
+
+                String reName = fileUtils.fileReName(originFileName);
+                File uploadFile = new File(UPLOAD_PATH, Objects.requireNonNull(originFileName));
+                File renameFile = new File(UPLOAD_PATH,reName);
+
+                boolean rename = renameFile.renameTo(uploadFile);
+
+                if (rename) {
+                    file.transferTo(renameFile);
+                    body.put("file",reName);
+                } else {
+                    file.transferTo(uploadFile);
+                    body.put("file",originFileName);
+                }
+
+                return ResponseEntity
+                        .status(HttpStatus.OK)
+                        .body(body);
             } catch (IOException e) {
                 e.printStackTrace();
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .build();
             }
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .build();
         }
-
-        return ResponseEntity.status(HttpStatus.OK).body(file.getOriginalFilename());
     }
 }
