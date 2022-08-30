@@ -1,24 +1,6 @@
-<!--<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/base}">
-<head>
-    <meta charset="UTF-8">
-    <title>Food Write</title>
-</head>
-<body>
-<th:block layout:fragment="main">
-    <main>
-        <form>
-            <label for="memberId" class="id_placeholder">ID</label>
-            <input type="text" id="memberId" name="memberId" value="" >
-        </form>
-    </main>
-</th:block>
-</body>
-</html>-->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
     <title>Food Write</title>
@@ -84,7 +66,7 @@
             <label for="foodImg">이미지</label>
             <input type="file" id="foodImg" name="foodImg" value="">
             <div class="img-box">
-                <img src="https://via.placeholder.com/300/09f/fff" alt="음식 이미지">
+                <img id="img-preview" src="https://via.placeholder.com/300/09f/fff" alt="음식 이미지">
             </div>
 
             <div class="buttons">
@@ -103,7 +85,8 @@
             let url = "/rest/foodImgUpload";
             let response = await axios.post(url,formData).then((Response)=>{
                 console.log(Response.data);
-                console.log(Response.data.file_path+Response.data.file);
+
+                document.querySelector("#img-preview").src = Response.data.file_path+Response.data.file;
             });
         } catch (error) {
             console.error(error);

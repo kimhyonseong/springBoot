@@ -37,6 +37,9 @@ dependencies {
     implementation 'org.apache.tika:tika-core:1.19'
     implementation 'org.apache.tika:tika-parsers:1.19'
 
+    implementation 'org.springframework.boot:spring-boot-devtools'
+
+
     // JSP 연동
     // https://mvnrepository.com/artifact/javax.servlet/jstl
     //implementation 'javax.servlet:jstl:1.2'

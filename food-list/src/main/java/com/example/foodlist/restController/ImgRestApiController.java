@@ -51,13 +51,8 @@ public class ImgRestApiController {
 
                 boolean rename = renameFile.renameTo(uploadFile);
 
-                if (rename) {
-                    file.transferTo(renameFile);
-                    body.put("file",reName);
-                } else {
-                    file.transferTo(uploadFile);
-                    body.put("file",originFileName);
-                }
+                file.transferTo(renameFile);
+                body.put("file",reName);
 
                 return ResponseEntity
                         .status(HttpStatus.OK)
