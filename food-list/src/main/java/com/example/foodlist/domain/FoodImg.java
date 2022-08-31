@@ -15,11 +15,11 @@ public class FoodImg extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
 
-    private String imgName;
+    private String name;
+
+    private String imgUrl;
 
     private Long size;
-
-    private String extension;
 
     @OneToOne
     @JoinColumn(name = "food_idx")

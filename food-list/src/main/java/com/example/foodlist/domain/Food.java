@@ -26,7 +26,7 @@ public class Food extends BaseEntity{
     private String country;
 
     @Comment("노출여부")
-    private boolean display;
+    private String display;
 
     @Comment("0:기본, 10:New, 20:Best, 30:Hot")
     private int state;

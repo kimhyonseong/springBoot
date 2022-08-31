@@ -32,7 +32,7 @@ public class ImgRestApiController {
             HttpServletRequest request
     ) {
 
-        Map<String,Map<String, Object>> uploadResult = imageService.imgUpload(file);
+        Map<String,Map<String, Object>> uploadResult = imageService.imgUpload(file,"food");
 
         return ResponseEntity
                 .status(HttpStatus.OK)

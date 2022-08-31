@@ -1,5 +1,6 @@
 package com.example.foodlist.service;
 
+import com.example.foodlist.domain.FoodImg;
 import com.example.foodlist.support.FileUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,12 +19,20 @@ public class ImageService {
     private final FileUtils fileUtils;
 
     public Map<String,Map<String,Object>> imgUpload(MultipartFile file) {
+        return this.imgUpload(file,"");
+    }
+
+    public Map<String,Map<String,Object>> imgUpload(MultipartFile file, String location) {
         Map<String, Map<String,Object>> result = new HashMap<>();
         Map<String, Object> body = new HashMap<>();
         Map<String, Object> fileInfo = fileUtils.fileInfo(file);
 
-        String UPLOAD_PATH = Paths.get("./images/tmp").toAbsolutePath().normalize().toString();
-        String URL_PATH = "http://localhost:8080/images/";
+        if (!Objects.equals(location, "")) {
+            location += "/";
+        }
+
+        String UPLOAD_PATH = Paths.get("./images/"+location).toAbsolutePath().normalize().toString();
+        String URL_PATH = "/images/"+location;
         String originFileName = file.getOriginalFilename();
 
         result.put("fileInfo",fileInfo);

@@ -44,10 +44,12 @@
     <article class="content">
         <form class="food_form" method="post" enctype="multipart/form-data">
             <label for="foodName">음식이름</label>
-            <input type="text" id="foodName" name="foodName" value="">
+            <input type="text" id="foodName" name="name" value="">
 
             <label for="country">나라</label>
             <input type="text" id="country" name="country" value="">
+            <label for="countryCode">나라 코드</label>
+            <input type="text" id="countryCode" name="countryCode" value="">
 
             <label for="state">상태</label>
             <select id="state" name="state">
@@ -59,12 +61,13 @@
 
             <label for="display">노출여부</label>
             <select id="display" name="display">
-                <option>노출</option>
-                <option>비노출</option>
+                <option value="10">노출</option>
+                <option value="90">비노출</option>
             </select>
 
             <label for="foodImg">이미지</label>
-            <input type="file" id="foodImg" name="foodImg" value="">
+            <input type="file" id="foodImg" name="foodImgFile" value="">
+            <input type="hidden" id="foodImgUrl" name="imgUrl" value="">
             <div class="img-box">
                 <img id="img-preview" src="https://via.placeholder.com/300/09f/fff" alt="음식 이미지">
             </div>
@@ -85,8 +88,10 @@
             let url = "/rest/foodImgUpload";
             let response = await axios.post(url,formData).then((Response)=>{
                 console.log(Response.data);
+                let imgUrl = Response.data.file_path+Response.data.file;
 
-                document.querySelector("#img-preview").src = Response.data.file_path+Response.data.file;
+                document.querySelector("#img-preview").src = imgUrl;
+                document.querySelector("#foodImgUrl").value = imgUrl;
             });
         } catch (error) {
             console.error(error);

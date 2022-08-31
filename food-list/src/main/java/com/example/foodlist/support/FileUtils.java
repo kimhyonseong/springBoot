@@ -20,7 +20,7 @@ public class FileUtils {
             InputStream inputStream = multipartFile.getInputStream();
             String mimeType = new Tika().detect(inputStream);
 
-            System.out.println(mimeType);
+            //System.out.println(mimeType);
             map.put("type",mimeType);
             map.put("size",multipartFile.getSize());
             map.put("allow",ALLOW_EXT.stream().anyMatch(matchType -> matchType.equalsIgnoreCase(mimeType)));
