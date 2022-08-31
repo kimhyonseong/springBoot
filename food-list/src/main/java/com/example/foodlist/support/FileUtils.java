@@ -12,7 +12,7 @@ import java.util.*;
 
 @Component
 public class FileUtils {
-    public Map<String,Object> isImgMimeType(MultipartFile multipartFile){
+    public Map<String,Object> fileInfo(MultipartFile multipartFile){
         final List<String> ALLOW_EXT = Arrays.asList("image/jpeg","image/pjpeg","image/png");
         Map<String,Object> map = new HashMap<>();
 
@@ -22,6 +22,7 @@ public class FileUtils {
 
             System.out.println(mimeType);
             map.put("type",mimeType);
+            map.put("size",multipartFile.getSize());
             map.put("allow",ALLOW_EXT.stream().anyMatch(matchType -> matchType.equalsIgnoreCase(mimeType)));
 
             return map;

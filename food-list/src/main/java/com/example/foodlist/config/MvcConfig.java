@@ -9,12 +9,12 @@ import java.nio.file.Paths;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
-    private final Path FILE_ROOT = Paths.get("./images").toAbsolutePath().normalize();
+    private final Path FILE_ROOT = Paths.get("./images/tmp/").toAbsolutePath().normalize();
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
-                .addResourceHandler("/images/tmp")
+                .addResourceHandler("/images/**")
                 .addResourceLocations(FILE_ROOT.toUri().toString());
     }
 }
