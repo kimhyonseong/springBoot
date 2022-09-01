@@ -40,3 +40,9 @@ export function valueEmpty(value) {
     // 비었으면 false
     return value.trim() !== "";
 }
+
+export function removeAllActive() {
+    Array.from(this).forEach(ele => {
+        ele.classList.remove('active');
+    })
+}

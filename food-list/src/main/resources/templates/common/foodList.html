@@ -9,6 +9,7 @@
 <body>
 <th:block layout:fragment="css">
     <link rel="stylesheet" th:href="@{/css/food-list.css}">
+    <link rel="stylesheet" th:href="@{/css/food-rating.css}">
 </th:block>
 <th:block layout:fragment="content">
     <div class="form-div">
@@ -45,10 +46,65 @@
             </div>
             <div class="food-name" th:text="${food.name}"></div>
         </div>
+        <div class="food">
+        <div class="food-img">
+            <img src="/images/food/20220831153854.jpg" alt="pizza">
+        </div>
+        <div class="food-name">
+            pizza
+        </div>
+    </div>
+    </div>
+    <div class="food-info none">
+        <div class="food-img">
+            <img src="/images/food/20220831153854.jpg" alt="">
+        </div>
+        <div class="food-avr">평점 <span class="avr">0.0</span></div>
+        <div class="rating-star">
+            <div class="text">내 평가</div>
+            <span class="star">
+                <label data-value="1">★
+                    <input type="radio" name="star" value="1">
+                </label>
+            </span>
+            <span class="star">
+                <label data-value="2">★
+                    <input type="radio" name="star" value="2">
+                </label>
+            </span>
+            <span class="star">
+                <label data-value="3">★
+                    <input type="radio" name="star" value="3">
+                </label>
+            </span>
+            <span class="star">
+                <label data-value="4">★
+                    <input type="radio" name="star" value="4">
+                </label>
+            </span>
+            <span class="star">
+                <label data-value="5">★
+                    <input type="radio" name="star" value="5">
+                </label>
+            </span>
+        </div>
+        <div class="food-name">음식 이름</div>
+        <div class="food-cate">양식</div>
+        <div class="food-comment">
+            <textarea></textarea>
+            <input type="button" value="작성">
+        </div>
+        <div class="food-reply">
+            <div class="reply">
+                <div class="star">★★★★★</div>
+                <span class="text">부드럽고 바삭한 식감.</span>
+                <div class="user_id">-khs-</div>
+            </div>
+        </div>
     </div>
 </th:block>
 <th:block layout:fragment="javascript">
-
+    <script th:src="@{/js/foodList.js}" type="module"></script>
 </th:block>
 </body>
 </html>
