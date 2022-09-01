@@ -7,10 +7,12 @@
     <th:block layout:fragment="css"></th:block>
 </head>
 <body>
-<div class="background"></div>
-<main layout:fragment="main">
-    <div layout:fragment="content"></div>
-</main>
-<th:block layout:fragment="javascript"></th:block>
+<div class="wrap">
+    <div class="background"></div>
+    <main layout:fragment="main">
+        <div layout:fragment="content"></div>
+    </main>
+    <th:block layout:fragment="javascript"></th:block>
+</div>
 </body>
 </html>

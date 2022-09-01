@@ -5,6 +5,7 @@ import com.example.foodlist.repository.FoodRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,5 +41,23 @@ public class FoodService {
             }
         }
         return 0;
+    }
+
+    public List<Food> showAllFoods() {
+        try {
+            return foodRepository.findAll();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Food showFood(Long idx) {
+        try {
+            return foodRepository.findByIdx(idx);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -25,8 +25,8 @@ public class Food extends BaseEntity{
     @Comment("음식 나라")
     private String country;
 
-    @Comment("노출여부")
-    private String display;
+    @Comment("10:노출, 90:비노출")
+    private int display;
 
     @Comment("0:기본, 10:New, 20:Best, 30:Hot")
     private int state;
@@ -38,5 +38,6 @@ public class Food extends BaseEntity{
 
     @OneToOne
     @JoinColumn(name = "idx")
+    @ToString.Exclude
     private FoodImg foodImg;
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -59,6 +60,13 @@ public class foodController {
         return "layout/redirect";
     }
 
+    @GetMapping(value = "food/write/{id}")
+    public String foodUpdatePage(@PathVariable Long id, @Validated Food food,Model model) {
+
+        model.addAttribute("foodData",food);
+        return "common/foodList";
+    }
+
     @PostMapping(value = "food/write/{id}")
     public String foodUpdateProc(@PathVariable Long id, @Validated Food food,Model model) {
         int result = foodService.update(id,food);
@@ -76,7 +84,10 @@ public class foodController {
     }
 
     @GetMapping("foodList")
-    public String foodListPage() {
-        return "admin/foodList";
+    public String foodListPage(Model model) {
+        List<Food> foodList = foodService.showAllFoods();
+
+        model.addAttribute("foodList",foodList);
+        return "common/foodList";
     }
 }

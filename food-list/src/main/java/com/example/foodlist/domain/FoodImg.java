@@ -23,5 +23,6 @@ public class FoodImg extends BaseEntity{
 
     @OneToOne
     @JoinColumn(name = "food_idx")
+    @ToString.Exclude
     private Food food;
 }

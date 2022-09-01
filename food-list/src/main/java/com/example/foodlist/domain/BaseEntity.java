@@ -20,15 +20,4 @@ abstract class BaseEntity {
     @LastModifiedDate
     @Column(name = "updDate", updatable = false, columnDefinition = "datetime(6) default now(6) comment '수정시간'")
     private LocalDateTime updDate;
-
-//    @PrePersist
-//    public void preRegDate() {
-//        this.setRegDate(LocalDateTime.now());
-//        this.setUpdDate(LocalDateTime.now());
-//    }
-//
-//    @PreUpdate
-//    public void preUpdDate() {
-//        this.setUpdDate(LocalDateTime.now());
-//    }
 }

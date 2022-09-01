@@ -8,7 +8,16 @@
     outline: none;
 }
 
-html {
+/*html {*/
+/*    min-height: 100vh;*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    margin: 0;*/
+/*    position: relative;*/
+/*}*/
+
+.wrap {
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -19,13 +28,12 @@ html {
 
 
 .background {
+    position: absolute;
     top: 0;
     left: 0;
-    width: 102vw;
-    height: 100vh;
-    background: url("/image/common/back_spaghetti.jpg") no-repeat;
-    background-size: cover;
-    position: fixed;
+    right: 0;
+    bottom: 0;
+    background: url("/image/common/back_spaghetti.jpg") center center no-repeat fixed;
 }
 
 

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+<head>
+    <meta charset="UTF-8">
+    <title>Food List</title>
+</head>
+<body>
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/food-list.css}">
+</th:block>
+<th:block layout:fragment="content">
+    <div class="form-div">
+        <h3>Find Menu<br><span class="border-bottom">Choose Menu</span></h3>
+        <form class="search-form">
+            <div class="category">
+                <label>
+                    <input type="button" value="0">전체
+                </label>
+                <label>
+                    <input type="button" value="1">한식
+                </label>
+                <label>
+                    <input type="button" value="2">양식
+                </label>
+                <label>
+                    <input type="button" value="3">중식
+                </label>
+                <label>
+                    <input type="button" value="4">일식
+                </label>
+            </div>
+            <div class="search">
+                <label for="food" class="food_placeholder">Food name</label>
+                <input name="food" id="food" class="food-search">
+                <input type="submit" class="food-search-bt" value="Find">
+            </div>
+        </form>
+    </div>
+    <div class="food-list">
+        <div class="food" th:each="food : ${foodList}">
+            <div th:class="food-img">
+                <img th:src="${food.foodImg.imgUrl}" th:alt="${food.name}">
+            </div>
+            <div class="food-name" th:text="${food.name}"></div>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="javascript">
+
+</th:block>
+</body>
+</html>
