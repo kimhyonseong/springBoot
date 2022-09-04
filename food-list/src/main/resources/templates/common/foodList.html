@@ -44,16 +44,18 @@
             <div th:class="food-img">
                 <img th:src="${food.foodImg.imgUrl}" th:alt="${food.name}">
             </div>
-            <div class="food-name" th:text="${food.name}"></div>
+            <div class="food-name" th:text="${food.name}"
+                 th:data-info-id="${food.id}" th:data-info-avr="${food.id}"></div>
         </div>
         <div class="food">
-        <div class="food-img">
-            <img src="/images/food/20220831153854.jpg" alt="pizza">
+            <div class="food-img">
+                <img src="/images/food/20220831153854.jpg" alt="pizza">
+            </div>
+            <div class="food-name" data-info-id="1"
+                 data-info-avr="4.4" data-my-score="4"
+                 data-info-img="/images/food/20220831153854.jpg"
+                 data-info-cate="양식">pizza</div>
         </div>
-        <div class="food-name">
-            pizza
-        </div>
-    </div>
     </div>
     <div class="food-info none">
         <div class="food-img">
@@ -62,31 +64,33 @@
         <div class="food-avr">평점 <span class="avr">0.0</span></div>
         <div class="rating-star">
             <div class="text">내 평가</div>
-            <span class="star">
-                <label data-value="1">★
-                    <input type="radio" name="star" value="1">
-                </label>
-            </span>
-            <span class="star">
-                <label data-value="2">★
-                    <input type="radio" name="star" value="2">
-                </label>
-            </span>
-            <span class="star">
-                <label data-value="3">★
-                    <input type="radio" name="star" value="3">
-                </label>
-            </span>
-            <span class="star">
-                <label data-value="4">★
-                    <input type="radio" name="star" value="4">
-                </label>
-            </span>
-            <span class="star">
-                <label data-value="5">★
-                    <input type="radio" name="star" value="5">
-                </label>
-            </span>
+            <div class="stars">
+                <span class="star">
+                    <label data-value="1">
+                        <input type="radio" name="star" value="1">
+                    </label>
+                </span>
+                <span class="star">
+                    <label data-value="2">
+                        <input type="radio" name="star" value="2">
+                    </label>
+                </span>
+                <span class="star">
+                    <label data-value="3">
+                        <input type="radio" name="star" value="3">
+                    </label>
+                </span>
+                <span class="star">
+                    <label data-value="4">
+                        <input type="radio" name="star" value="4">
+                    </label>
+                </span>
+                <span class="star">
+                    <label data-value="5"><!--★-->
+                        <input type="radio" name="star" value="5">
+                    </label>
+                </span>
+            </div>
         </div>
         <div class="food-name">음식 이름</div>
         <div class="food-cate">양식</div>

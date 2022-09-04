@@ -36,10 +36,19 @@
     text-align: center;
     font-size: 40px;
     color: #8080805c;
+    display: flex;
+    flex-direction: column;
 }
 
-.food-info .rating-star .star{
+.food-info .rating-star .stars {
+    display: flex;
+}
+.food-info .rating-star .stars .star{
     cursor: pointer;
+}
+
+.food-info .rating-star .stars .star label:before{
+    content: "★";
 }
 
 .food-info .rating-star .text{
