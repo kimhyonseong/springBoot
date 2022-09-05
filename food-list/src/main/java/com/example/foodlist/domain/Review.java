@@ -16,15 +16,17 @@ public class Review extends BaseEntity{
     private Long id;
 
     @Column(nullable = false)
-    private int score;
+    private Integer score;
 
     private String comment;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "food_idx")
     @ToString.Exclude
     private Food food;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "member_idx")
     @ToString.Exclude
     private Member member;
 }

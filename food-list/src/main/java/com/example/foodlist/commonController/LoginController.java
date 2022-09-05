@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -45,8 +46,10 @@ public class LoginController {
         String successPath = "common/foodList";
         Member loginMember;
 
-        if (redirect != null) {
+        if (!Objects.equals(redirect, "")) {
             successPath = "redirect:"+redirect;
+        } else {
+            successPath = "redirect:/foodList";
         }
 
         response.setContentType("text/html; charset=utf-8");

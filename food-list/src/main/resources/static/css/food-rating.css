@@ -92,13 +92,13 @@
     border-right: 0;
 }
 
-.food-info .food-comment input[type=button] {
+.food-info .food-comment .reviewBt {
     border-radius: 0 10px 10px 0;
     border: 1px solid;
     width: 10%;
 }
 
-.food-info .food-comment input[type=button]:hover {
+.food-info .food-comment .reviewBt:hover {
     border: 1px solid red;
 }
 

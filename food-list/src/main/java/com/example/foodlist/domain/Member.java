@@ -66,4 +66,9 @@ public class Member extends BaseEntity{
     @JoinColumn(name = "member_idx")
     @ToString.Exclude
     private MemberLastLogin memberLastLogin;
+
+    @OneToMany
+    @JoinColumn(name = "member_idx")
+    @ToString.Exclude
+    private List<Review> reviews = new ArrayList<>();
 }

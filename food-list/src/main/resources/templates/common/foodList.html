@@ -62,10 +62,10 @@
 <th:block layout:fragment="javascript">
     <script th:src="@{/js/foodList.js}" type="module"></script>
     <script th:if="${foodId != null}" th:inline="javascript" type="module">
-        import {foodTemplate} from "/js/foodList.js";
+        import * as foodList from "/js/foodList.js";
         import {scrollClass} from "/js/common.js";
 
-        foodTemplate([[${foodId}]]).then(result => {
+        foodList.foodTemplate([[${foodId}]]).then(result => {
             console.log(result);
             scrollClass("food-info");
         });

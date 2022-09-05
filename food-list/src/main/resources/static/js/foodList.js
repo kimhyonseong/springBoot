@@ -2,15 +2,12 @@ import * as common from "./common.js";
 
 const foodList = document.querySelector('.food-list');
 const foodInfo = document.querySelector(".food-info");
-const foodReviewBt = document.querySelector(".review");
 
 foodList?.addEventListener("click", foodClickEvent);
 foodList?.addEventListener("mousemove", foodMousemoveEvent);
 
 foodInfo?.addEventListener("click", foodInfoClickEvent);
 foodInfo?.addEventListener("mousemove", starMousemoveEvent);
-
-foodReviewBt?.addEventListener("click", );
 
 // 음식 선택 이벤트
 function foodClickEvent(e) {
@@ -39,7 +36,6 @@ export async function foodTemplate(index) {
     try {
         let url = `/food/info/${index}`;
         await axios.get(url).then((response)=> {
-
 
             let foodHtml = `<div class="food-img">
                                 <img src="${response.data.foodImg.imgUrl}" alt="">
@@ -78,11 +74,11 @@ export async function foodTemplate(index) {
                             <div class="food-name">${response.data.name}</div>
                             <div class="food-cate">양식</div>
                             <div class="food-comment">
-                                <form method="post" action="/foodList/review">
-                                    <input type="hidden" class="foodId" name="score">
+                                <form class="review-form" method="post" action="/food/review">
+                                    <input type="hidden" class="foodId" name="foodId" value="${index}">
                                     <input type="hidden" class="score" name="score">
                                     <textarea name="content"></textarea>
-                                    <input type="button" class="review" value="작성">
+                                    <input type="submit" class="reviewBt" value="작성">
                                 </form>
                             </div>`;
 
@@ -179,6 +175,14 @@ function fixStar(stars, num = 0) {
     return true;
 }
 
-function formAction() {
+/*
+export function formAction() {
+    const form = document.querySelector(".review-form");
 
+    if(common.getCookie("loginId") != null) {
+        form.submit();
+    } else {
+        common.login("/foodList/"+form.foodId);
+    }
 }
+*/

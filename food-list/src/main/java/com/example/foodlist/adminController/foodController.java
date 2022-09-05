@@ -2,8 +2,11 @@ package com.example.foodlist.adminController;
 
 import com.example.foodlist.domain.Food;
 import com.example.foodlist.domain.FoodImg;
+import com.example.foodlist.domain.Member;
+import com.example.foodlist.domain.Review;
 import com.example.foodlist.service.FoodImgService;
 import com.example.foodlist.service.FoodService;
+import com.example.foodlist.service.ReviewService;
 import com.example.foodlist.support.FileUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -12,11 +15,15 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,6 +31,7 @@ public class foodController {
     private final FoodService foodService;
     private final FileUtils fileUtils;
     private final FoodImgService foodImageService;
+    private final ReviewService reviewService;
 
     @GetMapping(value = "food/write")
     public String foodInsertPage() {
@@ -96,5 +104,47 @@ public class foodController {
         model.addAttribute("foodList",foodList);
         model.addAttribute("foodId",id);
         return "common/foodList";
+    }
+
+    @PostMapping("/food/review")
+    public String foodReview(HttpServletRequest request, Model model,
+                             Review review, @RequestParam("foodId") Long foodId) {
+        Food food = foodService.showFood(foodId);
+        Cookie[] cookies = request.getCookies();
+        String loginId = "";
+
+        for(Cookie c : cookies) {
+            if (Objects.equals(c.getName(), "loginId")) {
+                loginId = c.getValue();
+            }
+            System.out.println(c.getName()+"/"+c.getValue());
+        }
+
+        int result = reviewService.putReview(food,loginId,review);
+
+        if (result == 1) {
+            return "redirect:/foodList/";
+        } else if (result == 2) {
+            Map<String, String> redirect = new HashMap<>();
+            redirect.put("redirectUrl","/login");
+            redirect.put("message","다시 로그인 후 이용해주시기 바랍니다.");
+            model.addAttribute("redirect",redirect);
+
+            return "layout/redirect";
+        } else if (result == 0){
+            Map<String, String> redirect = new HashMap<>();
+            redirect.put("redirectUrl","/foodList");
+            redirect.put("message","음식 선택이 되지 않았습니다.");
+            model.addAttribute("redirect",redirect);
+
+            return "layout/redirect";
+        } else {
+            Map<String, String> redirect = new HashMap<>();
+            redirect.put("redirectUrl","/foodList");
+            redirect.put("message","오류가 발생하였습니다.");
+            model.addAttribute("redirect",redirect);
+
+            return "layout/redirect";
+        }
     }
 }
