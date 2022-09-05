@@ -35,7 +35,7 @@ class FoodServiceTest {
         insertFoodImg.setName(insertFood.getName());
         insertFoodImg.setFood(insertFood);
         insertFoodImg.setSize(100L);
-        insertFoodImg.setImgUrl("localhost:8080/images/test.jpg");;
+        insertFoodImg.setImgUrl("localhost:8080/images/test.jpg");
 
         foodImgService.put(insertFoodImg);
 
@@ -46,5 +46,28 @@ class FoodServiceTest {
         System.out.println("foodImg : "+foodImg);
 
         System.out.println("Food List : "+foodRepository.findAll());
+    }
+
+    @Test
+    void showFoodInfoService() {
+        Food insertFood = new Food();
+        insertFood.setName("김치");
+        insertFood.setCountry("한국");
+        insertFood.setCountryCode(1);
+        insertFood.setDisplay(10);
+
+        foodService.put(insertFood);
+
+        FoodImg insertFoodImg = new FoodImg();
+        insertFoodImg.setName(insertFood.getName());
+        insertFoodImg.setFood(insertFood);
+        insertFoodImg.setSize(100L);
+        insertFoodImg.setImgUrl("localhost:8080/images/test.jpg");
+
+        foodImgService.put(insertFoodImg);
+
+        insertFood = foodService.showFood(1L);
+
+        System.out.println(insertFood);
     }
 }

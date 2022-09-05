@@ -86,8 +86,15 @@ public class foodController {
     @GetMapping("foodList")
     public String foodListPage(Model model) {
         List<Food> foodList = foodService.showAllFoods();
-
         model.addAttribute("foodList",foodList);
+        return "common/foodList";
+    }
+
+    @GetMapping("foodList/{id}")
+    public String foodListPage(Model model, @PathVariable String id) {
+        List<Food> foodList = foodService.showAllFoods();
+        model.addAttribute("foodList",foodList);
+        model.addAttribute("foodId",id);
         return "common/foodList";
     }
 }

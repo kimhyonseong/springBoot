@@ -1,5 +1,6 @@
 package com.example.foodlist.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.Comment;
 
@@ -39,5 +40,6 @@ public class Food extends BaseEntity{
     @OneToOne
     @JoinColumn(name = "idx")
     @ToString.Exclude
+    @JsonManagedReference
     private FoodImg foodImg;
 }

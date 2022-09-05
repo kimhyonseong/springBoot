@@ -34,6 +34,7 @@
     right: 0;
     bottom: 0;
     background: url("/image/common/back_spaghetti.jpg") center center no-repeat fixed;
+    background-size: cover;
 }
 
 

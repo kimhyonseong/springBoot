@@ -1,5 +1,6 @@
 package com.example.foodlist.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,5 +25,6 @@ public class FoodImg extends BaseEntity{
     @OneToOne
     @JoinColumn(name = "food_idx")
     @ToString.Exclude
+    @JsonBackReference
     private Food food;
 }

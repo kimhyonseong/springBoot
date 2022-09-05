@@ -28,7 +28,9 @@ public class LoginController {
     private final MemberLoginService loginService;
 
     @GetMapping("login")
-    public String loginPage() {
+    public String loginPage(@RequestParam(value = "redirect", required = false)  String redirect,
+                            Model model) {
+        model.addAttribute("redirect",redirect);
         return "client/login";
     }
 
@@ -37,10 +39,15 @@ public class LoginController {
             Member member,
             BindingResult bindingResult,
             HttpServletRequest request,
-            HttpServletResponse response) {
+            HttpServletResponse response,
+            @RequestParam(value = "redirect", required = false) String redirect) {
         String failPath = "client/login";
-        String successPath = "client/success";
+        String successPath = "common/foodList";
         Member loginMember;
+
+        if (redirect != null) {
+            successPath = "redirect:"+redirect;
+        }
 
         response.setContentType("text/html; charset=utf-8");
 
