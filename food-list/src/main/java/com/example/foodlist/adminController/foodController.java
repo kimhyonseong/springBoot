@@ -117,34 +117,10 @@ public class foodController {
             if (Objects.equals(c.getName(), "loginId")) {
                 loginId = c.getValue();
             }
-            System.out.println(c.getName()+"/"+c.getValue());
         }
 
-        int result = reviewService.putReview(food,loginId,review);
+        int putResult = reviewService.putReview(food,loginId,review);
 
-        if (result == 1) {
-            return "redirect:/foodList/";
-        } else if (result == 2) {
-            Map<String, String> redirect = new HashMap<>();
-            redirect.put("redirectUrl","/login");
-            redirect.put("message","다시 로그인 후 이용해주시기 바랍니다.");
-            model.addAttribute("redirect",redirect);
-
-            return "layout/redirect";
-        } else if (result == 0){
-            Map<String, String> redirect = new HashMap<>();
-            redirect.put("redirectUrl","/foodList");
-            redirect.put("message","음식 선택이 되지 않았습니다.");
-            model.addAttribute("redirect",redirect);
-
-            return "layout/redirect";
-        } else {
-            Map<String, String> redirect = new HashMap<>();
-            redirect.put("redirectUrl","/foodList");
-            redirect.put("message","오류가 발생하였습니다.");
-            model.addAttribute("redirect",redirect);
-
-            return "layout/redirect";
-        }
+        return reviewService.returnResult(putResult,foodId, model);
     }
 }

@@ -1,5 +1,7 @@
 package com.example.foodlist.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,5 +30,6 @@ public class Review extends BaseEntity{
     @ManyToOne(optional = false)
     @JoinColumn(name = "member_idx")
     @ToString.Exclude
+    @JsonBackReference
     private Member member;
 }

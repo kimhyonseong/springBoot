@@ -2,6 +2,8 @@ package com.example.foodlist.domain;
 
 import com.example.foodlist.annotation.NoSpecial;
 import com.example.foodlist.domain.listener.MemberEntityListener;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -70,5 +72,6 @@ public class Member extends BaseEntity{
     @OneToMany
     @JoinColumn(name = "member_idx")
     @ToString.Exclude
+    @JsonManagedReference
     private List<Review> reviews = new ArrayList<>();
 }
