@@ -22,6 +22,8 @@ public class Review extends BaseEntity{
 
     private String comment;
 
+    private String memberId;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "food_idx")
     @ToString.Exclude

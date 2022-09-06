@@ -13,6 +13,7 @@ foodInfo?.addEventListener("mousemove", starMousemoveEvent);
 function foodClickEvent(e) {
     if (e.target.classList.contains("food-name") && e.type === "click") {
         foodTemplate(e.target.dataset.infoId).then(r => console.log(r));
+        foodReviewTemplate(e.target.dataset.infoId).then(r => console.log(r));
     }
 }
 
@@ -82,20 +83,51 @@ export async function foodTemplate(index) {
                                 </form>
                             </div>`;
 
-            foodHtml += `<div class="food-reply">
-                            <div class="reply">
-                                <div class="star">★★★★★</div>
-                                <span class="text">부드럽고 바삭한 식감.</span>
-                                <div class="user_id">-khs-</div>
-                            </div>
-                        </div>`;
-
-            foodInfo.innerHTML = foodHtml;
+            foodInfo.querySelector(".food-info-box").innerHTML = foodHtml;
             foodInfo.classList.remove("none");
         });
     } catch (e) {
         console.log(e);
     }
+}
+
+export async function foodReviewTemplate(index) {
+    try {
+        let url = `/food/review/${index}`;
+        await axios.get(url).then((response) => {
+            let review = '';
+
+            console.log(response.data);
+            console.log(response.data.length);
+
+            let data = '';
+            for(let i=0, length=response.data.length; i<length; i++) {
+                data = response.data[i];
+                review += `<div class="food-reply">
+                        <div class="reply">
+                            <div class="star">${drawReviewStar(data.score)}</div><!--★-->
+                            <span class="text">${data.comment}</span>
+                            <div class="user_id">-${data.memberId}-</div>
+                        </div>
+                    </div>`;
+            }
+
+            foodInfo.querySelector(".food-review-box").innerHTML = review;
+        })
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+function drawReviewStar(num) {
+    let star = '';
+
+    for(let i=0; i<5; i++) {
+        if (i === num) break;
+        star += '★';
+    }
+
+    return star;
 }
 
 function foodInfoClickEvent(e) {

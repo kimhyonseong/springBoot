@@ -119,6 +119,7 @@ public class foodController {
             }
         }
 
+        review.setMemberId(loginId);
         int putResult = reviewService.putReview(food,loginId,review);
 
         return reviewService.returnResult(putResult,foodId, model);
