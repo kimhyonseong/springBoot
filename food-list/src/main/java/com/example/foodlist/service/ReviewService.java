@@ -11,14 +11,13 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
-    private MemberRepository memberRepository;
-    private ReviewRepository reviewRepository;
+    private final MemberRepository memberRepository;
+    private final ReviewRepository reviewRepository;
 
     public int putReview(Food food, String memberId, Review review) {
         Member member;
 
         try {
-            System.out.println("memberId = "+memberId);
             member = memberRepository.findByMemberId(memberId);
         } catch (NullPointerException e) {
             e.printStackTrace();

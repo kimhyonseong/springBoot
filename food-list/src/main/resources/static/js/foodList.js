@@ -77,7 +77,7 @@ export async function foodTemplate(index) {
                                 <form class="review-form" method="post" action="/food/review">
                                     <input type="hidden" class="foodId" name="foodId" value="${index}">
                                     <input type="hidden" class="score" name="score">
-                                    <textarea name="content"></textarea>
+                                    <textarea name="comment"></textarea>
                                     <input type="submit" class="reviewBt" value="작성">
                                 </form>
                             </div>`;

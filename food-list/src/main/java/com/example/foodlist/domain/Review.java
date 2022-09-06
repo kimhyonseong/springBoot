@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class Review extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idx;
 
     @Column(nullable = false)
     private Integer score;
