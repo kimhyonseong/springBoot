@@ -1,44 +1,34 @@
-package com.example.foodlist.adminController;
+package com.example.foodlist.controller;
 
 import com.example.foodlist.domain.Food;
 import com.example.foodlist.domain.FoodImg;
-import com.example.foodlist.domain.Member;
-import com.example.foodlist.domain.Review;
 import com.example.foodlist.service.FoodImgService;
 import com.example.foodlist.service.FoodService;
-import com.example.foodlist.service.ReviewService;
 import com.example.foodlist.support.FileUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
-public class foodController {
+@RequestMapping("/admin")
+public class foodAdminController {
     private final FoodService foodService;
     private final FileUtils fileUtils;
     private final FoodImgService foodImageService;
-    private final ReviewService reviewService;
 
-    @GetMapping(value = "food/write")
+    @GetMapping(value = "/food/write")
     public String foodInsertPage() {
         return "admin/foodWrite";
     }
 
-    @PostMapping(value = "food/write")
+    @PostMapping(value = "/food/write")
     public String foodInsertProc(@Validated Food food,
                                  FoodImg foodImg,
                                  MultipartFile foodImgFile,
@@ -68,14 +58,14 @@ public class foodController {
         return "layout/redirect";
     }
 
-    @GetMapping(value = "food/write/{id}")
+    @GetMapping(value = "/food/write/{id}")
     public String foodUpdatePage(@PathVariable Long id, @Validated Food food,Model model) {
 
         model.addAttribute("foodData",food);
         return "common/foodList";
     }
 
-    @PostMapping(value = "food/write/{id}")
+    @PostMapping(value = "/food/write/{id}")
     public String foodUpdateProc(@PathVariable Long id, @Validated Food food,Model model) {
         int result = foodService.update(id,food);
 
@@ -89,39 +79,5 @@ public class foodController {
         }
 
         return "redirect:/foodList";
-    }
-
-    @GetMapping("foodList")
-    public String foodListPage(Model model) {
-        List<Food> foodList = foodService.showAllFoods();
-        model.addAttribute("foodList",foodList);
-        return "common/foodList";
-    }
-
-    @GetMapping("foodList/{id}")
-    public String foodListPage(Model model, @PathVariable String id) {
-        List<Food> foodList = foodService.showAllFoods();
-        model.addAttribute("foodList",foodList);
-        model.addAttribute("foodId",id);
-        return "common/foodList";
-    }
-
-    @PostMapping("/food/review")
-    public String foodReview(HttpServletRequest request, Model model,
-                             Review review, @RequestParam("foodId") Long foodId) {
-        Food food = foodService.showFood(foodId);
-        Cookie[] cookies = request.getCookies();
-        String loginId = "";
-
-        for(Cookie c : cookies) {
-            if (Objects.equals(c.getName(), "loginId")) {
-                loginId = c.getValue();
-            }
-        }
-
-        review.setMemberId(loginId);
-        int putResult = reviewService.putReview(food,loginId,review);
-
-        return reviewService.returnResult(putResult,foodId, model);
     }
 }

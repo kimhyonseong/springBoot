@@ -1,4 +1,4 @@
-package com.example.foodlist.commonController;
+package com.example.foodlist.controller;
 
 import com.example.foodlist.domain.Member;
 import com.example.foodlist.service.MemberService;
