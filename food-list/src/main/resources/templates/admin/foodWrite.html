@@ -44,32 +44,34 @@
     <article class="content">
         <form class="food_form" method="post" enctype="multipart/form-data">
             <label for="foodName">음식이름</label>
-            <input type="text" id="foodName" name="name" value="">
+            <input type="text" id="foodName" name="name" th:value="${foodData?.name}">
 
             <label for="country">나라</label>
-            <input type="text" id="country" name="country" value="">
+            <input type="text" id="country" name="country" th:value="${foodData?.country}">
             <label for="countryCode">나라 코드</label>
-            <input type="text" id="countryCode" name="countryCode" value="">
+            <input type="text" id="countryCode" name="countryCode" th:value="${foodData?.countryCode}">
 
             <label for="state">상태</label>
             <select id="state" name="state">
-                <option value="0">None</option>
-                <option value="10">New</option>
-                <option value="20">Best</option>
-                <option value="30">Hot</option>
+                <option th:selected="${foodData?.state==0}" value="0">None</option>
+                <option th:selected="${foodData?.state==10}" value="10">New</option>
+                <option th:selected="${foodData?.state==20}" value="20">Best</option>
+                <option th:selected="${foodData?.state==30}" value="30">Hot</option>
             </select>
 
             <label for="display">노출여부</label>
             <select id="display" name="display">
-                <option value="10">노출</option>
-                <option value="90">비노출</option>
+                <option th:selected="${foodData?.display==10}" value="10">노출</option>
+                <option th:selected="${foodData?.display==90}" value="90">비노출</option>
             </select>
 
             <label for="foodImg">이미지</label>
             <input type="file" id="foodImg" name="foodImgFile" value="">
             <input type="hidden" id="foodImgUrl" name="imgUrl" value="">
             <div class="img-box">
-                <img id="img-preview" src="https://via.placeholder.com/300/09f/fff" alt="음식 이미지">
+                <img id="img-preview"
+                     th:src="${foodData?.foodImg?.imgUrl ?:'https://via.placeholder.com/300/09f/fff'}"
+                     alt="음식 이미지">
             </div>
 
             <div class="buttons">

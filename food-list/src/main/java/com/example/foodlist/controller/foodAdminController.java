@@ -23,16 +23,15 @@ public class foodAdminController {
     private final FileUtils fileUtils;
     private final FoodImgService foodImageService;
 
-    @GetMapping(value = "/food/write")
-    public String foodInsertPage() {
-        return "admin/foodWrite";
-    }
-
-    @PostMapping(value = "/food/write")
+    @PostMapping(value = {"/food/write","/food/write/{id}"})
     public String foodInsertProc(@Validated Food food,
                                  FoodImg foodImg,
+                                 @PathVariable(required = false) Long id,
                                  MultipartFile foodImgFile,
                                  Model model){
+        if (id != null) {
+            food.setIdx(foodService.showFood(id).getIdx());
+        }
         int result = foodService.put(food);
 
         model.addAttribute("foodData",food);
@@ -58,26 +57,17 @@ public class foodAdminController {
         return "layout/redirect";
     }
 
-    @GetMapping(value = "/food/write/{id}")
-    public String foodUpdatePage(@PathVariable Long id, @Validated Food food,Model model) {
+    @GetMapping(value = {"/food/write/{id}","/food/write"})
+    public String foodUpdatePage(@PathVariable(required = false) Long id, Model model) {
 
-        model.addAttribute("foodData",food);
-        return "common/foodList";
-    }
+        Food food = null;
 
-    @PostMapping(value = "/food/write/{id}")
-    public String foodUpdateProc(@PathVariable Long id, @Validated Food food,Model model) {
-        int result = foodService.update(id,food);
-
-        model.addAttribute("foodData",food);
-
-        if (result == -1) {
-            model.addAttribute("errorMsg","오류가 발생하였습니다.");
-            return "admin/foodWrite";
-        } else if (result == 0) {
-            model.addAttribute("errorMsg","데이터가 비어있습니다.");
+        if (id != null) {
+            food = foodService.showFood(id);
+            System.out.println(food);
         }
 
-        return "redirect:/foodList";
+        model.addAttribute("foodData", food);
+        return "admin/foodWrite";
     }
 }
