@@ -67,7 +67,7 @@
 
             <label for="foodImg">이미지</label>
             <input type="file" id="foodImg" name="foodImgFile" value="">
-            <input type="hidden" id="foodImgUrl" name="imgUrl" value="">
+            <input type="hidden" id="foodImgUrl" name="imgUrl" th:value="${foodData?.foodImg?.imgUrl}">
             <div class="img-box">
                 <img id="img-preview"
                      th:src="${foodData?.foodImg?.imgUrl ?:'https://via.placeholder.com/300/09f/fff'}"

@@ -31,6 +31,7 @@ public class foodAdminController {
                                  Model model){
         if (id != null) {
             food.setIdx(foodService.showFood(id).getIdx());
+            foodImg.setIdx(foodService.showFood(id).getFoodImg().getIdx());
         }
         int result = foodService.put(food);
 

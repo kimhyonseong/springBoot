@@ -41,4 +41,13 @@ public class FoodImgService {
             return null;
         }
     }
+
+    public FoodImg showFoodImg(Long idx) {
+        try {
+            return foodImgRepository.findByIdx(idx);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
