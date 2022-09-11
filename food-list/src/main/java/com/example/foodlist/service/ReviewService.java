@@ -77,4 +77,15 @@ public class ReviewService {
 
         return "layout/redirect";
     }
+
+    public Long findReviewId(Long foodIdx,String loginId) {
+        Review review = new Review();
+        try {
+            review = reviewRepository.findByFoodIdxAndMemberId(foodIdx,loginId);
+            return review.getIdx();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+        return review.getIdx();
+    }
 }
