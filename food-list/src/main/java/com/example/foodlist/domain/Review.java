@@ -27,6 +27,7 @@ public class Review extends BaseEntity{
     @ManyToOne(optional = false)
     @JoinColumn(name = "food_idx")
     @ToString.Exclude
+    @JsonBackReference
     private Food food;
 
     @ManyToOne(optional = false)

@@ -35,8 +35,18 @@ function foodMousemoveEvent(e) {
 
 export async function foodTemplate(index) {
     try {
+        let loginId = common.getCookie("loginId");
+        let loginComment = "";
+        let loginScore = 0;
+
         let url = `/food/info/${index}`;
         await axios.get(url).then((response)=> {
+            for(let i=0,reviewLength = response.data.reviews.length; i<reviewLength; i++) {
+                if (response.data.reviews[i].memberId === loginId) {
+                    loginComment = response.data.reviews[i].comment;
+                    loginScore = response.data.reviews[i].score;
+                }
+            }
 
             let foodHtml = `<div class="food-img">
                                 <img src="${response.data.foodImg.imgUrl}" alt="">
@@ -45,29 +55,29 @@ export async function foodTemplate(index) {
                             <div class="rating-star">
                                 <div class="text">내 평가</div>
                                 <div class="stars">
-                                    <span class="star">
+                                    <span class="star ${loginScore >= 1?'fixedStar yellow':''}">
                                         <label data-value="1">
-                                            <input type="radio" name="star" value="1">
+                                            <input type="radio" name="star" ${loginScore===1?'checked':''} value="1">
                                         </label>
                                     </span>
-                                    <span class="star">
+                                    <span class="star ${loginScore >= 2?'fixedStar yellow':''}">
                                         <label data-value="2">
-                                            <input type="radio" name="star" value="2">
+                                            <input type="radio" name="star" ${loginScore===2?'checked':''} value="2">
                                         </label>
                                     </span>
-                                    <span class="star">
+                                    <span class="star ${loginScore >= 3?'fixedStar yellow':''}">
                                         <label data-value="3">
-                                            <input type="radio" name="star" value="3">
+                                            <input type="radio" name="star" ${loginScore===3?'checked':''} value="3">
                                         </label>
                                     </span>
-                                    <span class="star">
+                                    <span class="star ${loginScore >= 4?'fixedStar yellow':''}">
                                         <label data-value="4">
-                                            <input type="radio" name="star" value="4">
+                                            <input type="radio" name="star" ${loginScore===4?'checked':''} value="4">
                                         </label>
                                     </span>
-                                    <span class="star">
+                                    <span class="star ${loginScore >= 5?'fixedStar yellow':''}">
                                         <label data-value="5"><!--★-->
-                                            <input type="radio" name="star" value="5">
+                                            <input type="radio" name="star" ${loginScore===5?'checked':''} value="5">
                                         </label>
                                     </span>
                                 </div>
@@ -77,8 +87,8 @@ export async function foodTemplate(index) {
                             <div class="food-comment">
                                 <form class="review-form" method="post" action="/food/review">
                                     <input type="hidden" class="foodId" name="foodId" value="${index}">
-                                    <input type="hidden" class="score" name="score">
-                                    <textarea name="comment"></textarea>
+                                    <input type="hidden" class="score" name="score" value="${loginScore}">
+                                    <textarea name="comment">${loginComment}</textarea>
                                     <input type="submit" class="reviewBt" value="작성">
                                 </form>
                             </div>`;
@@ -96,9 +106,6 @@ export async function foodReviewTemplate(index) {
         let url = `/food/review/${index}`;
         await axios.get(url).then((response) => {
             let review = '';
-
-            console.log(response.data);
-            console.log(response.data.length);
 
             let data = '';
             for(let i=0, length=response.data.length; i<length; i++) {

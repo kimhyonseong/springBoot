@@ -40,7 +40,7 @@ public class FoodInfoRestController {
 
         if (foodIdx != null) {
             // 댓글 쓴거도 같이 보여주기
-            reviewService.findReviewId(foodIdx,loginId);
+            //reviewService.findReviewId(foodIdx,loginId);
             food = foodService.showFood(foodIdx);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("id : null");

@@ -5,6 +5,8 @@ import lombok.*;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -42,4 +44,10 @@ public class Food extends BaseEntity{
     @ToString.Exclude
     @JsonManagedReference
     private FoodImg foodImg;
+
+    @OneToMany
+    @JoinColumn(name = "food_idx")
+    @ToString.Exclude
+    @JsonManagedReference
+    private List<Review> reviews = new ArrayList<>();
 }

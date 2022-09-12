@@ -83,9 +83,11 @@ public class ReviewService {
         try {
             review = reviewRepository.findByFoodIdxAndMemberId(foodIdx,loginId);
             return review.getIdx();
+        } catch (NullPointerException e) {
+            return 0L;
         } catch (RuntimeException e) {
             e.printStackTrace();
+            return 0L;
         }
-        return review.getIdx();
     }
 }

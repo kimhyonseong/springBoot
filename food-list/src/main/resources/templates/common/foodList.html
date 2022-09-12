@@ -42,10 +42,10 @@
     <div class="food-list">
         <div class="food" th:if="${foodList != null}" th:each="food : ${foodList}">
             <div th:class="food-img">
-                <img th:src="${food.foodImg.imgUrl}" th:alt="${food.name}">
+                <img th:src="${food?.foodImg?.imgUrl}" th:alt="${food?.name}">
             </div>
-            <div class="food-name" th:text="${food.name}"
-                 th:data-info-id="${food.idx}" th:data-info-avr="${food.idx}"></div>
+            <div class="food-name" th:text="${food?.name}"
+                 th:data-info-id="${food?.idx}" th:data-info-avr="${food?.idx}"></div>
         </div>
         <div class="food">
             <div class="food-img">
