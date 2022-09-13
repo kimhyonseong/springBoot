@@ -13,7 +13,7 @@ foodInfo?.addEventListener("mousemove", starMousemoveEvent);
 function foodClickEvent(e) {
     if (e.target.classList.contains("food-name") && e.type === "click") {
         foodTemplate(e.target.dataset.infoId).then(r => console.log(r));
-        foodReviewTemplate(e.target.dataset.infoId).then(r => console.log(r));
+        //foodReviewTemplate(e.target.dataset.infoId).then(r => console.log(r));
     }
 }
 
@@ -41,48 +41,50 @@ export async function foodTemplate(index) {
 
         let url = `/food/info/${index}`;
         await axios.get(url).then((response)=> {
-            for(let i=0,reviewLength = response.data.reviews.length; i<reviewLength; i++) {
-                if (response.data.reviews[i].memberId === loginId) {
-                    loginComment = response.data.reviews[i].comment;
-                    loginScore = response.data.reviews[i].score;
-                }
+            let data = response.data;
+            let reviews = "";
+            let reviewHtml = "";
+
+            if (data.myReview != null) {
+                loginComment = data.myReview.comment;
+                loginScore = data.myReview.score;
             }
 
-            let foodHtml = `<div class="food-img">
-                                <img src="${response.data.foodImg.imgUrl}" alt="">
+            foodInfo.querySelector(".food-info-box").innerHTML = `<div class="food-img">
+                                <img src="${data.food.foodImg.imgUrl}" alt="">
                             </div>
-                            <div class="food-avr">평점 <span class="avr">0.0</span></div>
+                            <div class="food-avr">평점 <span class="avr">${data.totalScore}</span></div>
                             <div class="rating-star">
                                 <div class="text">내 평가</div>
                                 <div class="stars">
-                                    <span class="star ${loginScore >= 1?'fixedStar yellow':''}">
+                                    <span class="star ${loginScore >= 1 ? 'fixedStar yellow' : ''}">
                                         <label data-value="1">
-                                            <input type="radio" name="star" ${loginScore===1?'checked':''} value="1">
+                                            <input type="radio" name="star" ${loginScore === 1 ? 'checked' : ''} value="1">
                                         </label>
                                     </span>
-                                    <span class="star ${loginScore >= 2?'fixedStar yellow':''}">
+                                    <span class="star ${loginScore >= 2 ? 'fixedStar yellow' : ''}">
                                         <label data-value="2">
-                                            <input type="radio" name="star" ${loginScore===2?'checked':''} value="2">
+                                            <input type="radio" name="star" ${loginScore === 2 ? 'checked' : ''} value="2">
                                         </label>
                                     </span>
-                                    <span class="star ${loginScore >= 3?'fixedStar yellow':''}">
+                                    <span class="star ${loginScore >= 3 ? 'fixedStar yellow' : ''}">
                                         <label data-value="3">
-                                            <input type="radio" name="star" ${loginScore===3?'checked':''} value="3">
+                                            <input type="radio" name="star" ${loginScore === 3 ? 'checked' : ''} value="3">
                                         </label>
                                     </span>
-                                    <span class="star ${loginScore >= 4?'fixedStar yellow':''}">
+                                    <span class="star ${loginScore >= 4 ? 'fixedStar yellow' : ''}">
                                         <label data-value="4">
-                                            <input type="radio" name="star" ${loginScore===4?'checked':''} value="4">
+                                            <input type="radio" name="star" ${loginScore === 4 ? 'checked' : ''} value="4">
                                         </label>
                                     </span>
-                                    <span class="star ${loginScore >= 5?'fixedStar yellow':''}">
+                                    <span class="star ${loginScore >= 5 ? 'fixedStar yellow' : ''}">
                                         <label data-value="5"><!--★-->
-                                            <input type="radio" name="star" ${loginScore===5?'checked':''} value="5">
+                                            <input type="radio" name="star" ${loginScore === 5 ? 'checked' : ''} value="5">
                                         </label>
                                     </span>
                                 </div>
                             </div>
-                            <div class="food-name">${response.data.name}</div>
+                            <div class="food-name">${data.food.name}</div>
                             <div class="food-cate">양식</div>
                             <div class="food-comment">
                                 <form class="review-form" method="post" action="/food/review">
@@ -93,7 +95,18 @@ export async function foodTemplate(index) {
                                 </form>
                             </div>`;
 
-            foodInfo.querySelector(".food-info-box").innerHTML = foodHtml;
+            for(let i=0, length=data.food.reviews.length; i<length; i++) {
+                reviews = data.food.reviews[i];
+                reviewHtml += `<div class="food-reply">
+                        <div class="reply">
+                            <div class="star">${drawReviewStar(reviews.score)}</div><!--★-->
+                            <span class="text">${reviews.comment}</span>
+                            <div class="user_id">-${reviews.memberId}-</div>
+                        </div>
+                    </div>`;
+            }
+
+            foodInfo.querySelector(".food-review-box").innerHTML = reviewHtml;
             foodInfo.classList.remove("none");
         });
     } catch (e) {
@@ -108,8 +121,8 @@ export async function foodReviewTemplate(index) {
             let review = '';
 
             let data = '';
-            for(let i=0, length=response.data.length; i<length; i++) {
-                data = response.data[i];
+            for(let i=0, length=response.data.reviews.length; i<length; i++) {
+                data = response.data.reviews[i];
                 review += `<div class="food-reply">
                         <div class="reply">
                             <div class="star">${drawReviewStar(data.score)}</div><!--★-->

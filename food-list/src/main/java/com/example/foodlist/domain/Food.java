@@ -39,13 +39,13 @@ public class Food extends BaseEntity{
     @ToString.Exclude
     private FoodCategory foodCategory;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idx")
     @ToString.Exclude
     @JsonManagedReference
     private FoodImg foodImg;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "food_idx")
     @ToString.Exclude
     @JsonManagedReference

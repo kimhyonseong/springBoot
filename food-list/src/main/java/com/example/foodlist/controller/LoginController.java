@@ -1,7 +1,6 @@
 package com.example.foodlist.controller;
 
 import com.example.foodlist.domain.Member;
-import com.example.foodlist.repository.MemberLastLoginRepository;
 import com.example.foodlist.service.MemberLastLoginService;
 import com.example.foodlist.service.MemberLoginService;
 import com.example.foodlist.service.MemberService;
@@ -11,14 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Controller

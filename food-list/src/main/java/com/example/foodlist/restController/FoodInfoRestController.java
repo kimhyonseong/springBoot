@@ -1,6 +1,8 @@
 package com.example.foodlist.restController;
 
 import com.example.foodlist.domain.Food;
+import com.example.foodlist.domain.Review;
+import com.example.foodlist.repository.ReviewRepository;
 import com.example.foodlist.service.FoodService;
 import com.example.foodlist.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -12,21 +14,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
 public class FoodInfoRestController {
     private final FoodService foodService;
+    private final ReviewRepository reviewRepository;
     private final ReviewService reviewService;
 
     @GetMapping("/food/info/{foodIdx}")
     public ResponseEntity<?> showFoodInfo(
             HttpServletRequest request,
             @PathVariable Long foodIdx) {
+        Map<String,Object> body = new HashMap<>();
         Food food = null;
+        Review myReview = null;
         String loginId = "";
         Cookie[] cookies = request.getCookies();
+        String totalScore = "";
 
         try {
             for (Cookie cookie : cookies) {
@@ -39,12 +48,16 @@ public class FoodInfoRestController {
         }
 
         if (foodIdx != null) {
-            // 댓글 쓴거도 같이 보여주기
-            //reviewService.findReviewId(foodIdx,loginId);
+            myReview = reviewRepository.findByFoodIdxAndMemberId(foodIdx,loginId);
+            totalScore = new DecimalFormat("#.00").format(Double.parseDouble(reviewRepository.avgScore(foodIdx)));
             food = foodService.showFood(foodIdx);
+
+            body.put("food",food);
+            body.put("myReview",myReview);
+            body.put("totalScore",totalScore);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("id : null");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(food);
+        return ResponseEntity.status(HttpStatus.OK).body(body);
     }
 }
