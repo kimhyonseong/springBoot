@@ -12,8 +12,11 @@ foodInfo?.addEventListener("mousemove", starMousemoveEvent);
 // 음식 선택 이벤트
 function foodClickEvent(e) {
     if (e.target.classList.contains("food-name") && e.type === "click") {
-        foodTemplate(e.target.dataset.infoId).then(r => console.log(r));
-        //foodReviewTemplate(e.target.dataset.infoId).then(r => console.log(r));
+        foodTemplate(e.target.dataset.infoId).then(r => {
+            console.log(r);
+            foodInfo.classList.remove("none");
+        });
+        foodReviewTemplate(e.target.dataset.infoId).then(r => console.log(r));
     }
 }
 
@@ -35,15 +38,12 @@ function foodMousemoveEvent(e) {
 
 export async function foodTemplate(index) {
     try {
-        let loginId = common.getCookie("loginId");
         let loginComment = "";
         let loginScore = 0;
 
         let url = `/food/info/${index}`;
         await axios.get(url).then((response)=> {
             let data = response.data;
-            let reviews = "";
-            let reviewHtml = "";
 
             if (data.myReview != null) {
                 loginComment = data.myReview.comment;
@@ -94,29 +94,20 @@ export async function foodTemplate(index) {
                                     <input type="submit" class="reviewBt" value="작성">
                                 </form>
                             </div>`;
-
-            for(let i=0, length=data.food.reviews.length; i<length; i++) {
-                reviews = data.food.reviews[i];
-                reviewHtml += `<div class="food-reply">
-                        <div class="reply">
-                            <div class="star">${drawReviewStar(reviews.score)}</div><!--★-->
-                            <span class="text">${reviews.comment}</span>
-                            <div class="user_id">-${reviews.memberId}-</div>
-                        </div>
-                    </div>`;
-            }
-
-            foodInfo.querySelector(".food-review-box").innerHTML = reviewHtml;
-            foodInfo.classList.remove("none");
         });
     } catch (e) {
         console.log(e);
     }
 }
 
-export async function foodReviewTemplate(index) {
+export async function foodReviewTemplate(index,page = 0) {
     try {
         let url = `/food/review/${index}`;
+
+        if (page > 0) {
+            url = `/food/review/${index}/${page}`;
+        }
+
         await axios.get(url).then((response) => {
             let review = '';
 
@@ -132,11 +123,35 @@ export async function foodReviewTemplate(index) {
                     </div>`;
             }
 
+            let pageSize = response.data.pageSize;
+            let totalCnt = response.data.totalCount;
+            let start = Math.floor(response.data.currentPage/pageSize);
+
             foodInfo.querySelector(".food-review-box").innerHTML = review;
+            foodInfo.querySelector(".food-review-paging-box").innerHTML = paging(start,totalCnt,2,pageSize);
         })
     } catch (e) {
         console.log(e);
     }
+}
+
+function paging(start,totalCnt,size,pageSize) {
+    let pagingHtml = "";
+    let totalPage = Math.ceil(totalCnt/pageSize);
+    console.log("totalPage : "+ totalPage);
+
+    if (start > 0) {
+        pagingHtml += `<a href="javascript:void(0);" class="prev" data-page="${start-size}"> < </a>`;
+    }
+    for (let i=start; i<start+size; i++) {
+        pagingHtml += `&nbsp;&nbsp;<a href="javascript:void(0);" class="paging" data-page="${i}">-${i+1}-</a>&nbsp;&nbsp;`;
+        if (i === totalPage) break;
+    }
+    if (start+size < totalPage) {
+        pagingHtml += `<a href="javascript:void(0);" class="next" data-page="${start+size}"> > </a>`;
+    }
+
+    return pagingHtml;
 }
 
 function drawReviewStar(num) {

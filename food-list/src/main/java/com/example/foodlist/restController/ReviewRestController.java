@@ -30,15 +30,24 @@ public class ReviewRestController {
         Food food = null;
         List<Review> reviews = new ArrayList<>();
         String totalScore = "";
+        int totalCnt = 0;
+        int totalPage = 0;
+        int showCnt = 1;
+        int end = 1;
 
         if (start == null) {
             start = 0;
         }
 
         try {
-            reviews = reviewRepository.findReviewByFoodLimit5(foodIdx,start * 5);
+            reviews = reviewRepository.findReviewByFoodLimit5(foodIdx,start * showCnt,end);
             totalScore = new DecimalFormat("#.00").format(Double.parseDouble(reviewRepository.avgScore(foodIdx)));
+            totalCnt = reviewRepository.foodReviewCount(foodIdx);
+            totalPage = totalCnt/showCnt;
 
+            body.put("totalCount",totalCnt);
+            body.put("pageSize",showCnt);
+            body.put("currentPage",start);
             body.put("reviews",reviews);
             body.put("totalScore",totalScore);
         } catch (NullPointerException e) {

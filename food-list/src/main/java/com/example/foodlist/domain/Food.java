@@ -1,5 +1,6 @@
 package com.example.foodlist.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.Comment;
@@ -48,6 +49,6 @@ public class Food extends BaseEntity{
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "food_idx")
     @ToString.Exclude
-    @JsonManagedReference
+    @JsonBackReference
     private List<Review> reviews = new ArrayList<>();
 }

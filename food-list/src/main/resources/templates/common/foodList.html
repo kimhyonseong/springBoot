@@ -60,16 +60,29 @@
     <div class="food-info none">
         <div class="food-info-box"></div>
         <div class="food-review-box"></div>
+        <div class="food-review-paging-box"></div>
     </div>
 </th:block>
 <th:block layout:fragment="javascript">
     <script th:src="@{/js/foodList.js}" type="module"></script>
+    <script th:inline="javascript" type="module">
+        import * as foodList from "/js/foodList.js";
+
+        document.querySelector(".food-review-paging-box").addEventListener("click",function (e) {
+            let targetClass = e.target.classList;
+            if (targetClass.contains("paging") || targetClass.contains("prev") || targetClass.contains("next")) {
+                foodList.foodReviewTemplate(1,e.target.dataset.page);
+            }
+        })
+    </script>
     <script th:if="${foodId != null}" th:inline="javascript" type="module">
         import * as foodList from "/js/foodList.js";
         import {scrollClass} from "/js/common.js";
 
         foodList.foodTemplate([[${foodId}]]).then(result => {
             console.log(result);
+            document.querySelector('.food-info').classList.remove("none");
+            foodList.foodReviewTemplate([[${foodId}]]).then(result=>{console.log("review")});
             scrollClass("food-info");
         });
     </script>
