@@ -81,7 +81,7 @@ public class ReviewService {
     public Long findReviewId(Long foodIdx,String loginId) {
         Review review = new Review();
         try {
-            review = reviewRepository.findByFoodIdxAndMemberId(foodIdx,loginId);
+            review = reviewRepository.findByFoodIdxAndMemberIdAndState(foodIdx,loginId,10);
             return review.getIdx();
         } catch (NullPointerException e) {
             return 0L;

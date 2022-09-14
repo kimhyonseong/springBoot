@@ -3,6 +3,10 @@ package com.example.foodlist.domain;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -12,6 +16,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@DynamicInsert
+@DynamicUpdate
 public class Review extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +29,10 @@ public class Review extends BaseEntity{
     private String comment;
 
     private String memberId;
+
+    @Comment("10 : 정상, 20 : 비노출 및 정지, 30 : 삭제")
+    @ColumnDefault("10")
+    private Integer state;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "food_idx")

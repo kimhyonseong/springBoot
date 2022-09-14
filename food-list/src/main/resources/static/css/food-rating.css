@@ -29,6 +29,10 @@
     font-size: 20px;
 }
 
+.food-info .food-avr .avr-count{
+    font-size: 15px;
+}
+
 .food-info .food-avr .avr {
     font-size: 25px;
     color: #ffc600;

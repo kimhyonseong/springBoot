@@ -53,7 +53,10 @@ export async function foodTemplate(index) {
             foodInfo.querySelector(".food-info-box").innerHTML = `<div class="food-img">
                                 <img src="${data.food.foodImg.imgUrl}" alt="">
                             </div>
-                            <div class="food-avr">평점 <span class="avr">${data.totalScore}</span></div>
+                            <div class="food-avr">
+                            평점 <span class="avr">${data.totalScore}</span>
+                            <span class="avr-count">(${data.totalCount}명 참여)</span>
+                            </div>
                             <div class="rating-star">
                                 <div class="text">내 평가</div>
                                 <div class="stars">
@@ -88,10 +91,12 @@ export async function foodTemplate(index) {
                             <div class="food-cate">양식</div>
                             <div class="food-comment">
                                 <form class="review-form" method="post" action="/food/review">
+                                    <input type="hidden" name="_method" value="">
                                     <input type="hidden" class="foodId" name="foodId" value="${index}">
                                     <input type="hidden" class="score" name="score" value="${loginScore}">
                                     <textarea name="comment">${loginComment}</textarea>
                                     <input type="submit" class="reviewBt" value="작성">
+                                    <input type="button" class="delteBt" value="삭제">
                                 </form>
                             </div>`;
         });

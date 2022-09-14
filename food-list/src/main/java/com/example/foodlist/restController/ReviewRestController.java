@@ -40,9 +40,11 @@ public class ReviewRestController {
         }
 
         try {
-            reviews = reviewRepository.findReviewByFoodLimit5(foodIdx,start * showCnt,end);
+            reviews = reviewRepository.findReviewByFoodLimit(foodIdx,start * showCnt,end);
             totalScore = new DecimalFormat("#.00").format(Double.parseDouble(reviewRepository.avgScore(foodIdx)));
+            System.out.println("rest total score");
             totalCnt = reviewRepository.foodReviewCount(foodIdx);
+            System.out.println("rest total count");
             totalPage = totalCnt/showCnt;
 
             body.put("totalCount",totalCnt);

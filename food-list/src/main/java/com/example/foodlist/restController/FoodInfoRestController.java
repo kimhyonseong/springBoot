@@ -36,6 +36,7 @@ public class FoodInfoRestController {
         String loginId = "";
         Cookie[] cookies = request.getCookies();
         String totalScore = "";
+        int totalCount = 0;
 
         try {
             for (Cookie cookie : cookies) {
@@ -48,13 +49,18 @@ public class FoodInfoRestController {
         }
 
         if (foodIdx != null) {
-            myReview = reviewRepository.findByFoodIdxAndMemberId(foodIdx,loginId);
+            myReview = reviewRepository.findByFoodIdxAndMemberIdAndState(foodIdx,loginId,10);
+            System.out.println("my review");
             totalScore = new DecimalFormat("#.00").format(Double.parseDouble(reviewRepository.avgScore(foodIdx)));
+            System.out.println("review score");
+            totalCount = reviewRepository.foodReviewCount(foodIdx);
+            System.out.println("review count");
             food = foodService.showFood(foodIdx);
 
             body.put("food",food);
             body.put("myReview",myReview);
             body.put("totalScore",totalScore);
+            body.put("totalCount",totalCount);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("id : null");
         }

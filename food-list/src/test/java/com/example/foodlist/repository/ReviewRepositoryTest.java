@@ -44,4 +44,18 @@ class ReviewRepositoryTest {
 
         System.out.println(new DecimalFormat("###.00").format(result));
     }
+
+    @Test
+    void updateTest() {
+        Food food = foodRepository.findByIdx(1L);
+        Member member = memberRepository.findByMemberId("lss1545");
+        Review review = new Review();
+
+        review.setScore(4);
+        review.setIdx(1L);
+        review.setMember(member);
+        review.setFood(food);
+
+        reviewRepository.save(review);
+    }
 }
