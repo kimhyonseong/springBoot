@@ -107,6 +107,7 @@ export async function foodReviewTemplate(index,page = 0) {
         if (page > 0) {
             url = `/food/review/${index}/${page}`;
         }
+        console.log("url : "+url);
 
         await axios.get(url).then((response) => {
             let review = '';
@@ -123,12 +124,13 @@ export async function foodReviewTemplate(index,page = 0) {
                     </div>`;
             }
 
+            let blockSize = 5;
             let pageSize = response.data.pageSize;
             let totalCnt = response.data.totalCount;
-            let start = Math.floor(response.data.currentPage/pageSize);
+            let start = Math.floor(Math.floor(response.data.currentPage/pageSize)/blockSize);
 
             foodInfo.querySelector(".food-review-box").innerHTML = review;
-            foodInfo.querySelector(".food-review-paging-box").innerHTML = paging(start,totalCnt,2,pageSize);
+            foodInfo.querySelector(".food-review-paging-box").innerHTML = paging(start,totalCnt,blockSize,pageSize);
         })
     } catch (e) {
         console.log(e);
@@ -138,17 +140,18 @@ export async function foodReviewTemplate(index,page = 0) {
 function paging(start,totalCnt,size,pageSize) {
     let pagingHtml = "";
     let totalPage = Math.ceil(totalCnt/pageSize);
-    console.log("totalPage : "+ totalPage);
+    let currentBlock = start*size;
+    let totalBlock = Math.ceil(totalPage/size);
 
-    if (start > 0) {
-        pagingHtml += `<a href="javascript:void(0);" class="prev" data-page="${start-size}"> < </a>`;
+    if (currentBlock > 0) {
+        pagingHtml += `<a href="javascript:void(0);" class="paging prev" data-page="${currentBlock-1}"> < </a>`;
     }
-    for (let i=start; i<start+size; i++) {
+    for (let i=currentBlock; i<currentBlock+size; i++) {
         pagingHtml += `&nbsp;&nbsp;<a href="javascript:void(0);" class="paging" data-page="${i}">-${i+1}-</a>&nbsp;&nbsp;`;
-        if (i === totalPage) break;
+        if (i === totalPage-1) break;
     }
-    if (start+size < totalPage) {
-        pagingHtml += `<a href="javascript:void(0);" class="next" data-page="${start+size}"> > </a>`;
+    if (currentBlock+1 < totalBlock) {
+        pagingHtml += `<a href="javascript:void(0);" class="paging next" data-page="${currentBlock+size}"> > </a>`;
     }
 
     return pagingHtml;

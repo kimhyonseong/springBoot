@@ -32,8 +32,8 @@ public class ReviewRestController {
         String totalScore = "";
         int totalCnt = 0;
         int totalPage = 0;
-        int showCnt = 1;
-        int end = 1;
+        int showCnt = 5;
+        int end = 5;
 
         if (start == null) {
             start = 0;

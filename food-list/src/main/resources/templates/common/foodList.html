@@ -70,7 +70,7 @@
 
         document.querySelector(".food-review-paging-box").addEventListener("click",function (e) {
             let targetClass = e.target.classList;
-            if (targetClass.contains("paging") || targetClass.contains("prev") || targetClass.contains("next")) {
+            if (targetClass.contains("paging")) {
                 foodList.foodReviewTemplate(1,e.target.dataset.page);
             }
         })
