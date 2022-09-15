@@ -59,6 +59,11 @@ public class ReviewService {
         return 1;
     }
 
+    public int deleteReview(String memberId, Review review) {
+
+        return 5;
+    }
+
     public String returnResult(Integer putResult,Long foodId, Model model) {
         Map<String, String> redirect = new HashMap<>();
         String redirectUrl = "/foodList";
@@ -74,6 +79,8 @@ public class ReviewService {
         } else if (putResult == 4) {
             redirectUrl = "/foodList/"+foodId;
             message = "별점과 코멘트를 달아주세요.";
+        } else if (putResult == 5) {
+            message = "삭제되었습니다.";
         }
 
         redirect.put("redirectUrl",redirectUrl);

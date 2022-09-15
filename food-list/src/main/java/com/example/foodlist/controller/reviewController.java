@@ -9,10 +9,7 @@ import com.example.foodlist.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -31,10 +28,8 @@ public class reviewController {
     public String insertReview(HttpServletRequest request,
                              Model model,
                              Review review, @RequestParam("foodId") Long foodId) {
-        Map<String, String> login = new HashMap<>();
+        Map<String, String> login = memberLoginService.loginCheck(request, model);
         Food food = foodService.showFood(foodId);
-
-        login = memberLoginService.loginCheck(request, model);
 
         if (!Objects.equals(login.get("error"), null)) {
             return login.get("result");
@@ -56,5 +51,19 @@ public class reviewController {
         review.setComment(updateReview.getComment());
 
         return insertReview(request,model,review, foodId);
+    }
+
+    @DeleteMapping("/food/review/{reviewIdx}")
+    public String deleteReview(HttpServletRequest request,
+                               Model model,
+                               Review deleteReview,
+                               @RequestParam("foodId") Long foodId,
+                               @PathVariable Long reviewIdx) {
+        Map<String, String> login = memberLoginService.loginCheck(request, model);
+        Review review = reviewService.findReview(reviewIdx);
+
+        int deleteResult = reviewService.deleteReview(login.get("loginId"),review);
+
+        return reviewService.returnResult(deleteResult,foodId, model);
     }
 }
