@@ -65,6 +65,13 @@
                 foodList.foodReviewTemplate(1,e.target.dataset.page);
             }
         })
+
+        document.querySelector(".food-info-box").addEventListener("click", function (e) {
+            if(e.target.classList.contains("deleteBt")) {
+                document.querySelector("input[name=_method]").value = "delete";
+                document.querySelector(".review-form").submit();
+            }
+        })
     </script>
     <script th:if="${foodId != null}" th:inline="javascript" type="module">
         import * as foodList from "/js/foodList.js";

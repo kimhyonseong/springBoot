@@ -60,7 +60,15 @@ public class ReviewService {
     }
 
     public int deleteReview(String memberId, Review review) {
-
+        if(Objects.equals(memberId,review.getMemberId())) {
+            try {
+                review.setState(30);
+                reviewRepository.save(review);
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+                return -1;
+            }
+        }
         return 5;
     }
 

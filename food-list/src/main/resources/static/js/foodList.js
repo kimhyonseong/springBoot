@@ -52,7 +52,7 @@ export async function foodTemplate(index) {
                 reviewId = data.myReview.idx;
             }
 
-            foodInfo.querySelector(".food-info-box").innerHTML = `<div class="food-img">
+            foodInfo.querySelector(".food-info-box").innerHTML = `<div class="food-img" xmlns:th="http://www.w3.org/1999/html">
                                 <img src="${data.food.foodImg.imgUrl}" alt="">
                             </div>
                             <div class="food-avr">
@@ -92,13 +92,13 @@ export async function foodTemplate(index) {
                             <div class="food-name">${data.food.name}</div>
                             <div class="food-cate">양식</div>
                             <div class="food-comment">
-                                <form class="review-form" method="post" action="/food/review${reviewId !== '' ? '/'+reviewId:''}">
-                                    <input type="hidden" name="_method" value="${reviewId !== '' ? 'put':''}">
+                                <form class="review-form" method="post" action="/food/review${reviewId !== '' ? '/' + reviewId : ''}">
+                                    <input type="hidden" name="_method" class="method" value="${reviewId !== '' ? 'put' : ''}">
                                     <input type="hidden" class="foodId" name="foodId" value="${index}">
                                     <input type="hidden" class="score" name="score" value="${loginScore}">
                                     <textarea name="comment">${loginComment}</textarea>
                                     <input type="submit" class="reviewBt" value="작성">
-                                    <input type="button" class="delteBt" value="삭제">
+                                    <input type="${reviewId !== '' ? 'button' : 'hidden'}" class="deleteBt" value="삭제">
                                 </form>
                             </div>`;
         });

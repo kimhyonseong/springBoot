@@ -56,7 +56,6 @@ public class reviewController {
     @DeleteMapping("/food/review/{reviewIdx}")
     public String deleteReview(HttpServletRequest request,
                                Model model,
-                               Review deleteReview,
                                @RequestParam("foodId") Long foodId,
                                @PathVariable Long reviewIdx) {
         Map<String, String> login = memberLoginService.loginCheck(request, model);
