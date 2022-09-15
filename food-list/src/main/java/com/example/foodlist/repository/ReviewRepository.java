@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review,Long> {
+    Review findByIdx(Long reviewIdx);
     List<Review> findAllByFood(Food food);
     Review findByFoodIdxAndMemberId(Long foodIdx,String memberId);
     Review findByFoodIdxAndMemberIdAndState(Long foodIdx,String memberId,Integer state);

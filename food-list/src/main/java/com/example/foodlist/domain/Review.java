@@ -28,6 +28,7 @@ public class Review extends BaseEntity{
 
     private String comment;
 
+    @Column(updatable = false)
     private String memberId;
 
     @Comment("10 : 정상, 20 : 비노출 및 정지, 30 : 삭제")

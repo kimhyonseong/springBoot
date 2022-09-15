@@ -25,6 +25,10 @@ public class ReviewService {
 
         try {
             member = memberRepository.findByMemberId(memberId);
+
+            if (review.getIdx() != null && !Objects.equals(review.getMemberId(), memberId)) {
+                return -1;
+            }
         } catch (NullPointerException e) {
             e.printStackTrace();
             return 2;
@@ -36,6 +40,7 @@ public class ReviewService {
         if (member == null) return 2;
         if (food == null) return 3;
 
+        review.setMemberId(member.getMemberId());
         review.setFood(food);
         review.setMember(member);
 
@@ -88,6 +93,27 @@ public class ReviewService {
         } catch (RuntimeException e) {
             e.printStackTrace();
             return 0L;
+        }
+    }
+
+    public Long findReviewId(Long reviewIdx) {
+        try {
+            Review review = reviewRepository.findByIdx(reviewIdx);
+            return review.getIdx();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return 0L;
+        }
+    }
+
+    public Review findReview(Long reviewIdx) {
+        try {
+            return reviewRepository.findByIdx(reviewIdx);
+        } catch (NullPointerException e) {
+            return null;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

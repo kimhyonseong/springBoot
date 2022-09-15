@@ -40,6 +40,7 @@ export async function foodTemplate(index) {
     try {
         let loginComment = "";
         let loginScore = 0;
+        let reviewId = "";
 
         let url = `/food/info/${index}`;
         await axios.get(url).then((response)=> {
@@ -48,6 +49,7 @@ export async function foodTemplate(index) {
             if (data.myReview != null) {
                 loginComment = data.myReview.comment;
                 loginScore = data.myReview.score;
+                reviewId = data.myReview.idx;
             }
 
             foodInfo.querySelector(".food-info-box").innerHTML = `<div class="food-img">
@@ -90,8 +92,8 @@ export async function foodTemplate(index) {
                             <div class="food-name">${data.food.name}</div>
                             <div class="food-cate">양식</div>
                             <div class="food-comment">
-                                <form class="review-form" method="post" action="/food/review">
-                                    <input type="hidden" name="_method" value="">
+                                <form class="review-form" method="post" action="/food/review${reviewId !== '' ? '/'+reviewId:''}">
+                                    <input type="hidden" name="_method" value="${reviewId !== '' ? 'put':''}">
                                     <input type="hidden" class="foodId" name="foodId" value="${index}">
                                     <input type="hidden" class="score" name="score" value="${loginScore}">
                                     <textarea name="comment">${loginComment}</textarea>
