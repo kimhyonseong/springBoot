@@ -18,6 +18,6 @@ abstract class BaseEntity {
     private LocalDateTime regDate;
 
     @LastModifiedDate
-    @Column(name = "updDate", updatable = false, columnDefinition = "datetime(6) default now(6) comment '수정시간'")
+    @Column(name = "updDate", updatable = true, columnDefinition = "datetime(6) default now(6) comment '수정시간'")
     private LocalDateTime updDate;
 }

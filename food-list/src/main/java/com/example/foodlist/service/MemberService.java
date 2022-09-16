@@ -63,4 +63,8 @@ public class MemberService {
             return -1;
         }
     }
+
+    public void deleteSecessionMember() {
+        memberRepository.findAll();
+    }
 }

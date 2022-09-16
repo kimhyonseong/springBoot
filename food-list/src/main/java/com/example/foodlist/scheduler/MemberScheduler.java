@@ -13,4 +13,9 @@ public class MemberScheduler {
     public void changeDormancyMember() {
         lastLoginService.changeDormancyMember();
     }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    public void deleteMember() {
+
+    }
 }
