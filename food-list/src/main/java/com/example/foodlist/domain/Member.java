@@ -54,22 +54,22 @@ public class Member extends BaseEntity{
     @ColumnDefault("10")
     private Integer state;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "idx",insertable = false, updatable = false)
     @ToString.Exclude
     private List<MemberHistory> memberHistories = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "idx",insertable = false, updatable = false)
     @ToString.Exclude
     private List<MemberLogin> memberLogins = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idx")
     @ToString.Exclude
     private MemberLastLogin memberLastLogin;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "idx")
     @ToString.Exclude
     @JsonManagedReference

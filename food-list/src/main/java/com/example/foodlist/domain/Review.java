@@ -3,12 +3,10 @@ package com.example.foodlist.domain;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 
 @Entity
 @Data
@@ -39,11 +37,13 @@ public class Review extends BaseEntity{
     @JoinColumn(name = "food_idx")
     @ToString.Exclude
     @JsonBackReference
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Food food;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "member_idx")
     @ToString.Exclude
     @JsonBackReference
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 }

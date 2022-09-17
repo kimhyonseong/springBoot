@@ -65,6 +65,7 @@ public class MemberService {
     }
 
     public void deleteSecessionMember() {
-        memberRepository.findAll();
+        List<Member> memberList = memberRepository.findAllByStateAndUpdDateBefore(90,LocalDateTime.now().minusDays(30));
+        memberRepository.deleteAllInBatch(memberList);
     }
 }

@@ -19,12 +19,16 @@ public interface ReviewRepository extends JpaRepository<Review,Long> {
     String avgScore(@Param("foodIdx") Long foodIdx);
 
     @Query(nativeQuery = true,
-            value = "select * from review where food_idx = :foodIdx and state = 10 limit :start,:end")
+            value = "select a.* from review a " +
+                    "join member b on a.member_idx = b.idx " +
+                    "where a.food_idx = :foodIdx and a.state = 10 and b.state = 10 limit :start,:end")
     List<Review> findReviewByFoodLimit(@Param("foodIdx")Long foodIdx,
                                         @Param("start")Integer start,
                                         @Param("end")Integer end);
 
     @Query(nativeQuery = true,
-            value = "select count(*) as all_count from review where food_idx = :foodIdx and state = 10")
+            value = "select count(*) as all_count from review a " +
+                    "join member b on a.member_idx = b.idx " +
+                    "where a.food_idx = :foodIdx and a.state = 10 and b.state = 10")
     Integer foodReviewCount(@Param("foodIdx")Long foodIdx);
 }

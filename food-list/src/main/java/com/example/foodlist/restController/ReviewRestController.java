@@ -45,7 +45,6 @@ public class ReviewRestController {
             System.out.println("rest total score");
             totalCnt = reviewRepository.foodReviewCount(foodIdx);
             System.out.println("rest total count");
-            totalPage = totalCnt/showCnt;
 
             body.put("totalCount",totalCnt);
             body.put("pageSize",showCnt);
