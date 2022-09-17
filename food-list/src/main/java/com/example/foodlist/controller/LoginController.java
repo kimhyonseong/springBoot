@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @Controller
@@ -75,6 +78,31 @@ public class LoginController {
 
         // 성공 시 전에 있던 페이지로 - 메인 페이지
         return successPath;
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletResponse response,Model model,
+                         @RequestParam(required = false) String redirect) {
+        Cookie userId = new Cookie("loginId",null);
+        Cookie userName = new Cookie("loginName",null);
+
+        userId.setMaxAge(0);
+        userName.setMaxAge(0);
+
+        response.addCookie(userId);
+        response.addCookie(userName);
+
+        if (redirect == null) {
+            redirect = "/foodList";
+        }
+
+        Map<String,String> result = new HashMap<>();
+        result.put("redirectUrl",redirect);
+        result.put("message","로그아웃 되었습니다.");
+
+        model.addAttribute("redirect",result);
+
+        return "layout/redirect";
     }
 
     private void alertMsg(HttpServletResponse response,String msg) {

@@ -80,3 +80,22 @@ export function setCookie(name, value, options = {}) {
 export function login(path) {
     location.href = `/login?redirect=${path}`;
 }
+
+export function logout() {
+    let form = document.createElement("form");
+    form.setAttribute("method","post");
+    form.setAttribute("action","/logout");
+
+    let redirect = document.createElement("input");
+    redirect.setAttribute("type","hidden");
+    redirect.setAttribute("name","redirect");
+    redirect.setAttribute("value",location.pathname);
+
+    form.appendChild(redirect);
+    document.body.appendChild(form);
+    form.submit();
+}
+
+document.querySelector(".logout")?.addEventListener("click", function () {
+    logout();
+})
