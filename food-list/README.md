@@ -53,3 +53,4 @@ html - src/main/resources/templates
   - 리뷰 페이징
 - 음식 총점 확인
 - 회원관리(예정)
+- 카테고리 검색(진행중)

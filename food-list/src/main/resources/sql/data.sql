@@ -1,4 +1,9 @@
-insert into food(country, country_code,display,name,state) values('배고픔국',1,10,'빵',0);
+insert into food_category(category_code,category_name) values (1,"한식");
+insert into food_category(category_code,category_name) values (2,"양식");
+insert into food_category(category_code,category_name) values (3,"중식");
+insert into food_category(category_code,category_name) values (4,"일식");
+
+insert into food(country, country_code,display,name,state, category_code) values('배고픔국',1,10,'빵',0,2);
 insert into food_img(img_url,name,size,food_idx) values ('/images/food/bread.jpg','빵',1234,1);
 
 insert into member(member_id,member_pw,name,state) values ('lss1545','1234','이순신',10);
