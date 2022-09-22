@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    public Member login(String loginId, String loginPw, HttpServletResponse response) throws Exception {
+    public Member login(String loginId, String loginPw) throws Exception {
         try {
             Member member = memberRepository.findByMemberIdAndMemberPw(loginId,loginPw);
 
@@ -53,14 +53,13 @@ public class MemberService {
         return list.size();
     }
 
-    public int countId(String memberId) {
+    public List<Member> countId(String memberId) {
         List<Member> count;
 
         try {
-            count = memberRepository.findAllByMemberId(memberId);
-            return count.size();
+            return memberRepository.findAllByMemberId(memberId);
         } catch (RuntimeException e) {
-            return -1;
+            return null;
         }
     }
 
