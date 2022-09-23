@@ -2,12 +2,16 @@ import * as common from "./common.js";
 
 const foodList = document.querySelector('.food-list');
 const foodInfo = document.querySelector(".food-info");
+const category = document.querySelector('.category');
 
 foodList?.addEventListener("click", foodClickEvent);
 foodList?.addEventListener("mousemove", foodMousemoveEvent);
 
 foodInfo?.addEventListener("click", foodInfoClickEvent);
 foodInfo?.addEventListener("mousemove", starMousemoveEvent);
+
+category?.addEventListener("click", categoryClickEvent);
+category?.addEventListener("mousemove", categoryMouseEvent);
 
 // 음식 선택 이벤트
 function foodClickEvent(e) {
@@ -26,7 +30,6 @@ function foodMousemoveEvent(e) {
     if (e.target.classList.contains("food-name") && !prevFoodList.classList.contains("food-name")) {
         common.toggleActive.call(e.target);
     }
-
     //leave
     else if (!e.target.classList.contains("food-name") && prevFoodList.classList.contains("food-name")) {
         common.toggleActive.call(prevFoodList);
@@ -114,7 +117,6 @@ export async function foodReviewTemplate(index,page = 0) {
         if (page > 0) {
             url = `/food/review/${index}/${page}`;
         }
-        console.log("url : "+url);
 
         await axios.get(url).then((response) => {
             let review = '';
@@ -178,11 +180,6 @@ function drawReviewStar(num) {
 function foodInfoClickEvent(e) {
     if (e.target.name === "star") {
         starClickEvent(e);
-    } else if (e.target.nodeName.toLowerCase() === "button") {
-        // writeReview();
-        // alert("리뷰 작성이 완료되었습니다.");
-        // reloadFoodScore(foodNum);
-        e.preventDefault();
     }
 }
 
@@ -252,14 +249,46 @@ function fixStar(stars, num = 0) {
     return true;
 }
 
-/*
-export function formAction() {
-    const form = document.querySelector(".review-form");
+let preCategory = category;
+function categoryMouseEvent(e) {
+    if (e.target.tagName.toLowerCase() === 'label') {
+        if(e.target.classList.value === '') {
+            common.toggleActive.call(e.target);
+        }
+    } else if(preCategory !== e.target.tagName.toLowerCase() && preCategory.tagName.toLowerCase() === 'label') {
+        common.toggleActive.call(preCategory);
+    }
+    preCategory = e.target;
+}
 
-    if(common.getCookie("loginId") != null) {
-        form.submit();
-    } else {
-        common.login("/foodList/"+form.foodId);
+async function categoryClickEvent(e) {
+    if (e.target.tagName.toLowerCase() === 'label') {
+        category.querySelectorAll("label").forEach(btn => {
+            btn.classList.remove('a-fix');
+        })
+        common.removeAllActive.call(category.querySelectorAll("label"));
+        e.target.classList.add("active");
+        e.target.classList.add("a-fix");
+
+        let category = e.target.querySelector('input').value;
+
+        // ajax로 api 불러오기
+        let url = `/food/category/${category}`;
+
+        await axious.get(url).then((response) => {
+            let html = ``;
+            let foodData = response.data.food;
+
+            for(let i=0, length = foodData.length; i<length; i++) {
+                html += `
+                <div class="food">
+                    <div class="food-img">
+                        <img src="${foodData.foodImg.imgUrl}" alt="${foodData.name}">
+                    </div>
+                    <div class="food-name" data-info-id="${foodData.idx}" data-info-avr="${foodData.idx}">${foodData.name}</div>
+                </div>`;
+            }
+            document.querySelector(".food-list").innerHTML = html;
+        })
     }
 }
-*/

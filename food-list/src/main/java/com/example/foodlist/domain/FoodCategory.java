@@ -1,6 +1,7 @@
 package com.example.foodlist.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,6 +24,6 @@ public class FoodCategory extends BaseEntity{
     @OneToMany
     @JoinColumn(name = "category_code")
     @ToString.Exclude
-    @JsonBackReference
+    @JsonManagedReference
     private List<Food> foodList = new ArrayList<>();
 }

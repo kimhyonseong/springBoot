@@ -50,7 +50,6 @@ main {
     border-radius: 20px;
     padding: 20px 100px;
     margin: 100px 0;
-    z-index: 1;
 }
 
 main.login {
@@ -176,10 +175,12 @@ footer .my-menu {
     text-align: center;
     font-weight: bold;
     transition: all 0.3s;
+    border: 1px solid black;
 }
 
 footer .my-menu:hover {
     background-color: #07efae;
+    border: 1px solid #07efae;
     color: white;
     transform: rotateX(360deg);
     transition: all 0.3s;

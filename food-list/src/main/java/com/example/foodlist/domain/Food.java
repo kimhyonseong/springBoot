@@ -38,7 +38,7 @@ public class Food extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "category_code")
     @ToString.Exclude
-    @JsonManagedReference
+    @JsonBackReference
     private FoodCategory foodCategory;
 
     @OneToOne(cascade = CascadeType.ALL)
