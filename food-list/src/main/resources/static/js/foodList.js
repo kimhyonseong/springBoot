@@ -270,22 +270,22 @@ async function categoryClickEvent(e) {
         e.target.classList.add("active");
         e.target.classList.add("a-fix");
 
-        let category = e.target.querySelector('input').value;
+        let categoryId = e.target.querySelector('input').value;
 
         // ajax로 api 불러오기
-        let url = `/food/category/${category}`;
+        let url = `/food/category/${categoryId}`;
 
-        await axious.get(url).then((response) => {
+        await axios.get(url).then((response) => {
             let html = ``;
-            let foodData = response.data.food;
+            let foodData = response.data;
 
             for(let i=0, length = foodData.length; i<length; i++) {
                 html += `
                 <div class="food">
                     <div class="food-img">
-                        <img src="${foodData.foodImg.imgUrl}" alt="${foodData.name}">
+                        <img src="${foodData[i].foodImg.imgUrl}" alt="${foodData[i].name}">
                     </div>
-                    <div class="food-name" data-info-id="${foodData.idx}" data-info-avr="${foodData.idx}">${foodData.name}</div>
+                    <div class="food-name" data-info-id="${foodData[i].idx}" data-info-avr="${foodData[i].idx}">${foodData[i].name}</div>
                 </div>`;
             }
             document.querySelector(".food-list").innerHTML = html;

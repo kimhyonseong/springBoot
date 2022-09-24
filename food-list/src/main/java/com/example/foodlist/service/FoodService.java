@@ -1,10 +1,13 @@
 package com.example.foodlist.service;
 
 import com.example.foodlist.domain.Food;
+import com.example.foodlist.domain.FoodCategory;
+import com.example.foodlist.repository.FoodCategoryRepository;
 import com.example.foodlist.repository.FoodRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class FoodService {
     private final FoodRepository foodRepository;
+    private final FoodCategoryRepository foodCategoryRepository;
 
     public int put(Food food) {
         if (food != null) {
@@ -58,6 +62,25 @@ public class FoodService {
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
+        return null;
+    }
+
+    public List<Food> showFoodByCategory(int categoryCode) {
+        List<Food> foodList = new ArrayList<>();
+
+        try {
+            FoodCategory foodCategory = foodCategoryRepository.findByCategoryCode(categoryCode);
+
+            if (foodCategory == null) {
+                foodList = this.showAllFoods();
+            } else {
+                foodList = foodRepository.findAllByFoodCategory(foodCategory);
+            }
+            return foodList;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
 }
