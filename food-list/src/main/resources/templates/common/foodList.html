@@ -33,8 +33,8 @@
                 </label>
             </div>
             <div class="search">
-                <label for="food" class="food_placeholder">Food name</label>
-                <input name="food" id="food" class="food-search">
+                <label for="food-search" class="food_placeholder" th:classappend="${foodName == null ?'':'font-black focus'}">Food name</label>
+                <input name="food" id="food-search" class="food-search" th:value="${foodName}">
                 <input type="submit" class="food-search-bt" value="Find">
             </div>
         </form>

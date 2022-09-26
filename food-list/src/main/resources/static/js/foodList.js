@@ -3,6 +3,7 @@ import * as common from "./common.js";
 const foodList = document.querySelector('.food-list');
 const foodInfo = document.querySelector(".food-info");
 const category = document.querySelector('.category');
+const searchInput = document.getElementById('food-search');
 
 foodList?.addEventListener("click", foodClickEvent);
 foodList?.addEventListener("mousemove", foodMousemoveEvent);
@@ -12,6 +13,9 @@ foodInfo?.addEventListener("mousemove", starMousemoveEvent);
 
 category?.addEventListener("click", categoryClickEvent);
 category?.addEventListener("mousemove", categoryMouseEvent);
+
+searchInput?.addEventListener("focus",common.toggleLabel);
+searchInput?.addEventListener("focusout",common.toggleLabel);
 
 // 음식 선택 이벤트
 function foodClickEvent(e) {

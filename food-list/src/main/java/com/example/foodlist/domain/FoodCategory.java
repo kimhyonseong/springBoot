@@ -20,6 +20,7 @@ public class FoodCategory extends BaseEntity{
     private Long id;
     private String categoryName;
     private int categoryCode;
+    private int state;
 
     @OneToMany
     @JoinColumn(name = "category_code")

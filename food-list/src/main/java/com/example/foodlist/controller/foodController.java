@@ -15,10 +15,16 @@ public class foodController {
     private final FoodService foodService;
 
     @GetMapping(value = {"foodList","/","foodList/{id}"})
-    public String foodListPage(Model model, @PathVariable(required = false) String id) {
+    public String foodListPage(Model model, @PathVariable(required = false) String id,
+                               @RequestParam(value = "food", required = false) String foodName) {
         List<Food> foodList = foodService.showAllFoods();
+
+        if (foodName != null) {
+            foodList = foodService.searchFood(foodName);
+        }
         model.addAttribute("foodList",foodList);
         model.addAttribute("foodId",id);
+        model.addAttribute("foodName",foodName);
         return "common/foodList";
     }
 }

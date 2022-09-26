@@ -83,4 +83,17 @@ public class FoodService {
 
         return null;
     }
+
+    public List<Food> searchFood(String foodName) {
+        List<Food> foodList = new ArrayList<>();
+
+        try {
+            foodList = foodRepository.findAllByNameContaining(foodName);
+            return foodList;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }
