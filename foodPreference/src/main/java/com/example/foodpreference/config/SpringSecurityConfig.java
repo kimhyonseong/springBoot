@@ -1,5 +1,6 @@
 package com.example.foodpreference.config;
 
+import com.example.foodpreference.validator.LoginIdPwValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class SpringSecurityConfig {
   private final UserDetailsService userDetailsService;
+  private final LoginIdPwValidator loginIdPwValidator;
 
   // spring security 필터를 타지 않게 무시
   @Bean
