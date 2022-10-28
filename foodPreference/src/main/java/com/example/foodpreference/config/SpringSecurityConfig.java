@@ -43,17 +43,4 @@ public class SpringSecurityConfig {
 
     return http.build();
   }
-
-  /*
-  @Override
-  protected void configure(HttpSecurity http) throws Exception{
-    http.authorizeRequests()
-            .anyRequest().authenticated()
-            .and()
-            .formLogin()
-            .defaultSuccessUrl("/main",true)
-            .permitAll()
-            .and()
-            .logout();
-  }*/
 }
