@@ -12,10 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 @Controller
 public class HomeController {
-  @GetMapping("/login")
-  public String loginView() {
-    return "login";
-  }
 
   @GetMapping("/main")
   public String test() {
