@@ -16,6 +16,11 @@ spring:
         format_sql: true
     defer-datasource-initialization: true
     generate-ddl: true
+  security:
+    user:
+      name: user1
+      password: 1234
+      roles: USER
 #  sql:
 #    init:
 #      mode: always
