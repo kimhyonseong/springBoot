@@ -30,12 +30,12 @@ public class Item extends BaseEntity{
   @ToString.Exclude
   private Member member;
 
-  @OneToMany
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "item_idx")
   @ToString.Exclude
   private List<ItemImg> imgs;
 
-  @OneToMany
+  @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "item_idx")
   @ToString.Exclude
   private List<Cart> carts;

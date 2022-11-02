@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,6 +19,8 @@ import java.util.List;
 @Table(indexes = {
         @Index(name = "idx_unique_id", columnList = "id", unique = true)
 })
+@DynamicInsert
+@DynamicUpdate
 public class Member extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,14 +29,16 @@ public class Member extends BaseEntity{
 
     private String id;
     private String password;
+
+    @ColumnDefault("'user'")
     private String role;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "member_idx")
     @ToString.Exclude
     private List<Item> items;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "member_idx")
     @ToString.Exclude
     private List<Cart> cart;
