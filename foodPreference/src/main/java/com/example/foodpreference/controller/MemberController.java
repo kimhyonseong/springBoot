@@ -16,13 +16,13 @@ public class MemberController {
         return "member/login";
     }
 
-    @PostMapping("login")
-    public String login(@RequestBody MemberDto memberDto) {
-        System.out.println(memberDto);
-        System.out.println("--------------------");
-        log.info(memberDto.toString());
-
-        // 로그인 로직
-       return "main";
-    }
+//    @PostMapping("login")
+//    public String login(@RequestBody MemberDto memberDto) {
+//        System.out.println(memberDto);
+//        System.out.println("--------------------");
+//        log.info(memberDto.toString());
+//
+//        // 로그인 로직
+//       return "main";
+//    }
 }
