@@ -31,6 +31,12 @@ public class Item extends BaseEntity{
   private Member member;
 
   @OneToMany
-  @JoinColumn(name = "img_idx")
+  @JoinColumn(name = "item_idx")
+  @ToString.Exclude
   private List<ItemImg> imgs;
+
+  @OneToMany
+  @JoinColumn(name = "item_idx")
+  @ToString.Exclude
+  private List<Cart> carts;
 }

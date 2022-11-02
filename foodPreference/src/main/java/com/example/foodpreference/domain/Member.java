@@ -27,10 +27,12 @@ public class Member extends BaseEntity{
     private String role;
 
     @OneToMany
+    @JoinColumn(name = "member_idx")
     @ToString.Exclude
     private List<Item> items;
 
     @OneToMany
+    @JoinColumn(name = "member_idx")
     @ToString.Exclude
-    private List<Cart> carts;
+    private List<Cart> cart;
 }

@@ -19,6 +19,6 @@ public class ItemImg extends BaseEntity {
   private String extension;
 
   @ManyToOne
-  @JoinColumn(name = "item_idx")
+  //@JoinColumn(name = "item_idx")
   private Item item;
 }

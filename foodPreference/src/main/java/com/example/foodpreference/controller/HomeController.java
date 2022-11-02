@@ -24,11 +24,11 @@ public class HomeController {
     return "main";
   }
 
-  @PostMapping("/login")
-  public String proc(MemberDto memberDto) {
-    log.info(memberDto.toString());
-    return "loginProc";
-  }
+//  @PostMapping("/login")
+//  public String proc(MemberDto memberDto) {
+//    log.info(memberDto.toString());
+//    return "loginProc";
+//  }
 
   @RequestMapping("auth")
   public Authentication auth() {

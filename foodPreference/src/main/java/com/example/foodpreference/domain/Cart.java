@@ -14,8 +14,13 @@ import java.util.List;
 public class Cart {
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long idx;
-  private Long cart_idx;
+  private int quantity;
 
-  @ManyToMany
-  private List<Item> items;
+  @ManyToOne
+  @JoinColumn(name = "member_idx")
+  private Member member;
+
+  @ManyToOne
+  @JoinColumn(name = "item_idx")
+  private Item item;
 }
