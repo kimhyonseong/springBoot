@@ -31,10 +31,12 @@ public class MemberController {
 //        // 로그인 로직
 //       return "main";
 //    }
+    @GetMapping("member")
+    public String join() {
+        return "join";
+    }
     @PostMapping("member")
-    public String join(@RequestBody MemberDto memberDto) {
-        System.out.println(memberDto);
-        System.out.println("--------------------");
+    public String join(MemberDto memberDto) {
         log.info(memberDto.toString());
 
         Member member = new Member();

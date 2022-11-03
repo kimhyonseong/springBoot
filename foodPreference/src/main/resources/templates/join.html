@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Join</title>
+</head>
+<body>
+<form class="login-form" method="post" th:action="@{/member}">
+    <input type="text" name="id" placeholder="Id">
+    <input type="password" name="password" placeholder="password">
+    <input type="password" name="confirm-password" placeholder="password confirm">
+    <input type="text" name="name" placeholder="name">
+    <input type="submit" value="Join">
+</form>
+</body>
+</html>
