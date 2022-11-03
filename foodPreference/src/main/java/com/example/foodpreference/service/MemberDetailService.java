@@ -2,7 +2,6 @@ package com.example.foodpreference.service;
 
 import com.example.foodpreference.domain.Member;
 import com.example.foodpreference.repository.MemberRepository;
-import com.example.foodpreference.security.MemberDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -51,9 +50,33 @@ public class MemberDetailService implements UserDetailsService {
         System.out.println("username = "+username);
         System.out.println("member = "+member);
 
-        if (member != null) {
-            return new MemberDetails(member);
+        return member;
+    }
+
+    public int signUp(Member member) {
+        try {
+            if(duplicateId(member.getId())) {
+                return 300;
+            }
+            BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+            member.setPassword(bcrypt.encode(member.getPassword()));
+
+            memberRepository.save(member);
+            return 200;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return 400;
         }
-        return null;
+    }
+
+    public boolean duplicateId(String id) {
+        try {
+            Member member = memberRepository.findById(id);
+
+            return member != null;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return true;
+        }
     }
 }

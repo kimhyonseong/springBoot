@@ -6,7 +6,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -17,15 +20,16 @@ public class SpringSecurityConfig {
   //private final LoginIdPwValidator loginIdPwValidator;
 
   // spring security 필터를 타지 않게 무시
-  @Bean
-  public WebSecurityCustomizer webSecurityCustomizer() {
-    return (web) -> web.ignoring().antMatchers("/resources/**","/h2-console/**");
-  }
+//  @Bean
+//  public WebSecurityCustomizer webSecurityCustomizer() {
+//    return (web) -> web.ignoring().antMatchers("/resources/**","/h2-console/**");
+//  }
 
   @Bean
   protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
     http.csrf().disable().authorizeRequests()
               .antMatchers("/login","/signup","/main").permitAll()
+              .antMatchers("/resources/**").permitAll()
               .antMatchers("/admin").hasRole("ADMIN")
               .antMatchers("/my").authenticated()
             .and()

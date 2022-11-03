@@ -4,6 +4,7 @@ import com.example.foodpreference.domain.Member;
 import com.example.foodpreference.dto.MemberDto;
 import com.example.foodpreference.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
@@ -11,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Service
 @RequiredArgsConstructor
-public class authService {
+public class MemberService {
     private final MemberRepository memberRepository;
 
     public boolean login(MemberDto memberDto, HttpServletResponse response) {

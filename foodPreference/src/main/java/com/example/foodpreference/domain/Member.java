@@ -7,9 +7,15 @@ import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -21,7 +27,7 @@ import java.util.List;
 })
 @DynamicInsert
 @DynamicUpdate
-public class Member extends BaseEntity{
+public class Member extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
@@ -29,6 +35,7 @@ public class Member extends BaseEntity{
 
     private String id;
     private String password;
+    private int state;
 
     @ColumnDefault("'user'")
     private String role;
@@ -42,4 +49,42 @@ public class Member extends BaseEntity{
     @JoinColumn(name = "member_idx")
     @ToString.Exclude
     private List<Cart> cart;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> map = new HashSet<>();
+        map.add(new SimpleGrantedAuthority(this.getRole()));
+
+        return map;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.getName();
+    }
+
+    // 만료 여부 확인
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    // 계정 잠겼는지 확인
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+
+    // 패스워드 만료 확인
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    // 계정 사용 가능 여부
+    @Override
+    public boolean isEnabled() {
+        return this.getState() == 10;
+    }
 }
