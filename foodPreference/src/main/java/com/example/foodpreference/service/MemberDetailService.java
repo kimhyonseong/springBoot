@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +28,7 @@ public class MemberDetailService implements UserDetailsService {
         return new BCryptPasswordEncoder();
     }
 
+    // 로그인 시 이놈이 요청을 가로챔
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = null;
@@ -53,6 +55,7 @@ public class MemberDetailService implements UserDetailsService {
         return member;
     }
 
+    @Transactional
     public int signUp(Member member) {
         try {
             if(duplicateId(member.getId())) {

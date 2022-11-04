@@ -21,27 +21,27 @@ public class SpringSecurityConfig {
   //private final LoginIdPwValidator loginIdPwValidator;
 
   // spring security 필터를 타지 않게 무시
-//  @Bean
-//  public WebSecurityCustomizer webSecurityCustomizer() {
-//    return (web) -> web.ignoring().antMatchers("/resources/**","/h2-console/**");
-//  }
+  @Bean
+  public WebSecurityCustomizer webSecurityCustomizer() {
+    return (web) -> web.ignoring().antMatchers("/main","/resources/**","/h2-console/**");
+  }
 
   @Bean
   protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-//    http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//    http.csrf().ignoringAntMatchers("/resources/**","/login","/signup").and().authorizeRequests()
     http.csrf().disable().authorizeRequests()
-              .antMatchers("/login","/signup","/main").permitAll()
-              .antMatchers("/resources/**").permitAll()
+              .antMatchers("/login","/loginProc","/signup","/main","/resources/**").permitAll()
               .antMatchers("/admin").hasRole("ADMIN")
               .antMatchers("/my").authenticated()
             .and()
               .formLogin()
               .loginPage("/login")
-              .loginProcessingUrl("/login")
+              .loginProcessingUrl("/loginProc")
               .usernameParameter("id")
               .passwordParameter("pw")
-              .defaultSuccessUrl("/main",false)
-              .failureForwardUrl("/login")
+              //.defaultSuccessUrl("/main",false)
+              .defaultSuccessUrl("/main")
+              .failureForwardUrl("/fail")
             .and()
             .logout();
             //.logoutRequestMatcher(new AntPathRequestMatcher("/logoutProc")) -> 생략시 default /logout
