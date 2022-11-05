@@ -30,7 +30,7 @@ public class SpringSecurityConfig {
   protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 //    http.csrf().ignoringAntMatchers("/resources/**","/login","/signup").and().authorizeRequests()
     http.csrf().disable().authorizeRequests()
-              .antMatchers("/login","/loginProc","/signup","/main","/resources/**").permitAll()
+              .antMatchers("/auth","/login","/loginProc","/signup","/main","/resources/**").permitAll()
               .antMatchers("/admin").hasRole("ADMIN")
               .antMatchers("/my").authenticated()
             .and()

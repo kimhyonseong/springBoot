@@ -1,4 +1,4 @@
-insert into member(id,name,password,role) values("lss1545","lss","1234","admin");
+insert into member(id,name,password,role) values("lss1545","lss","1234","ADMIN");
 
 insert into item(member_idx,name) values(1,"sh");
 

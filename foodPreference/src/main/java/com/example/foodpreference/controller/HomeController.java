@@ -20,8 +20,9 @@ public class HomeController {
   }
 
   // 이쪽으로 들어가면 login 페이지로 가짐
-  @GetMapping("/admin")
+  @RequestMapping("admin")
   public String test1() {
+
     return "admin";
   }
 
@@ -31,10 +32,10 @@ public class HomeController {
 //    return "loginProc";
 //  }
 
-  @RequestMapping("/auth")
+  @RequestMapping("auth")
   public Authentication auth() {
-    log.info(String.valueOf(SecurityContextHolder.getContext()
-            .getAuthentication()));
+//    log.info(String.valueOf(SecurityContextHolder.getContext()
+//            .getAuthentication()));
     return SecurityContextHolder.getContext()
             .getAuthentication();
   }

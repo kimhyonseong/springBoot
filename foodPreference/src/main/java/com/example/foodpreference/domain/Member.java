@@ -35,6 +35,8 @@ public class Member extends BaseEntity implements UserDetails {
 
     private String id;
     private String password;
+
+    @ColumnDefault("10")
     private int state;
 
     @ColumnDefault("'user'")
@@ -66,13 +68,13 @@ public class Member extends BaseEntity implements UserDetails {
     // 만료 여부 확인
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     // 계정 잠겼는지 확인
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
 
@@ -86,5 +88,6 @@ public class Member extends BaseEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.getState() == 10;
+//        return true;
     }
 }
