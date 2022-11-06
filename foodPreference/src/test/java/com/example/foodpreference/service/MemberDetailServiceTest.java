@@ -50,4 +50,11 @@ class MemberDetailServiceTest {
 
         System.out.println(authService.loadUserByUsername(member.getId()));
     }
+
+    @Test
+    void regText(){
+        String str = "12341234&";
+
+        assertTrue("aqweq".matches(".{4,10}"));
+    }
 }

@@ -58,7 +58,7 @@ public class MemberDetailService implements UserDetailsService {
     @Transactional
     public int signUp(Member member) {
         try {
-            if(duplicateId(member.getId())) {
+            if(checkMemberIdDuplication(member.getId())) {
                 return 300;
             }
             BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
@@ -72,14 +72,8 @@ public class MemberDetailService implements UserDetailsService {
         }
     }
 
-    public boolean duplicateId(String id) {
-        try {
-            Member member = memberRepository.findById(id);
-
-            return member != null;
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return true;
-        }
+    @Transactional(readOnly = true)
+    public boolean checkMemberIdDuplication(String id) {
+        return memberRepository.existsById(id);
     }
 }

@@ -36,7 +36,7 @@ public class SpringSecurityConfig {
             .and()
               .formLogin()
               .loginPage("/login")
-              .loginProcessingUrl("/loginProc")
+              .loginProcessingUrl("/login")
               .usernameParameter("id")
               .passwordParameter("pw")
               //.defaultSuccessUrl("/main",false)
