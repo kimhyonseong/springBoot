@@ -19,7 +19,6 @@ public abstract class BaseValidator<T> implements Validator {
       doValidate((T) target,errors);
     } catch (IllegalStateException e) {
       log.error("중복 검증",e);
-      System.out.println("검증 완.");
       throw e;
     }
   }

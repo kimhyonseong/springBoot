@@ -18,7 +18,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @RequiredArgsConstructor
 public class SpringSecurityConfig {
   private final UserDetailsService userDetailsService;
-  //private final LoginIdPwValidator loginIdPwValidator;
+  private final CustomAuthFailHandler customAuthFailHandler;
 
   // spring security 필터를 타지 않게 무시
   @Bean
@@ -41,7 +41,8 @@ public class SpringSecurityConfig {
               .passwordParameter("pw")
               //.defaultSuccessUrl("/main",false)
               .defaultSuccessUrl("/main")
-              .failureForwardUrl("/fail")
+              //.failureForwardUrl("/login")
+            .failureHandler(customAuthFailHandler)
             .and()
             .logout();
             //.logoutRequestMatcher(new AntPathRequestMatcher("/logoutProc")) -> 생략시 default /logout

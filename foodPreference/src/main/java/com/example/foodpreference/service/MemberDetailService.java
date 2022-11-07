@@ -52,6 +52,8 @@ public class MemberDetailService implements UserDetailsService {
         System.out.println("username = "+username);
         System.out.println("member = "+member);
 
+        if (member == null) throw new UsernameNotFoundException("없는 아이디 입니다.");
+
         return member;
     }
 

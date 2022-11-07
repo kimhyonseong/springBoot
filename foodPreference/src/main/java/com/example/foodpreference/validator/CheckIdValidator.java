@@ -15,7 +15,6 @@ public class CheckIdValidator extends BaseValidator<MemberDto>{
   protected void doValidate(MemberDto dto, Errors errors) {
     if (memberRepository.existsById(dto.getId())) {
       errors.rejectValue("id","아이디 중복 오류","이미 사용중인 아이디");
-      System.out.println("에러스");
     }
   }
 }

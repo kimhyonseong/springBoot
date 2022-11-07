@@ -4,6 +4,7 @@ import com.example.foodpreference.domain.Member;
 import com.example.foodpreference.dto.MemberDto;
 import com.example.foodpreference.service.MemberDetailService;
 import com.example.foodpreference.validator.CheckIdValidator;
+import com.example.foodpreference.validator.PasswordCheckerValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +29,9 @@ import java.util.Map;
 public class MemberController {
     private final MemberDetailService memberDetailService;
     private final CheckIdValidator checkIdValidator;
+    private final PasswordCheckerValidator pwChecker;
 
-    @GetMapping("login")
+    @RequestMapping("login")
     public String loginView() {
         return "member/login";
     }
@@ -39,14 +41,12 @@ public class MemberController {
         return "member/join";
     }
 
+    // You must declare an Errors, or BindingResult argument immediately after the validated method argument.
     @PostMapping("join")
-    public String join(@Validated @ModelAttribute MemberDto memberDto, HttpServletRequest request,
-                       Model model, BindingResult bindingResult, Errors errors) {
+    public String join(@Validated @ModelAttribute MemberDto memberDto,
+                       BindingResult bindingResult, Model model) {
 
-        System.out.println("join?!");
-
-        if (errors.hasErrors()) {
-            System.out.println("error");
+        if (bindingResult.hasErrors()) {
             model.addAttribute("memberDto",memberDto);
 
             Map<String,String> map = new HashMap<>();
@@ -55,6 +55,7 @@ public class MemberController {
                 map.put("valid_"+error.getField(),error.getDefaultMessage());
                 log.info("error message : "+error.getDefaultMessage());
             }
+            model.addAllAttributes(map);
 
             return "member/join";
         } else {
@@ -71,18 +72,12 @@ public class MemberController {
             switch (memberDetailService.signUp(member)) {
                 case 200:
                     return "member/joinSuccess";
-                case 300:
-                    map.put("message", "중복된 아이디 입니다.");
-
-                    model.addAttribute("member", map);
-
-                    return "redirect:/join";
                 case 400:
                     map.put("message", "에러가 발생하였습니다. 잠시후 다시 시도해주세요.");
 
                     model.addAllAttributes(map);
 
-                    return "forward:/join";
+                    return "member/join";
                 default:
                     return "main";
             }
@@ -91,9 +86,8 @@ public class MemberController {
 
     @InitBinder
     public void validatorBinder(WebDataBinder binder) {
-        System.out.println("validator in");
         binder.addValidators(checkIdValidator);
-        System.out.println("다음.");
+        binder.addValidators(pwChecker);
     }
 
     @GetMapping("/join/{id}/exist")
@@ -103,6 +97,6 @@ public class MemberController {
 
     @RequestMapping("fail")
     public String failPage() {
-        return "fail";
+        return "member/fail";
     }
 }
