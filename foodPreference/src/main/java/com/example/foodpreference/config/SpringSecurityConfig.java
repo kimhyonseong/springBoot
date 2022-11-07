@@ -39,12 +39,12 @@ public class SpringSecurityConfig {
               .loginProcessingUrl("/login")
               .usernameParameter("id")
               .passwordParameter("pw")
-              //.defaultSuccessUrl("/main",false)
-              .defaultSuccessUrl("/main")
-              //.failureForwardUrl("/login")
+              .defaultSuccessUrl("/main", false)
             .failureHandler(customAuthFailHandler)
             .and()
-            .logout();
+            .logout()
+            .and()
+            .rememberMe();
             //.logoutRequestMatcher(new AntPathRequestMatcher("/logoutProc")) -> 생략시 default /logout
 
     return http.build();

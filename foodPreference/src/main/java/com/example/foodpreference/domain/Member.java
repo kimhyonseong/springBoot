@@ -37,7 +37,7 @@ public class Member extends BaseEntity implements UserDetails {
     private String password;
 
     @ColumnDefault("10")
-    private int state;
+    private Integer state;
 
     @ColumnDefault("'user'")
     private String role;

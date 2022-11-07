@@ -40,8 +40,7 @@ public class MemberController {
     public String join() {
         return "member/join";
     }
-
-    // You must declare an Errors, or BindingResult argument immediately after the validated method argument.
+    
     @PostMapping("join")
     public String join(@Validated @ModelAttribute MemberDto memberDto,
                        BindingResult bindingResult, Model model) {
