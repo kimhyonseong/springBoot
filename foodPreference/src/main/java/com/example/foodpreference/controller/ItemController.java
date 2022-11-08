@@ -5,6 +5,7 @@ import com.example.foodpreference.dto.ItemDto;
 import com.example.foodpreference.repository.ItemRepository;
 import com.example.foodpreference.service.ItemService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -15,38 +16,43 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
-public class FoodController {
+public class ItemController {
   private final ItemService itemService;
   private final ItemRepository itemRepository;
 
-  @GetMapping({"admin/food/{idx}","admin/food"})
+  @GetMapping({"admin/item/{idx}","admin/item"})
   public String foodPage(
           @PathVariable(required = false) Long idx,
           Model model) {
-    if (idx != null) {
-      // 불러오기
-      Item item = itemRepository.findByIdx(idx);
-      Map<String,Object> map = new HashMap<>();
-      map.put("name",item.getName());
+    try {
+      if (idx != null) {
+        // 불러오기
+        Item item = itemRepository.findByIdx(idx);
+        Map<String,Object> map = new HashMap<>();
+        map.put("name",item.getName());
 
-      model.addAllAttributes(map);
+        model.addAllAttributes(map);
+      }
+    } catch (RuntimeException e) {
+      e.printStackTrace();
     }
-    return "food/foodInsert";
+    return "item/itemInsert";
   }
 
-  @PostMapping({"admin/food/{idx}","admin/food"})
+  @PostMapping({"admin/item/{idx}","admin/item"})
   public String foodSave(
           @PathVariable(required = false) Long idx,
           @Validated ItemDto itemDto) {
-    if (idx == null) {
-      // 새로저장
-      itemService.itemSave(itemDto);
-    } else {
-      // 수정
-      itemService.itemModify(itemDto, idx);
+    try {
+      itemService.itemSave(itemDto, idx);
+    } catch (Exception e) {
+      log.error("insert error. page : admin/item/"+idx);
+      return "item/itemInsert";
     }
-    return "food/foodInsert";
+
+    return "item/itemInsert";
   }
 }

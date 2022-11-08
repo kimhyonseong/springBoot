@@ -11,25 +11,26 @@ import org.springframework.stereotype.Service;
 public class ItemService {
   private final ItemRepository itemRepository;
 
-  public void itemSave(ItemDto itemDto) {
-    Item item = new Item();
+  public void itemSave(ItemDto itemDto, Long idx) throws RuntimeException {
+    try {
+      Item item = null;
 
-    item.setName(itemDto.getName());
-    item.setCode(itemDto.getCode());
-    item.setPrice(itemDto.getPrice());
-    item.setQuantity(itemDto.getQuantity());
+      System.out.println(idx);
 
-    itemRepository.save(item);
-  }
+      if (idx == null) {
+        item = new Item();
+      } else {
+        item = itemRepository.findByIdx(idx);
+      }
 
-  public void itemModify(ItemDto itemDto, Long idx) {
-    Item item = itemRepository.findByIdx(idx);
+      item.setName(itemDto.getName());
+      item.setCode(itemDto.getCode());
+      item.setPrice(itemDto.getPrice());
+      item.setQuantity(itemDto.getQuantity());
 
-    item.setName(itemDto.getName());
-    item.setCode(itemDto.getCode());
-    item.setPrice(itemDto.getPrice());
-    item.setQuantity(itemDto.getQuantity());
-
-    itemRepository.save(item);
+      itemRepository.save(item);
+    } catch (RuntimeException e) {
+      throw new RuntimeException("진행 오류");
+    }
   }
 }
