@@ -23,7 +23,7 @@ public class ItemController {
   private final ItemService itemService;
 
   @GetMapping({"admin/item/{idx}","admin/item"})
-  public String foodPage(
+  public String itemPage(
           @PathVariable(required = false) Long idx,
           Model model) {
     try {
@@ -40,12 +40,12 @@ public class ItemController {
   }
 
   @PostMapping({"admin/item/{idx}","admin/item"})
-  public String foodSave(
+  public String itemSave(
           @PathVariable(required = false) Long idx,
           @Validated ItemDto itemDto, Model model) {
     try {
       itemService.itemSave(itemDto, idx);
-    } catch (Exception e) {
+    } catch (RuntimeException e) {
       log.error("insert error. page : admin/item/"+idx);
       model.addAttribute("errMsg","저장 오류");
       return "item/itemInsert";
