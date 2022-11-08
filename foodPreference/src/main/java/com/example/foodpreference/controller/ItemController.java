@@ -21,7 +21,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ItemController {
   private final ItemService itemService;
-  private final ItemRepository itemRepository;
 
   @GetMapping({"admin/item/{idx}","admin/item"})
   public String foodPage(
@@ -30,9 +29,7 @@ public class ItemController {
     try {
       if (idx != null) {
         // 불러오기
-        Item item = itemRepository.findByIdx(idx);
-        Map<String,Object> map = new HashMap<>();
-        map.put("name",item.getName());
+        Map<String,Object> map = itemService.findItem(idx);
 
         model.addAllAttributes(map);
       }
@@ -45,11 +42,12 @@ public class ItemController {
   @PostMapping({"admin/item/{idx}","admin/item"})
   public String foodSave(
           @PathVariable(required = false) Long idx,
-          @Validated ItemDto itemDto) {
+          @Validated ItemDto itemDto, Model model) {
     try {
       itemService.itemSave(itemDto, idx);
     } catch (Exception e) {
       log.error("insert error. page : admin/item/"+idx);
+      model.addAttribute("errMsg","저장 오류");
       return "item/itemInsert";
     }
 

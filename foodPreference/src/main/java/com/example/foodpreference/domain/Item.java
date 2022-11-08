@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Item extends BaseEntity{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
