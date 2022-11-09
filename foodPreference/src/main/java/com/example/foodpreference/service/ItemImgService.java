@@ -6,6 +6,7 @@ import com.example.foodpreference.repository.ItemImgRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
@@ -14,7 +15,7 @@ public class ItemImgService {
   private final ItemImgRepository itemImgRepository;
 
   // 이미지 여러개 들어올 예정
-  public void ImgSave(ItemImgDto itemImgDto, Long idx) throws RuntimeException{
+  public void ImgSave(MultipartFile file, Long idx) throws RuntimeException{
     try {
       ItemImg itemImg = null;
       if (idx != null) {
