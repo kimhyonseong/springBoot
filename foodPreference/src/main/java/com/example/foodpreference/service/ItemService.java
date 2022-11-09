@@ -2,6 +2,7 @@ package com.example.foodpreference.service;
 
 import com.example.foodpreference.domain.Item;
 import com.example.foodpreference.dto.ItemDto;
+import com.example.foodpreference.dto.ItemImgDto;
 import com.example.foodpreference.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,5 +59,11 @@ public class ItemService {
       log.error("save error");
       throw new RuntimeException("item save error");
     }
+  }
+
+  public String itemImgSave(ItemImgDto itemImgDto) {
+    String fileName = "";
+
+    return fileName;
   }
 }
