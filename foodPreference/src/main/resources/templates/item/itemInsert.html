@@ -51,7 +51,16 @@
     </form>
 </div>
 <script>
-
+    $(function () {
+        $.ajax({
+            url:"/admin/imgUpload",
+            method:"POST",
+            data : {},
+            success : function (data) {
+                console.log(data);
+            }
+        })
+    })
 </script>
 </body>
 </html>

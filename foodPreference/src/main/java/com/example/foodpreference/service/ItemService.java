@@ -60,10 +60,4 @@ public class ItemService {
       throw new RuntimeException("item save error");
     }
   }
-
-  public String itemImgSave(ItemImgDto itemImgDto) {
-    String fileName = "";
-
-    return fileName;
-  }
 }
