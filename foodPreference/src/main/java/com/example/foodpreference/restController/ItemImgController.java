@@ -1,9 +1,12 @@
 package com.example.foodpreference.restController;
 
+import com.example.foodpreference.service.ItemImgService;
 import com.example.foodpreference.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,16 +16,20 @@ import java.util.Map;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class ItemImgController {
+  private final ItemImgService itemImgService;
 
   @PostMapping("admin/imgUpload")
   public ResponseEntity<?> imgUpload(
-          MultipartFile file
+          @RequestParam(value = "image", required = false) MultipartFile file
   ) {
+    FileUtil fileUtil = new FileUtil();
     Map<String, Object> fileInfo = new HashMap<>();
+
     try {
-      FileUtil fileUtil = new FileUtil();
-      fileInfo = fileUtil.uploadFileInfo(file);
+      System.out.println("imgUpload");
+      fileInfo = fileUtil.fileInfo(file);
 
       if (fileInfo.get("status") == "error") {
         throw new RuntimeException("file error");

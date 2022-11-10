@@ -52,15 +52,30 @@
 </div>
 <script>
     $(function () {
+        $("#itemImg1").on("change", function () {
+            console.log("123");
+            upload($(this)[0]);
+        })
+    })
+
+    function upload(target) {
+        console.log(target.files);
+
+        const image = target;
+        const formData = new FormData();
+        formData.append("image",image.files[0]);
+
         $.ajax({
             url:"/admin/imgUpload",
-            method:"POST",
-            data : {},
+            type:"POST",
+            processData: false,
+            contentType: false,
+            data : formData,
             success : function (data) {
                 console.log(data);
             }
         })
-    })
+    }
 </script>
 </body>
 </html>

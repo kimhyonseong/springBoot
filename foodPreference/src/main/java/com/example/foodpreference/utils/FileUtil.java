@@ -4,12 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.io.File;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Component
@@ -22,13 +20,16 @@ public class FileUtil {
         return fileName;
     }
 
-    public Map<String,Object> uploadFileInfo(MultipartFile file) {
+    public Map<String,Object> fileInfo(MultipartFile file) {
+        final List<String> ALLOW_TYPE = Arrays.asList("image/jpeg","image/png");
         Map<String, Object> fileInfo = new HashMap<>();
+        System.out.println("fileInfo");
 
         try {
+            System.out.println(file.getContentType());
+
             // 정보들 map에 저장
-            System.out.println(file.getOriginalFilename());
-            System.out.println(Arrays.toString(file.getBytes()));
+            //System.out.println(Arrays.toString(file.getBytes()));
             System.out.println(file.getOriginalFilename());
         } catch (Exception e) {
             log.error(e.getMessage());
