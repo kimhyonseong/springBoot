@@ -28,12 +28,9 @@ public class ItemImgController {
     Map<String, Object> fileInfo = new HashMap<>();
 
     try {
-      System.out.println("imgUpload");
       fileInfo = fileUtil.fileInfo(file);
 
-      if (fileInfo.get("status") == "error") {
-        throw new RuntimeException("file error");
-      }
+      itemImgService.imgTmpSave(file);
 
     } catch (RuntimeException e) {
       log.error("ItemImgController error : "+e.getMessage());

@@ -3,14 +3,15 @@ package com.example.foodpreference.service;
 import com.example.foodpreference.domain.ItemImg;
 import com.example.foodpreference.dto.ItemImgDto;
 import com.example.foodpreference.repository.ItemImgRepository;
+import com.example.foodpreference.utils.FileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -31,6 +32,28 @@ public class ItemImgService {
     } catch (RuntimeException e) {
       log.error("itemImg save error");
       throw new RuntimeException("itemImg save error");
+    }
+  }
+
+  public void imgTmpSave(MultipartFile file) {
+    final List<String> ALLOW_TYPE = Arrays.asList("image/jpeg","image/png");
+    FileUtil fileUtil = new FileUtil();
+    Map<String, Object> fileInfo = fileUtil.fileInfo(file);
+    String uploadPath = Paths.get("./images/tmp").toAbsolutePath().toString();
+
+    try {
+      if (!ALLOW_TYPE.contains((String) fileInfo.get("contentType"))) {
+        System.out.println("업로드 불가능한 파일");
+      } else {
+        String reName = fileUtil.makeFileName(Objects.requireNonNull(file.getOriginalFilename()));
+
+        File originFile = new File(uploadPath, Objects.requireNonNull(file.getOriginalFilename()));
+        File newFile = new File(uploadPath,reName);
+
+        file.transferTo(newFile);
+      }
+    } catch (Exception e) {
+      log.error("img error : "+e.getMessage());
     }
   }
 }

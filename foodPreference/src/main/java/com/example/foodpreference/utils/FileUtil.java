@@ -21,21 +21,11 @@ public class FileUtil {
     }
 
     public Map<String,Object> fileInfo(MultipartFile file) {
-        final List<String> ALLOW_TYPE = Arrays.asList("image/jpeg","image/png");
         Map<String, Object> fileInfo = new HashMap<>();
-        System.out.println("fileInfo");
 
-        try {
-            System.out.println(file.getContentType());
-
-            // 정보들 map에 저장
-            //System.out.println(Arrays.toString(file.getBytes()));
-            System.out.println(file.getOriginalFilename());
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            log.error("업로드 불가능 파일 " + file.getName());
-            fileInfo.put("status","error");
-        }
+        fileInfo.put("contentType",file.getContentType());
+        fileInfo.put("originName",file.getOriginalFilename());
+        fileInfo.put("size",file.getSize());
 
         return fileInfo;
     }
