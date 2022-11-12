@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <title>food insert</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        .preImage {
+            max-width: 200px;
+        }
+    </style>
 </head>
 <body>
 <div class="wrap">
@@ -40,27 +45,26 @@
             <p>아이템 사진</p>
             <label for="itemImg1">이미지1</label>
             <input style="display: none" type="file" id="itemImg1" name="name" th:value="${img?.imgUrl1}">
-            <img src="https://via.placeholder.com/150" alt="img1">
+            <img class="preImage" id="itemImg1pre" src="https://via.placeholder.com/150" alt="img1">
+
             <label for="itemImg2">이미지2</label>
             <input style="display: none" type="file" id="itemImg2" name="name" th:value="${img?.imgUrl2}">
-            <img src="https://via.placeholder.com/150" alt="img2">
+            <img class="preImage" id="itemImg2pre" src="https://via.placeholder.com/150" alt="img2">
+
             <label for="itemImg3">이미지3</label>
             <input style="display: none" type="file" id="itemImg3" name="name" th:value="${img?.imgUrl3}">
-            <img src="https://via.placeholder.com/150" alt="img3">
+            <img class="preImage" id="itemImg3pre" src="https://via.placeholder.com/150" alt="img3">
         </div>
     </form>
 </div>
 <script>
     $(function () {
-        $("#itemImg1").on("change", function () {
-            console.log("123");
+        $("input[type=file]").on("change", function () {
             upload($(this)[0]);
         })
     })
 
     function upload(target) {
-        console.log(target.files);
-
         const image = target;
         const formData = new FormData();
         formData.append("image",image.files[0]);
@@ -72,7 +76,9 @@
             contentType: false,
             data : formData,
             success : function (data) {
-                console.log(data);
+                //console.log(data);
+                $(`#${target.id}pre`).attr("src",`/images/tmp/${data.newName}`);
+                $(target).val("");
             }
         })
     }

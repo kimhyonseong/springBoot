@@ -35,7 +35,7 @@ public class ItemImgService {
     }
   }
 
-  public void imgTmpSave(MultipartFile file) {
+  public Map<String, Object> imgTmpSave(MultipartFile file) {
     final List<String> ALLOW_TYPE = Arrays.asList("image/jpeg","image/png");
     FileUtil fileUtil = new FileUtil();
     Map<String, Object> fileInfo = fileUtil.fileInfo(file);
@@ -43,17 +43,20 @@ public class ItemImgService {
 
     try {
       if (!ALLOW_TYPE.contains((String) fileInfo.get("contentType"))) {
-        System.out.println("업로드 불가능한 파일");
+        log.error("업로드 불가능한 파일");
       } else {
         String reName = fileUtil.makeFileName(Objects.requireNonNull(file.getOriginalFilename()));
+        fileInfo.put("newName",reName);
 
-        File originFile = new File(uploadPath, Objects.requireNonNull(file.getOriginalFilename()));
         File newFile = new File(uploadPath,reName);
 
         file.transferTo(newFile);
+        log.info("upload success : "+reName);
       }
     } catch (Exception e) {
       log.error("img error : "+e.getMessage());
     }
+
+    return fileInfo;
   }
 }

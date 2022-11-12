@@ -28,10 +28,9 @@ public class ItemImgController {
     Map<String, Object> fileInfo = new HashMap<>();
 
     try {
-      fileInfo = fileUtil.fileInfo(file);
-
-      itemImgService.imgTmpSave(file);
-
+      if (file != null) {
+        fileInfo = itemImgService.imgTmpSave(file);
+      }
     } catch (RuntimeException e) {
       log.error("ItemImgController error : "+e.getMessage());
       return ResponseEntity.badRequest().build();
