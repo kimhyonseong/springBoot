@@ -2,7 +2,6 @@ package com.example.foodpreference.service;
 
 import com.example.foodpreference.domain.Item;
 import com.example.foodpreference.dto.ItemDto;
-import com.example.foodpreference.dto.ItemImgDto;
 import com.example.foodpreference.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +21,7 @@ public class ItemService {
 
     try {
       Item item = itemRepository.findByIdx(idx);
+      map.put("item",item);
       map.put("name",item.getName());
       map.put("code",item.getCode());
       map.put("description",item.getDescription());
@@ -36,11 +36,9 @@ public class ItemService {
     return map;
   }
 
-  public void itemSave(ItemDto itemDto, Long idx) throws RuntimeException {
+  public Long itemSave(ItemDto itemDto, Long idx) throws RuntimeException {
     try {
       Item item = null;
-
-      System.out.println(idx);
 
       if (idx == null) {
         item = new Item();
@@ -54,7 +52,7 @@ public class ItemService {
       item.setPrice(itemDto.getPrice());
       item.setQuantity(itemDto.getQuantity());
 
-      itemRepository.save(item);
+      return itemRepository.save(item).getIdx();
     } catch (RuntimeException e) {
       log.error("save error");
       throw new RuntimeException("item save error");

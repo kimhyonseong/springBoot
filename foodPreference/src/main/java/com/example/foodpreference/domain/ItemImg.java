@@ -3,6 +3,7 @@ package com.example.foodpreference.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -10,12 +11,14 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class ItemImg extends BaseEntity {
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long idx;
+  private String imgPath;
   private String imgUrl;
-  private int width;
-  private int height;
+  private String originName;
+  private Integer size;
   private String extension;
 
   @ManyToOne

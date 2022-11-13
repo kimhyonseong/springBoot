@@ -4,12 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 public class ItemImgDto {
     private String imgUrl;
-    private int width;
-    private int height;
-    private String extension;
+    private String originName;
+    private List<ItemImgDto> itemImgDtoList;
 }

@@ -30,7 +30,7 @@ public class TmpFileScheduler {
       assert files != null;
       for (File file : files) {
         // 1000L - 1초
-        if(file.lastModified() < date.getTime()-360000L) {
+        if(file.lastModified() < date.getTime()-(1000L*12*360)) {
           deleteSuccess = file.delete();
 
           log.info(file.getName()+" delete "+deleteSuccess);

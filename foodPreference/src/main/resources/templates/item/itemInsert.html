@@ -5,6 +5,10 @@
     <title>food insert</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
         .preImage {
             max-width: 200px;
         }
@@ -12,49 +16,48 @@
 </head>
 <body>
 <div class="wrap">
-    <form th:action="@{/admin/item}" method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data">
         <div>
             <label for="itemName">아이템 이름</label>
-            <p th:text="${valid_name}"></p>
+            <p th:text="${valid_name}" style="height: max-content"></p>
             <input type="text" id="itemName" name="name" th:value="${name}">
         </div>
         <div>
             <label for="itemCode">아이템 분류</label>
             <p th:text="${valid_code}"></p>
-            <input type="text" id="itemCode" name="name" th:value="${code}">
+            <input type="text" id="itemCode" name="code" th:value="${code}">
         </div>
         <div>
             <label for="itemDesc">아이템 설명</label>
             <p th:text="${valid_description}"></p>
-            <input type="text" id="itemDesc" name="name" th:value="${description}">
+            <input type="text" id="itemDesc" name="description" th:value="${description}">
         </div>
         <div>
             <label for="itemPrice">아이템 가격</label>
             <p th:text="${valid_price}"></p>
-            <input type="text" id="itemPrice" name="name" th:value="${price}">
+            <input type="text" id="itemPrice" name="price" th:value="${price}">
         </div>
         <div>
             <label for="itemQuantity">아이템 수량</label>
             <p th:text="${valid_quantity}"></p>
-            <input type="text" id="itemQuantity" name="name" th:value="${quantity}">
+            <input type="text" id="itemQuantity" name="quantity" th:value="${quantity}">
         </div>
-        <div style="display: flex;
+        <div style="margin: 20px;
+                    display: flex;
                     flex-direction: column;
                     flex-wrap: wrap;
                     align-items: baseline;">
             <p>아이템 사진</p>
-            <label for="itemImg1">이미지1</label>
-            <input style="display: none" type="file" id="itemImg1" name="name" th:value="${img?.imgUrl1}">
-            <img class="preImage" id="itemImg1pre" src="https://via.placeholder.com/150" alt="img1">
-
-            <label for="itemImg2">이미지2</label>
-            <input style="display: none" type="file" id="itemImg2" name="name" th:value="${img?.imgUrl2}">
-            <img class="preImage" id="itemImg2pre" src="https://via.placeholder.com/150" alt="img2">
-
-            <label for="itemImg3">이미지3</label>
-            <input style="display: none" type="file" id="itemImg3" name="name" th:value="${img?.imgUrl3}">
-            <img class="preImage" id="itemImg3pre" src="https://via.placeholder.com/150" alt="img3">
+            <div style="display: flex;
+                        flex-direction: column;">
+                <label th:for="itemImg" th:text="${img?.originName ?: '이미지'}"></label>
+                <input style="display: none" type="file" th:id="itemImg">
+                <input type="hidden" name="originName" th:id="originName" th:value="${img?.originName}">
+                <input type="hidden" name="imgUrl" th:id="imgUrl" th:value="${img?.imgUrl}">
+                <img class="preImage" th:id="itemImgPre" th:src="${img?.src ?: 'https://via.placeholder.com/150'}" alt="img">
+            </div>
         </div>
+        <input type="submit">
     </form>
 </div>
 <script>
@@ -77,8 +80,10 @@
             data : formData,
             success : function (data) {
                 //console.log(data);
-                $(`#${target.id}pre`).attr("src",`/images/tmp/${data.newName}`);
+                $(`#${target.id}Pre`).attr("src",`/images/tmp/${data.newName}`);
                 $(target).val("");
+                $("#imgUrl").val(`${data.newName}`);
+                $("#originName").val(`${data.originName}`);
             }
         })
     }
