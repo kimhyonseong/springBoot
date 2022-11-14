@@ -27,75 +27,82 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
-    private final MemberDetailService memberDetailService;
-    private final CheckIdValidator checkIdValidator;
-    private final PasswordCheckerValidator pwChecker;
+  private final MemberDetailService memberDetailService;
+  private final CheckIdValidator checkIdValidator;
+  private final PasswordCheckerValidator pwChecker;
 
-    @RequestMapping("login")
-    public String loginView() {
-        return "member/login";
+  @RequestMapping("login")
+  public String loginView() {
+    return "member/login";
+  }
+
+  @GetMapping("join")
+  public String join() {
+    return "member/join";
+  }
+
+  @PostMapping("join")
+  public String join(@Validated @ModelAttribute MemberDto memberDto,
+                     BindingResult bindingResult, Model model) {
+
+    if (bindingResult.hasErrors()) {
+      model.addAttribute("memberDto", memberDto);
+
+      Map<String, String> map = new HashMap<>();
+
+      for (FieldError error : bindingResult.getFieldErrors()) {
+        map.put("valid_" + error.getField(), error.getDefaultMessage());
+        log.info("error message : " + error.getDefaultMessage());
+      }
+      model.addAllAttributes(map);
+
+      return "member/join";
     }
 
-    @GetMapping("join")
-    public String join() {
+    if (!memberDto.getPassword().equals(memberDto.getPasswordConfirm())) {
+      bindingResult.rejectValue("passwordConfirm","password not correct",
+              "2개의 패스워드가 일치하지 않습니다.");
+      return "member/join";
+    }
+
+    Member member = new Member();
+    member.setName(memberDto.getName());
+    member.setId(memberDto.getId());
+    member.setPassword(memberDto.getPassword());
+
+    Map<String, String> map = new HashMap<>();
+    map.put("id", memberDto.getId());
+    map.put("name", memberDto.getName());
+    map.put("password", memberDto.getPassword());
+
+    switch (memberDetailService.signUp(member)) {
+      case 200:
+        return "member/joinSuccess";
+      case 400:
+        map.put("message", "에러가 발생하였습니다. 잠시후 다시 시도해주세요.");
+
+        model.addAllAttributes(map);
+
         return "member/join";
-    }
-    
-    @PostMapping("join")
-    public String join(@Validated @ModelAttribute MemberDto memberDto,
-                       BindingResult bindingResult, Model model) {
-
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("memberDto",memberDto);
-
-            Map<String,String> map = new HashMap<>();
-
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                map.put("valid_"+error.getField(),error.getDefaultMessage());
-                log.info("error message : "+error.getDefaultMessage());
-            }
-            model.addAllAttributes(map);
-
-            return "member/join";
-        } else {
-            Member member = new Member();
-            member.setName(memberDto.getName());
-            member.setId(memberDto.getId());
-            member.setPassword(memberDto.getPassword());
-
-            Map<String, String> map = new HashMap<>();
-            map.put("id", memberDto.getId());
-            map.put("name", memberDto.getName());
-            map.put("password", memberDto.getPassword());
-
-            switch (memberDetailService.signUp(member)) {
-                case 200:
-                    return "member/joinSuccess";
-                case 400:
-                    map.put("message", "에러가 발생하였습니다. 잠시후 다시 시도해주세요.");
-
-                    model.addAllAttributes(map);
-
-                    return "member/join";
-                default:
-                    return "main";
-            }
-        }
+      default:
+        return "main";
     }
 
-    @InitBinder
-    public void validatorBinder(WebDataBinder binder) {
-        binder.addValidators(checkIdValidator);
-        binder.addValidators(pwChecker);
-    }
+  }
 
-    @GetMapping("/join/{id}/exist")
-    public ResponseEntity<Boolean> checkId(@PathVariable String id) {
-        return ResponseEntity.ok(memberDetailService.checkMemberIdDuplication(id));
-    }
+  @InitBinder
+  public void validatorBinder(WebDataBinder binder) {
+    binder.addValidators(checkIdValidator);
+    binder.addValidators(pwChecker);
+  }
 
-    @RequestMapping("fail")
-    public String failPage() {
-        return "member/fail";
-    }
+  @GetMapping("/join/{id}/exist")
+  public ResponseEntity<Boolean> checkId(@PathVariable String id) {
+    return ResponseEntity.ok(memberDetailService.checkMemberIdDuplication(id));
+  }
+
+  @RequestMapping("fail")
+  public String failPage() {
+    return "member/fail";
+  }
 }

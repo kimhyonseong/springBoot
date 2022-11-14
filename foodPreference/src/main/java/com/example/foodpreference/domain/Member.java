@@ -33,6 +33,7 @@ public class Member extends BaseEntity implements UserDetails {
     private Long idx;
     private String name;
 
+    @Column(unique = true)
     private String id;
     private String password;
 

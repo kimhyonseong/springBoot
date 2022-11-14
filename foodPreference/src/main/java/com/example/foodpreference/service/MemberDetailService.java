@@ -4,7 +4,6 @@ import com.example.foodpreference.domain.Member;
 import com.example.foodpreference.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,30 +16,27 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberDetailService implements UserDetailsService {
     private final MemberRepository memberRepository;
+//    private final PasswordEncoder passwordEncoder;
 
     @Value("${spring.security.user.name}")
     private String testId;
     @Value("${spring.security.user.password}")
     private String testPassword;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     // 로그인 시 이놈이 요청을 가로챔
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = null;
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
         if (username.equals(testId)) {
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             member = new Member();
             member.setId(testId);
             member.setPassword(bCryptPasswordEncoder.encode(testPassword));
             member.setRole("ADMIN");
         } else {
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
             member = memberRepository.findById(username);
 
             // data.sql 데이터는 평문으로 들어가서 암호화 해주어야함

@@ -18,5 +18,6 @@ public class MemberDto {
     @Pattern(regexp = ".{4,20}", message = "비밀번호는 4-20 글자입니다.")
     private String password;
 
+    @NotBlank(message = "비밀번호 확인란을 채워주세요.")
     private String passwordConfirm;
 }
