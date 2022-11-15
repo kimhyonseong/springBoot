@@ -3,6 +3,7 @@ package com.example.foodpreference.controller;
 import com.example.foodpreference.domain.Member;
 import com.example.foodpreference.dto.MemberDto;
 import com.example.foodpreference.service.MemberDetailService;
+import com.example.foodpreference.service.MemberService;
 import com.example.foodpreference.validator.CheckIdValidator;
 import com.example.foodpreference.validator.PasswordCheckerValidator;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +25,7 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
+  private final MemberService memberService;
   private final MemberDetailService memberDetailService;
   private final CheckIdValidator checkIdValidator;
   private final PasswordCheckerValidator pwChecker;
@@ -59,12 +58,6 @@ public class MemberController {
       return "member/join";
     }
 
-    if (!memberDto.getPassword().equals(memberDto.getPasswordConfirm())) {
-      bindingResult.rejectValue("passwordConfirm","password not correct",
-              "2개의 패스워드가 일치하지 않습니다.");
-      return "member/join";
-    }
-
     Member member = new Member();
     member.setName(memberDto.getName());
     member.setId(memberDto.getId());
@@ -75,7 +68,7 @@ public class MemberController {
     map.put("name", memberDto.getName());
     map.put("password", memberDto.getPassword());
 
-    switch (memberDetailService.signUp(member)) {
+    switch (memberService.signUp(member)) {
       case 200:
         return "member/joinSuccess";
       case 400:
@@ -87,18 +80,12 @@ public class MemberController {
       default:
         return "main";
     }
-
   }
 
   @InitBinder
   public void validatorBinder(WebDataBinder binder) {
     binder.addValidators(checkIdValidator);
     binder.addValidators(pwChecker);
-  }
-
-  @GetMapping("/join/{id}/exist")
-  public ResponseEntity<Boolean> checkId(@PathVariable String id) {
-    return ResponseEntity.ok(memberDetailService.checkMemberIdDuplication(id));
   }
 
   @RequestMapping("fail")

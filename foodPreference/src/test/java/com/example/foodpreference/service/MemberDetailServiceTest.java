@@ -14,6 +14,8 @@ class MemberDetailServiceTest {
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
+    private MemberService memberService;
+    @Autowired
     private MemberDetailService authService;
 
     @Test
@@ -24,7 +26,7 @@ class MemberDetailServiceTest {
         member.setPassword("1234");
         member.setRole("USER");
 
-        int result = authService.signUp(member);
+        int result = memberService.signUp(member);
         assertEquals(300,result);
 
         Member member1 = new Member();
@@ -33,7 +35,7 @@ class MemberDetailServiceTest {
         member1.setPassword("1234");
         member1.setRole("USER");
 
-        int result1 = authService.signUp(member1);
+        int result1 = memberService.signUp(member1);
         System.out.println(member1);
         assertEquals(200,result1);
 
