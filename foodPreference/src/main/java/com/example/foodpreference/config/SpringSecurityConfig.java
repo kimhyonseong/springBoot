@@ -30,7 +30,9 @@ public class SpringSecurityConfig {
 
   @Bean
   protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-    http.authorizeRequests().antMatchers("/**").permitAll()
+    http.authorizeRequests()
+            .antMatchers("/admin/**").hasRole("ADMIN")
+//            .antMatchers("/**").permitAll()
             .and()
             .csrf().ignoringAntMatchers("/h2-console/**")
             .and()
@@ -48,27 +50,14 @@ public class SpringSecurityConfig {
             .failureHandler(customAuthFailHandler)
             .and()
             .logout()
+            .logoutRequestMatcher(new AntPathRequestMatcher("/logout")) // 없으면 에러 -> default 아닌가봄
             .logoutSuccessUrl("/main")
             .invalidateHttpSession(true);
 //    http.csrf().ignoringAntMatchers("/resources/**","/login","/signup").and().authorizeRequests()
 
 //    http.csrf().disable().authorizeRequests()
 //              .antMatchers("/auth","/login","/loginProc","/signup","/main","/resources/**").permitAll()
-//              .antMatchers("/admin").hasRole("ADMIN")
-//              .antMatchers("/my").authenticated()
-//            .and()
-//              .formLogin()
-//              .loginPage("/login")
-//              .loginProcessingUrl("/login")
-//              .usernameParameter("id")
-//              .passwordParameter("pw")
-//              .defaultSuccessUrl("/main", false)
-//            .failureHandler(customAuthFailHandler)
-//            .and()
-//            .logout()
-//            .and()
 //            .rememberMe();
-            //.logoutRequestMatcher(new AntPathRequestMatcher("/logoutProc")) -> 생략시 default /logout
 
     return http.build();
   }

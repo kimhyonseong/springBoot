@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
 @Controller
@@ -30,16 +31,9 @@ public class HomeController {
     return "admin";
   }
 
-//  @PostMapping("/login")
-//  public String proc(MemberDto memberDto) {
-//    log.info(memberDto.toString());
-//    return "loginProc";
-//  }
-
+  @ResponseBody
   @RequestMapping("auth")
   public Authentication auth() {
-//    log.info(String.valueOf(SecurityContextHolder.getContext()
-//            .getAuthentication()));
     return SecurityContextHolder.getContext()
             .getAuthentication();
   }
