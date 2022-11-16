@@ -15,8 +15,12 @@ public class HomeController {
 
   @GetMapping("/main")
   public String test() {
-    System.out.println("home");
-    return "main";
+    return "pages/main";
+  }
+
+  @GetMapping("/index")
+  public String indexView() {
+    return "index";
   }
 
   // 이쪽으로 들어가면 login 페이지로 가짐

@@ -4,11 +4,17 @@ import com.example.foodpreference.domain.Member;
 import com.example.foodpreference.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,9 +25,9 @@ public class MemberDetailService implements UserDetailsService {
     private String testId;
     @Value("${spring.security.user.password}")
     private String testPassword;
+    @Value("${spring.security.user.roles}")
+    private String testRoles;
 
-
-    // 로그인 시 이놈이 요청을 가로챔
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = null;
@@ -31,22 +37,16 @@ public class MemberDetailService implements UserDetailsService {
             member = new Member();
             member.setId(testId);
             member.setPassword(bCryptPasswordEncoder.encode(testPassword));
-            member.setRole("ADMIN");
+            member.setRole(testRoles);
         } else {
-
             member = memberRepository.findById(username);
-
-            // data.sql 데이터는 평문으로 들어가서 암호화 해주어야함
-            if (username.equals("lss1545")) {
-                member.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));
-            }
         }
 
-        System.out.println("username = "+username);
-        System.out.println("member = "+member);
-
         if (member == null) throw new UsernameNotFoundException("없는 아이디 입니다.");
+        List<GrantedAuthority> authorities = new ArrayList<>();
 
-        return member;
+        authorities.add(new SimpleGrantedAuthority(member.getRole()));
+
+        return new User(member.getId(),member.getPassword(),authorities);
     }
 }

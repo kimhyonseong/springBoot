@@ -1,4 +1,5 @@
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
@@ -6,6 +7,7 @@
     <link rel="stylesheet" th:href="@{/css/login.css}">
 </head>
 <body>
+<th:block th:replace="layout/navBar :: navbarFragment" />
 <div class="wrap">
     <div class="login-box">
         <form class="login-form" method="post" th:action="@{/login}">
