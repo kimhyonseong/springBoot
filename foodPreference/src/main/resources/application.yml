@@ -20,7 +20,8 @@ spring:
     user:
       name: lss1545
       password: 1234
-      roles: ADMIN
+#      roles: ADMIN
+      roles: ROLE_ADMIN
   sql:
     init:
       mode: always
