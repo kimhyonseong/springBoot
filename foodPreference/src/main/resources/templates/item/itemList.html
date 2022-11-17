@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ItemList</title>
+</head>
+<body>
+<div class="wrap">
+    <th:block th:replace="layout/navBar :: navbarFragment" />
+    <div>
+        <ul>
+            <li>
+                <a th:href="@{/admin/item/id}">
+                    <dl>
+                        <dt>
+                            <img src="https://via.placeholder.com/150">
+                        </dt>
+                        <dd>
+                            <div>
+                                <div class="item-name">음식 이름</div>
+                                <div class="item-price">가격</div>
+                                <div class="item-other">뭐?</div>
+                            </div>
+                        </dd>
+                    </dl>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

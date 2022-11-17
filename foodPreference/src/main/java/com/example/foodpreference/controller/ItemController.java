@@ -11,21 +11,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/admin")
 public class ItemController {
   private final ItemService itemService;
   private final ItemImgService itemImgService;
 
-  @GetMapping({"admin/item/{idx}","admin/item"})
+  @GetMapping({"/item/{idx}","/item"})
   public String itemPage(
           @PathVariable(required = false) Long idx,
           Model model) {
@@ -47,7 +45,7 @@ public class ItemController {
   }
 
   @Transactional
-  @PostMapping({"admin/item/{idx}","admin/item"})
+  @PostMapping({"/item/{idx}","/item"})
   public String itemSave(
           @PathVariable(required = false) Long idx,
           @Validated ItemDto itemDto,
@@ -66,8 +64,13 @@ public class ItemController {
     return "main";
   }
 
-  @DeleteMapping("admin/item/{idx}")
+  @DeleteMapping("/item/{idx}")
   public void deleteItem(@PathVariable Long idx) {
 
+  }
+
+  @GetMapping("/itemList")
+  public String list() {
+    return "item/itemList";
   }
 }

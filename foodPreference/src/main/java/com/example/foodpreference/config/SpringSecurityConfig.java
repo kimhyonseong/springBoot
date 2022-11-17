@@ -32,7 +32,7 @@ public class SpringSecurityConfig {
   protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
     http.authorizeRequests()
 //            .antMatchers("/admin/**").hasAuthority("ADMIN")
-            .antMatchers("/admin/**").hasRole("ROLE_ADMIN") // 'ROLE_'을 명시해야함
+            .antMatchers("/admin/**").hasRole("ADMIN")  // 비교하는 값에는 'ROLE_'로 시작해야함
 //            .antMatchers("/**").permitAll()
             .and()
             .csrf().ignoringAntMatchers("/h2-console/**")
