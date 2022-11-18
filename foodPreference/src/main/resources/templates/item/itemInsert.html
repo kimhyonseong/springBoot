@@ -1,22 +1,20 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
 <head>
     <meta charset="UTF-8">
     <title>food insert</title>
+</head>
+<body>
+<th:block layout:fragment="content">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <style>
-        * {
-            padding: 0;
-            margin: 0;
-        }
         .preImage {
             max-width: 200px;
         }
     </style>
-</head>
-<body>
-<div class="wrap">
-    <th:block th:replace="layout/navBar :: navbarFragment" />
+
     <form method="post" enctype="multipart/form-data">
         <div>
             <label for="itemName">아이템 이름</label>
@@ -60,34 +58,35 @@
         </div>
         <input type="submit">
     </form>
-</div>
-<script>
-    $(function () {
-        $("input[type=file]").on("change", function () {
-            upload($(this)[0]);
-        })
-    })
 
-    function upload(target) {
-        const image = target;
-        const formData = new FormData();
-        formData.append("image",image.files[0]);
-
-        $.ajax({
-            url:"/admin/imgUpload",
-            type:"POST",
-            processData: false,
-            contentType: false,
-            data : formData,
-            success : function (data) {
-                //console.log(data);
-                $(`#${target.id}Pre`).attr("src",`/images/tmp/${data.newName}`);
-                $(target).val("");
-                $("#imgUrl").val(`${data.newName}`);
-                $("#originName").val(`${data.originName}`);
-            }
+    <script>
+        $(function () {
+            $("input[type=file]").on("change", function () {
+                upload($(this)[0]);
+            })
         })
-    }
-</script>
+
+        function upload(target) {
+            const image = target;
+            const formData = new FormData();
+            formData.append("image",image.files[0]);
+
+            $.ajax({
+                url:"/admin/imgUpload",
+                type:"POST",
+                processData: false,
+                contentType: false,
+                data : formData,
+                success : function (data) {
+                    //console.log(data);
+                    $(`#${target.id}Pre`).attr("src",`/images/tmp/${data.newName}`);
+                    $(target).val("");
+                    $("#imgUrl").val(`${data.newName}`);
+                    $("#originName").val(`${data.originName}`);
+                }
+            })
+        }
+    </script>
+</th:block>
 </body>
 </html>

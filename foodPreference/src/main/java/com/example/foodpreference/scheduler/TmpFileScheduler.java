@@ -15,7 +15,7 @@ import java.util.Date;
 @Component
 public class TmpFileScheduler {
   @Async
-  @Scheduled(fixedRate = 60000)
+  @Scheduled(fixedRate = 1000 * 60 * 60)
   //@Scheduled(cron = "0 0 0 * * *")
   public void tmpFileDelete() {
     String path = Paths.get("./images/tmp").toAbsolutePath().toString();

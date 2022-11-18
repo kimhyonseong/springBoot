@@ -1,15 +1,28 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/base">
 <head>
     <meta charset="UTF-8">
     <title>Main</title>
 </head>
 <body>
-<!--<th:block th:replace="layout/header :: headerFragment" />-->
-<th:block th:replace="/layout/navBar :: navbarFragment" />
-두둥
-<button onclick="location.href='/login'">Login</button>
+<th:block layout:fragment="content">
+    <div class="main-box-container">
+        <div class="main-box">
+            <a th:href="@{/itemReview}">음식 평가</a>
+        </div>
+        <div class="main-box">
+            <a th:href="@{/itemList}">음식 구매</a>
+        </div>
+        <div sec:authorize="hasRole('ADMIN')" class="main-box">
+            <a th:href="@{/admin}">아이템 목록</a>
+        </div>
+        <div sec:authorize="hasRole('ADMIN')" class="main-box">
+            <a th:href="@{/admin/item}">아이템 등록</a>
+        </div>
+    </div>
+</th:block>
 </body>
 </html>
