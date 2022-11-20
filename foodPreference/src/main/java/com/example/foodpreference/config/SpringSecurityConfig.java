@@ -35,7 +35,7 @@ public class SpringSecurityConfig {
             .antMatchers("/admin/**").hasRole("ADMIN")  // 비교하는 값에는 'ROLE_'로 시작해야함
 //            .antMatchers("/**").permitAll()
             .and()
-            .csrf().ignoringAntMatchers("/h2-console/**")
+            .csrf().ignoringAntMatchers("/h2-console/**","/admin/**","/itemRest/**")
             .and()
             .headers()
             .addHeaderWriter(new XFrameOptionsHeaderWriter(

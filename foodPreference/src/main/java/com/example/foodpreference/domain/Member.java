@@ -1,5 +1,6 @@
 package com.example.foodpreference.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -45,11 +46,13 @@ public class Member extends BaseEntity implements UserDetails {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "member_idx")
+    @JsonManagedReference
     @ToString.Exclude
     private List<Item> items;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "member_idx")
+    @JsonManagedReference
     @ToString.Exclude
     private List<Cart> cart;
 
@@ -89,6 +92,5 @@ public class Member extends BaseEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.getState() == 10;
-//        return true;
     }
 }

@@ -61,7 +61,7 @@ public class ItemController {
       return "item/itemInsert";
     }
 
-    return "main";
+    return "pages/main";
   }
 
   @DeleteMapping("/item/{idx}")

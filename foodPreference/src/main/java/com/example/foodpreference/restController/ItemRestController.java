@@ -1,0 +1,47 @@
+package com.example.foodpreference.restController;
+
+import com.example.foodpreference.domain.Item;
+import com.example.foodpreference.repository.ItemRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+public class ItemRestController {
+  private final ItemRepository itemRepository;
+
+  @GetMapping("/itemRest/{code}")
+  public ResponseEntity<?> itemList(
+          @PageableDefault(size = 20,sort = "regDate", direction = Sort.Direction.DESC) Pageable pageable,
+          @PathVariable String code) {
+    Page<Item> itemList = null;
+    try {
+      itemList = itemRepository.findAllByCode(code,pageable);
+    } catch (RuntimeException e) {
+      return ResponseEntity.badRequest().build();
+    }
+    return ResponseEntity.ok(itemList);
+  }
+
+  @GetMapping("/itemRest/all")
+  public ResponseEntity<?> itemAllList(
+          @PageableDefault(size = 20,sort = "regDate", direction = Sort.Direction.DESC) Pageable pageable
+  ) {
+    List<Item> itemList = null;
+    try {
+      itemList = itemRepository.findAll(pageable).getContent();
+    } catch (RuntimeException e) {
+      return ResponseEntity.badRequest().build();
+    }
+    return ResponseEntity.ok(itemList);
+  }
+}

@@ -1,5 +1,7 @@
 package com.example.foodpreference.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,9 +20,11 @@ public class Cart {
 
   @ManyToOne
   @JoinColumn(name = "member_idx")
+  @JsonBackReference
   private Member member;
 
   @ManyToOne
   @JoinColumn(name = "item_idx")
+  @JsonManagedReference
   private Item item;
 }

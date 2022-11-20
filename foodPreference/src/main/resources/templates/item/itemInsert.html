@@ -22,9 +22,16 @@
             <input type="text" id="itemName" name="name" th:value="${name}">
         </div>
         <div>
-            <label for="itemCode">아이템 분류</label>
+            <p>아이템 분류</p>
             <p th:text="${valid_code}"></p>
-            <input type="text" id="itemCode" name="code" th:value="${code}">
+            <input type="radio" id="radio1" name="code" th:value="A001">
+            <label for="radio1">한식</label>
+            <input type="radio" id="radio2" name="code" th:value="A002">
+            <label for="radio2">양식</label>
+            <input type="radio" id="radio3" name="code" th:value="A003">
+            <label for="radio3">일식</label>
+            <input type="radio" id="radio4" name="code" th:value="A004">
+            <label for="radio4">중식</label>
         </div>
         <div>
             <label for="itemDesc">아이템 설명</label>
@@ -78,7 +85,7 @@
                 contentType: false,
                 data : formData,
                 success : function (data) {
-                    //console.log(data);
+                    console.log(data);
                     $(`#${target.id}Pre`).attr("src",`/images/tmp/${data.newName}`);
                     $(target).val("");
                     $("#imgUrl").val(`${data.newName}`);

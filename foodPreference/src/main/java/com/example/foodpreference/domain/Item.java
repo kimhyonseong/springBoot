@@ -1,5 +1,7 @@
 package com.example.foodpreference.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,16 +30,19 @@ public class Item extends BaseEntity{
 
   @ManyToOne
   @JoinColumn(name = "member_idx")
+  @JsonBackReference
   @ToString.Exclude
   private Member member;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "item_idx")
+  @JsonManagedReference
   @ToString.Exclude
   private List<ItemImg> imgs;
 
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "item_idx")
+  @JsonBackReference
   @ToString.Exclude
   private List<Cart> carts;
 }

@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class HomeController {
 
+  @GetMapping("/")
+  public String welcome() {
+    return "pages/main";
+  }
+
   @GetMapping("/main")
   public String test() {
     return "pages/main";
