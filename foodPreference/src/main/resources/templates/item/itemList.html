@@ -2,18 +2,30 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/base}">
+      layout:decorate="layout/base">
 <head>
     <meta charset="UTF-8">
     <title>ItemList</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <style>
+        #itemListDiv {
+            width: 100%;
+        }
+        #itemList {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            justify-content: space-around;
+        }
+    </style>
 </head>
 <body>
 <th:block layout:fragment="content">
-    <div>
-        <ul>
+    <div id="itemListDiv">
+        <ul id="itemList">
             <!-- 반복 -->
             <li>
-                <a th:href="@{/admin/item/id}">
+                <a th:href="@{/item/id}">
                     <dl>
                         <dt>
                             <img src="https://via.placeholder.com/150">
@@ -31,6 +43,40 @@
             <!-- 반복 -->
         </ul>
     </div>
+    <script>
+        $(function () {
+            let liForm = `<li>
+                <a href="/item/ITEM_ID">
+                    <dl>
+                        <dt>
+                            <img src="https://via.placeholder.com/150">
+                        </dt>
+                        <dd>
+                            <div>
+                                <div class="item-name">ITEM_NAME</div>
+                                <div class="item-price">ITEM_PRICE</div>
+                                <div class="item-other">ITEM_DESC</div>
+                            </div>
+                        </dd>
+                    </dl>
+                </a>
+            </li>`;
+
+            $.ajax({
+                url:"/itemRest/all",
+            }).done(function (json) {
+                console.log(json);
+                let html = "";
+                for (let i=0; i<json.length; i++) {
+                    html += liForm.replace("ITEM_ID",json[i].idx)
+                        .replace("ITEM_NAME",json[i].name)
+                        .replace("ITEM_PRICE",json[i].price)
+                        .replace("ITEM_DESC",json[i].description);
+                }
+                $("#itemList").html(html);
+            })
+        })
+    </script>
 </th:block>
 </body>
 </html>

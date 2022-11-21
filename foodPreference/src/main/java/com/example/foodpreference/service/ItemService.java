@@ -1,11 +1,14 @@
 package com.example.foodpreference.service;
 
 import com.example.foodpreference.domain.Item;
+import com.example.foodpreference.domain.ItemImg;
 import com.example.foodpreference.dto.ItemDto;
+import com.example.foodpreference.repository.ItemImgRepository;
 import com.example.foodpreference.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,8 +16,10 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ItemService {
   private final ItemRepository itemRepository;
+  private final ItemImgRepository itemImgRepository;
 
   public Map<String,Object> findItem(Long idx) throws RuntimeException{
     Map<String, Object> map = new HashMap<>();
@@ -22,11 +27,15 @@ public class ItemService {
     try {
       Item item = itemRepository.findByIdx(idx);
       map.put("item",item);
+      map.put("itemIdx",item.getIdx());
       map.put("name",item.getName());
       map.put("code",item.getCode());
       map.put("description",item.getDescription());
       map.put("price",item.getPrice());
       map.put("quantity",item.getQuantity());
+
+      ItemImg itemImg = itemImgRepository.findByItem(item);
+      map.put("img", itemImg != null ? itemImg.getImgUrl() : null);
 
     } catch (RuntimeException e) {
       log.error("존재하지 않는 idx - "+idx);
@@ -58,4 +67,6 @@ public class ItemService {
       throw new RuntimeException("item save error");
     }
   }
+
+
 }
