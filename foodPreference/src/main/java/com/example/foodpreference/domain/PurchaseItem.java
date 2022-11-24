@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -14,7 +16,10 @@ import javax.persistence.*;
 @Setter
 @ToString
 @NoArgsConstructor
-public class PurchaseItem {
+@DynamicInsert
+@DynamicUpdate
+// 구매 내역의 구매 상품
+public class PurchaseItem extends BaseEntity{
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long idx;
 
@@ -32,7 +37,7 @@ public class PurchaseItem {
 
   @ManyToOne
   @ToString.Exclude
-  @JoinColumn(name = "order_idx")
+  @JoinColumn(name = "purchase_idx")
   @JsonBackReference
-  private Purchase order;
+  private Purchase purchase;
 }
