@@ -24,7 +24,7 @@ public class PurchaseItem extends BaseEntity{
   private Long idx;
 
   @Comment("주문 수량")
-  private int itemCount;
+  private int itemAmount;
 
   @Comment("가격")
   private int itemPrice;

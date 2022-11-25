@@ -6,7 +6,6 @@
 <head>
     <meta charset="UTF-8">
     <title>ItemList</title>
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <style>
         #itemListDiv {
             width: 100%;
@@ -15,33 +14,17 @@
             display: flex;
             flex-wrap: wrap;
             flex-direction: row;
-            justify-content: space-around;
+            list-style: none;
+        }
+        #itemList>li {
+            margin: 5px;
         }
     </style>
 </head>
 <body>
 <th:block layout:fragment="content">
     <div id="itemListDiv">
-        <ul id="itemList">
-            <!-- 반복 -->
-            <li>
-                <a th:href="@{/item/id}">
-                    <dl>
-                        <dt>
-                            <img src="https://via.placeholder.com/150">
-                        </dt>
-                        <dd>
-                            <div>
-                                <div class="item-name">음식 이름</div>
-                                <div class="item-price">가격</div>
-                                <div class="item-other">뭐?</div>
-                            </div>
-                        </dd>
-                    </dl>
-                </a>
-            </li>
-            <!-- 반복 -->
-        </ul>
+        <ul id="itemList"></ul>
     </div>
     <script>
         $(function () {
@@ -63,7 +46,7 @@
             </li>`;
 
             $.ajax({
-                url:"/itemRest/all",
+                url:"/itemList/all",
             }).done(function (json) {
                 console.log(json);
                 let html = "";

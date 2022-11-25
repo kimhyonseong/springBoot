@@ -1,5 +1,6 @@
 -- insert into member(id,name,password,role) values("lss1545","lss","1234","ADMIN");
-insert into member(id,name,password,role) values("lss1545","lss","1234","ROLE_ADMIN");
+insert into member(id,name,password,role) values("admin","admin","1234","ROLE_ADMIN");
+insert into member(id,name,password,role) values("user","user","1234","ROLE_USER");
 
 -- 리스트 테스트
 insert into item(code,description,name,price,quantity,member_idx) values ("A002","M사","감자튀김1",9900,1000,1);

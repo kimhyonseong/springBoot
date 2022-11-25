@@ -33,6 +33,7 @@ public class SpringSecurityConfig {
     http.authorizeRequests()
 //            .antMatchers("/admin/**").hasAuthority("ADMIN")
             .antMatchers("/admin/**").hasRole("ADMIN")  // 비교하는 값에는 'ROLE_'로 시작해야함
+            .antMatchers("/item/buy").hasAnyRole("ADMIN","USER")
 //            .antMatchers("/**").permitAll()
             .and()
             .csrf().ignoringAntMatchers("/h2-console/**","/admin/**","/itemRest/**")

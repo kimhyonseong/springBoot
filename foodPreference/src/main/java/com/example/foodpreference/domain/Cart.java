@@ -20,7 +20,7 @@ import java.util.List;
 public class Cart extends BaseEntity{
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long idx;
-  private int quantity;
+  private int amount;
 
   @ManyToOne
   @JoinColumn(name = "member_idx")
