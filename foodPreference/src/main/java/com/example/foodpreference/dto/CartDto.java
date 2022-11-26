@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class CartDto {
-  private Member member;
-  private Item item;
+  private String memberId;
+  private Long itemIdx;
   private int amount;
 }

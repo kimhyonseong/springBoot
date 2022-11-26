@@ -29,6 +29,9 @@ public class Item extends BaseEntity{
   private String code;
   private String name;
   private String description;
+  @Comment("정상 : 10, 비노출 : 90")
+  @Column(columnDefinition = "10")
+  private Integer state;
   private int price;
   private int quantity;
 
