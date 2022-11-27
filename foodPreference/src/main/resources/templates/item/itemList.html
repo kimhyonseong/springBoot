@@ -7,59 +7,26 @@
     <meta charset="UTF-8">
     <title>ItemList</title>
     <style>
-        #itemListDiv {
+        .itemListDiv {
             width: 100%;
         }
-        #itemList {
+        .itemList {
             display: flex;
             flex-wrap: wrap;
             flex-direction: row;
             list-style: none;
         }
-        #itemList>li {
+        .itemList>li {
             margin: 5px;
         }
     </style>
+    <script th:src="@{/js/itemList.js}"></script>
 </head>
 <body>
 <th:block layout:fragment="content">
-    <div id="itemListDiv">
-        <ul id="itemList"></ul>
+    <div class="itemListDiv">
+        <ul class="itemList"></ul>
     </div>
-    <script>
-        $(function () {
-            let liForm = `<li>
-                <a href="/item/ITEM_ID">
-                    <dl>
-                        <dt>
-                            <img src="https://via.placeholder.com/150">
-                        </dt>
-                        <dd>
-                            <div>
-                                <div class="item-name">ITEM_NAME</div>
-                                <div class="item-price">ITEM_PRICE</div>
-                                <div class="item-other">ITEM_DESC</div>
-                            </div>
-                        </dd>
-                    </dl>
-                </a>
-            </li>`;
-
-            $.ajax({
-                url:"/itemList/all",
-            }).done(function (json) {
-                console.log(json);
-                let html = "";
-                for (let i=0; i<json.length; i++) {
-                    html += liForm.replace("ITEM_ID",json[i].idx)
-                        .replace("ITEM_NAME",json[i].name)
-                        .replace("ITEM_PRICE",json[i].price)
-                        .replace("ITEM_DESC",json[i].description);
-                }
-                $("#itemList").html(html);
-            })
-        })
-    </script>
 </th:block>
 </body>
 </html>

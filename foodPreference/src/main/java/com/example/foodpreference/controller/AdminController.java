@@ -7,6 +7,8 @@ import com.example.foodpreference.service.ItemImgService;
 import com.example.foodpreference.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -41,7 +43,7 @@ public class AdminController {
 
       return "error";
     }
-    return "item/itemInsert";
+    return "admin/itemInsert";
   }
 
   @Transactional
@@ -67,5 +69,10 @@ public class AdminController {
   @DeleteMapping("/item/{idx}")
   public void deleteItem(@PathVariable Long idx) {
 
+  }
+
+  @GetMapping("/myItemList")
+  public String myItem() {
+    return "";
   }
 }
