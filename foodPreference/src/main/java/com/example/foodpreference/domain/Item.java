@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -30,8 +31,8 @@ public class Item extends BaseEntity{
   private String name;
   private String description;
   @Comment("정상 : 10, 비노출 : 90")
-  @Column(columnDefinition = "10")
-  private Integer state;
+  @ColumnDefault("10")
+  private int state;
   private int price;
   private int quantity;
 

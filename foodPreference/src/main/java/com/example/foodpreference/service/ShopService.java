@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -34,7 +36,7 @@ public class ShopService {
       if (item == null)
         throw new IllegalArgumentException("아이템이 존재하지 않습니다.");
 
-      Cart cart = new Cart();
+      Cart cart = cartRepository.findByMemberAndItem(member, item).orElseGet(Cart::new);
       cart.setAmount(cartDto.getAmount());
       cart.setItem(item);
       cart.setMember(member);

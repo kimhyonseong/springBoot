@@ -1,17 +1,14 @@
 package com.example.foodpreference.restController;
 
-import com.example.foodpreference.domain.Member;
 import com.example.foodpreference.dto.CartDto;
-import com.example.foodpreference.repository.MemberRepository;
 import com.example.foodpreference.service.MemberService;
 import com.example.foodpreference.service.ShopService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -25,7 +22,7 @@ public class CartRestController {
 
   @Transactional
   @PostMapping("/addCart")
-  public Map<String,Object> addCart(CartDto cartDto, @AuthenticationPrincipal User user) {
+  public Map<String,Object> addCart(@RequestBody CartDto cartDto, @AuthenticationPrincipal User user) {
     int code;
     String message;
     Map<String, Object> map = new HashMap<>();
@@ -36,7 +33,7 @@ public class CartRestController {
         code = 200;
         message = "정상처리 되었습니다.";
       } else {
-        code = 400;
+        code = 500;
         message = "에러가 발생하였습니다.";
       }
     } else {

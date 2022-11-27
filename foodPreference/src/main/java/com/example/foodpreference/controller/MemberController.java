@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,8 +31,15 @@ public class MemberController {
   private final CheckIdValidator checkIdValidator;
   private final PasswordCheckerValidator pwChecker;
 
-  @RequestMapping("login")
-  public String loginView() {
+  @RequestMapping("/login")
+  public String loginView(HttpServletRequest request) {
+    String url = request.getHeader("Referer");
+
+    // 로그인 페이지 전환시 이전 페이지 저장
+    if (url != null && !url.contains("/login")) {
+      request.getSession().setAttribute("prePage",url);
+    }
+
     return "member/login";
   }
 

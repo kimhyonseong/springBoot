@@ -21,6 +21,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SpringSecurityConfig {
   private final UserDetailsService userDetailsService;
   private final CustomAuthFailHandler customAuthFailHandler;
+  private final CustomAuthSuccessHandler customAuthSuccessHandler;
 
   // spring security 필터를 타지 않게 무시
   @Bean
@@ -37,6 +38,7 @@ public class SpringSecurityConfig {
 //            .antMatchers("/**").permitAll()
             .and()
             .csrf().ignoringAntMatchers("/h2-console/**","/admin/**","/itemRest/**")
+            .ignoringAntMatchers("/addCart")
             .and()
             .headers()
             .addHeaderWriter(new XFrameOptionsHeaderWriter(
@@ -49,6 +51,7 @@ public class SpringSecurityConfig {
             .usernameParameter("id")
             .passwordParameter("pw")
             .defaultSuccessUrl("/main",false)
+            .successHandler(customAuthSuccessHandler)
             .failureHandler(customAuthFailHandler)
             .and()
             .logout()
