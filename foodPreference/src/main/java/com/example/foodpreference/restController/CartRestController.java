@@ -1,44 +1,69 @@
 package com.example.foodpreference.restController;
 
+import com.example.foodpreference.domain.Cart;
 import com.example.foodpreference.dto.CartDto;
 import com.example.foodpreference.service.MemberService;
 import com.example.foodpreference.service.ShopService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/shopping")
 public class CartRestController {
   private final MemberService memberService;
   private final ShopService shopService;
 
-  @Transactional
-  @PostMapping("/addCart")
+  @GetMapping("/cart")
+  public List<Cart> showCart(@AuthenticationPrincipal User user, Pageable pageable) {
+    // pageable 사용 수정해야함
+    return showCart(user,pageable);
+  }
+
+  // 테스트 케이스 만들어야함
+  @PostMapping("/cart")
   public Map<String,Object> addCart(@RequestBody CartDto cartDto, @AuthenticationPrincipal User user) {
+    return makeResult(memberService.isLogin(user),shopService.addCart(cartDto,user));
+  }
+
+  @PutMapping("/cart/{idx}")
+  public Map<String, Object> updateCart(
+          @RequestBody CartDto cartDto,@AuthenticationPrincipal User user,
+          @PathVariable Long idx) {
+    return makeResult(memberService.isLogin(user),shopService.updateCart(idx,cartDto.getAmount()));
+  }
+
+  @DeleteMapping("/cart/{idx}")
+  public Map<String, Object> deleteCart(
+          @PathVariable Long idx, @AuthenticationPrincipal User user
+  ) {
+    return makeResult(memberService.isLogin(user),shopService.deleteCart(idx));
+  }
+
+  private Map<String, Object> makeResult(boolean login, boolean service) {
     int code;
     String message;
     Map<String, Object> map = new HashMap<>();
 
-    if(memberService.isLogin(user)) {
-      // 카트 생성 및 아이템 넣기
-      if (shopService.addCart(cartDto,user)) {
+    if (!login) {
+      code = 400;
+      message = "로그인이 필요합니다.";
+    } else {
+      if (service) {
         code = 200;
         message = "정상처리 되었습니다.";
       } else {
         code = 500;
         message = "에러가 발생하였습니다.";
       }
-    } else {
-      code = 400;
-      message = "로그인이 필요합니다.";
     }
 
     map.put("code",code);

@@ -10,11 +10,13 @@ import com.example.foodpreference.repository.MemberRepository;
 import com.example.foodpreference.repository.PurchaseItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -25,6 +27,16 @@ public class ShopService {
   private final CartRepository cartRepository;
   private final ItemRepository itemRepository;
   private final MemberRepository memberRepository;
+
+  public List<Cart> showCart(@AuthenticationPrincipal User user, Pageable pageable) {
+    List<Cart> list;
+    try {
+      Member member = memberRepository.findById(user.getUsername());
+      return cartRepository.findAllByMember(member,pageable);
+    } catch (RuntimeException e) {
+      return null;
+    }
+  }
 
   @Transactional
   public boolean addCart(CartDto cartDto, @AuthenticationPrincipal User user) {
@@ -46,6 +58,33 @@ public class ShopService {
       return true;
     } catch (RuntimeException e) {
       log.error("addCart error : no item");
+      return false;
+    }
+  }
+
+  @Transactional
+  public boolean updateCart(Long idx, int amount) {
+    try{
+      Cart cart = cartRepository.findById(idx).orElseThrow(()->new IllegalArgumentException("no cart"));
+      cart.setAmount(amount);
+
+      cartRepository.save(cart);
+
+      return true;
+    } catch (RuntimeException e) {
+      log.error("update cart error : no cart");
+      return false;
+    }
+  }
+
+  @Transactional
+  public boolean deleteCart(Long idx) {
+    try {
+      Cart cart = cartRepository.findById(idx).orElseThrow(()->new IllegalArgumentException("no cart"));
+      cartRepository.delete(cart);
+      return true;
+    } catch (RuntimeException e) {
+      log.error("delete cart : no cart");
       return false;
     }
   }
