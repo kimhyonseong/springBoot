@@ -38,7 +38,7 @@ public class SpringSecurityConfig {
 //            .antMatchers("/**").permitAll()
             .and()
             .csrf().ignoringAntMatchers("/h2-console/**","/admin/**","/itemRest/**")
-            .ignoringAntMatchers("/addCart")
+            .ignoringAntMatchers("/api/**")
             .and()
             .headers()
             .addHeaderWriter(new XFrameOptionsHeaderWriter(

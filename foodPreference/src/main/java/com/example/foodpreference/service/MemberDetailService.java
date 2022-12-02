@@ -39,10 +39,10 @@ public class MemberDetailService implements UserDetailsService {
             member.setPassword(bCryptPasswordEncoder.encode(testPassword));
             member.setRole(testRoles);
         } else {
-            member = memberRepository.findById(username);
+            member = memberRepository.findById(username).orElseThrow(()->
+            new UsernameNotFoundException("없는 아이디 입니다."));
         }
 
-        if (member == null) throw new UsernameNotFoundException("없는 아이디 입니다.");
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         authorities.add(new SimpleGrantedAuthority(member.getRole()));

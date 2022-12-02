@@ -10,14 +10,15 @@ import com.example.foodpreference.repository.MemberRepository;
 import com.example.foodpreference.repository.PurchaseItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -28,12 +29,15 @@ public class ShopService {
   private final ItemRepository itemRepository;
   private final MemberRepository memberRepository;
 
-  public List<Cart> showCart(@AuthenticationPrincipal User user, Pageable pageable) {
+  public Page<Cart> showCart(@AuthenticationPrincipal User user, Pageable pageable, int page) {
     List<Cart> list;
     try {
-      Member member = memberRepository.findById(user.getUsername());
+      //pageable = PageRequest.of(page,20, Sort.Direction.ASC);
+      Member member = memberRepository.findById(user.getUsername()).orElseThrow(()->new IllegalArgumentException("no login"));
+
       return cartRepository.findAllByMember(member,pageable);
     } catch (RuntimeException e) {
+      log.error("showCart error");
       return null;
     }
   }
@@ -41,8 +45,7 @@ public class ShopService {
   @Transactional
   public boolean addCart(CartDto cartDto, @AuthenticationPrincipal User user) {
     try {
-      // 로그인 확인해서 무조건 쿠키가 있음
-      Member member = memberRepository.findById(user.getUsername());
+      Member member = memberRepository.findById(user.getUsername()).orElseThrow(()->new UsernameNotFoundException("no login"));
       Item item = itemRepository.findByIdx(cartDto.getItemIdx());
 
       if (item == null)
@@ -56,6 +59,9 @@ public class ShopService {
       cartRepository.save(cart);
 
       return true;
+    } catch (UsernameNotFoundException e) {
+      log.error("addCart error : no login");
+      return false;
     } catch (RuntimeException e) {
       log.error("addCart error : no item");
       return false;

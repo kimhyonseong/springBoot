@@ -29,7 +29,7 @@
 
         $("#addCart").on("click", function () {
             $.ajax({
-                url:`/addCart`,
+                url:`/api/shopping/cart`,
                 type : `POST`,
                 contentType : 'application/json',
                 data : JSON.stringify({
