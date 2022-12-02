@@ -5,6 +5,7 @@ import com.example.foodpreference.repository.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,7 +40,7 @@ class MemberDetailServiceTest {
         System.out.println(member1);
         assertEquals(200,result1);
 
-        Member member2 = memberRepository.findById("lss01");
+        Member member2 = memberRepository.findById("lss01").orElseThrow(()->new UsernameNotFoundException("no user"));
         System.out.println(member2);
     }
 
@@ -47,7 +48,7 @@ class MemberDetailServiceTest {
     public void loginTest() {
         BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder();
 
-        Member member = memberRepository.findById("lss1545");
+        Member member = memberRepository.findById("lss1545").orElseThrow(()->new UsernameNotFoundException("no user"));
         member.setPassword(bCrypt.encode(member.getPassword()));
 
         System.out.println(authService.loadUserByUsername(member.getId()));

@@ -1,5 +1,6 @@
 package com.example.foodpreference.restController;
 
+import com.example.foodpreference.annotation.WithCustomUser;
 import com.example.foodpreference.domain.Member;
 import com.example.foodpreference.repository.CartRepository;
 import com.example.foodpreference.repository.ItemRepository;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,17 +27,22 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
+@SpringBootTest
+/*
 @WebMvcTest(CartRestControllerTest.class)
 @AutoConfigureWebMvc
 @Import({ShopService.class, MemberService.class})
-class CartRestControllerTest {
-  @Autowired
-  private MockMvc mockMvc;
+// 이거로 하면 에러남
+*/
 
-  @MockBean
-  private ShopService shopService;
-  @MockBean
-  private MemberService memberService;
+class CartRestControllerTest {
+//  @Autowired
+//  private MockMvc mockMvc;
+
+//  @MockBean
+//  private ShopService shopService;
+//  @MockBean
+//  private MemberService memberService;
 
 //  @Autowired
 //  private WebApplicationContext context;
@@ -48,23 +55,10 @@ class CartRestControllerTest {
 //  @MockBean
 //  private PasswordEncoder passwordEncoder;
 
-  private final Member member = new Member();
-  //private final User user = mo;
-
-  @BeforeEach
-  void insertEntity() {
-    member.setId("admin");
-    member.setRole("USER");
-
-//    mockMvc = MockMvcBuilders.
-//            webAppContextSetup(context)
-//            .alwaysDo(print())
-//            .apply(springSecurity())
-//            .build();
-  }
-
   @Test
+  @WithCustomUser
   void showCart() {
+    System.out.println(SecurityContextHolder.getContext().getAuthentication());
   }
 
   @Test
