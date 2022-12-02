@@ -24,13 +24,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ShopService {
-  private final PurchaseItemRepository purchaseItemRepository;
   private final CartRepository cartRepository;
   private final ItemRepository itemRepository;
   private final MemberRepository memberRepository;
 
   public Page<Cart> showCart(@AuthenticationPrincipal User user, Pageable pageable, int page) {
-    List<Cart> list;
     try {
       //pageable = PageRequest.of(page,20, Sort.Direction.ASC);
       Member member = memberRepository.findById(user.getUsername()).orElseThrow(()->new IllegalArgumentException("no login"));
