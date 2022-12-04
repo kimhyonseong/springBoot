@@ -34,6 +34,10 @@ public class ShopService {
       Member member = memberRepository.findById(user.getUsername()).orElseThrow(()->new IllegalArgumentException("no login"));
 
       return cartRepository.findAllByMember(member,pageable);
+    } catch (NullPointerException e) {
+      log.error("null");
+      e.printStackTrace();
+      return null;
     } catch (RuntimeException e) {
       log.error("showCart error");
       return null;
