@@ -8,6 +8,7 @@ import com.example.foodpreference.repository.CartRepository;
 import com.example.foodpreference.repository.ItemRepository;
 import com.example.foodpreference.repository.MemberRepository;
 import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,39 +47,50 @@ class ShopServiceTest {
   @Mock
   private CartRepository cartRepository;
 
+  private static Member member;
+  private static Item item;
+  private static Cart cart;
+  private static final List<Cart> cartList = new ArrayList<>();
+  private static Page<Cart> cartPage;
+  private static User user;
+
+  @BeforeAll
+  static void before() {
+    member = new Member();
+    member.setIdx(1L);
+    member.setId("admin");
+    member.setName("testAdmin");
+    member.setPassword("1234");
+    member.setRole("USER");
+
+    item = new Item();
+    item.setIdx(1L);
+    item.setCode("한식");
+    item.setName("김치");
+    item.setQuantity(100);
+    item.setPrice(1000);
+
+    cart = new Cart();
+    cart.setIdx(1L);
+    cart.setMember(member);
+    cart.setAmount(5);
+    cart.setItem(item);
+
+    cartList.add(cart);
+    cartPage = new PageImpl<>(cartList);
+
+    user = mock(User.class);
+  }
+
   @Nested
   class showCart {
     @Test
     void success() {
       // given
-      Optional<Member> member = Optional.of(new Member());
-      member.get().setIdx(1L);
-      member.get().setId("admin");
-      member.get().setName("testAdmin");
-      member.get().setPassword("1234");
-      member.get().setRole("USER");
-
-      Item item = new Item();
-      item.setIdx(1L);
-      item.setCode("한식");
-      item.setName("김치");
-      item.setQuantity(100);
-      item.setPrice(1000);
-
-      Cart cart1 = new Cart();
-      cart1.setIdx(1L);
-      cart1.setMember(member.get());
-      cart1.setAmount(5);
-      cart1.setItem(item);
-
-      List<Cart> cartList = new ArrayList<>();
-      cartList.add(cart1);
-      Page<Cart> cartPage = new PageImpl<>(cartList);
-
-      User user = mock(User.class);
       when(user.getUsername()).thenReturn("admin");
 
       // 스프링 시큐리티 mock
+      /*
       Authentication auth = Mockito.mock(Authentication.class);
       lenient().when(auth.getPrincipal()).thenReturn(member);
       lenient().when(auth.isAuthenticated()).thenReturn(true);
@@ -86,27 +98,49 @@ class ShopServiceTest {
       SecurityContext securityContext = Mockito.mock(SecurityContext.class);
       lenient().when(securityContext.getAuthentication()).thenReturn(auth);
       SecurityContextHolder.setContext(securityContext);
-
-      given(memberRepository.findById(anyString())).willReturn(member);
-      given(cartRepository.findAllByMember(any(),any())).willReturn(cartPage);
-
       assertNotNull(SecurityContextHolder.getContext().getAuthentication());
       System.out.println(SecurityContextHolder.getContext().getAuthentication());
+      */
+
+      given(memberRepository.findById(anyString())).willReturn(Optional.ofNullable(member));
+      given(cartRepository.findAllByMember(any(),any())).willReturn(cartPage);
 
       //when
       Page<Cart> showCart = shopService.showCart(user, Pageable.ofSize(1),0);
+
+      //then
       assertEquals(5,showCart.getContent().get(0).getAmount());
       assertEquals(item,showCart.getContent().get(0).getItem());
     }
 
     @Test
     void fail(){
+      //given
 
+      // member 값이 null 값일 시 showCart error 출력 및 null 반환 예상
+      when(memberRepository.findById(anyString())).thenReturn(null);
+      // 이 로직은 사용하기 전에 예외 발생
+      lenient().when(cartRepository.findAllByMember(any(),any())).thenReturn(cartPage);
+
+      //when
+      Page<Cart> result = shopService.showCart(user,Pageable.ofSize(1),0);
+
+      //then
+      assertNull(result);
     }
   }
 
-  @Test
-  void addCart() {
+  @Nested
+  class addCart {
+    @Test
+    void success() {
+
+    }
+
+    @Test
+    void fail() {
+
+    }
   }
 
   @Test

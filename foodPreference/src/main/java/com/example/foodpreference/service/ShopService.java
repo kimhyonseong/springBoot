@@ -29,12 +29,10 @@ public class ShopService {
 
   public Page<Cart> showCart(@AuthenticationPrincipal User user, Pageable pageable, int page) {
     try {
-      //pageable = PageRequest.of(page,20, Sort.Direction.ASC);
       Member member = memberRepository.findById(user.getUsername()).orElseThrow(()->new IllegalArgumentException("no login"));
 
       return cartRepository.findAllByMember(member,pageable);
     } catch (RuntimeException e) {
-      e.printStackTrace();
       log.error("showCart error");
       return null;
     }
