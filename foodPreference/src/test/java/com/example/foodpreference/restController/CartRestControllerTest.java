@@ -59,6 +59,7 @@ class CartRestControllerTest {
   @WithCustomUser
   void showCart() {
     System.out.println(SecurityContextHolder.getContext().getAuthentication());
+    System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
   }
 
   @Test

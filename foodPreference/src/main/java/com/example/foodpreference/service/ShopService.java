@@ -7,7 +7,6 @@ import com.example.foodpreference.dto.CartDto;
 import com.example.foodpreference.repository.CartRepository;
 import com.example.foodpreference.repository.ItemRepository;
 import com.example.foodpreference.repository.MemberRepository;
-import com.example.foodpreference.repository.PurchaseItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -36,22 +35,6 @@ public class ShopService {
       return cartRepository.findAllByMember(member,pageable);
     } catch (RuntimeException e) {
       e.printStackTrace();
-      log.error("showCart error");
-      return null;
-    }
-  }
-
-  // 테스트용
-  public List<Cart> showCart() {
-    try {
-      Member member = memberRepository.findById("admin").get();
-
-      return cartRepository.findAllByMember(member);
-    } catch (NullPointerException e) {
-      log.error("null");
-      e.printStackTrace();
-      return null;
-    } catch (RuntimeException e) {
       log.error("showCart error");
       return null;
     }

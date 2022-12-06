@@ -7,6 +7,7 @@ import com.example.foodpreference.domain.Member;
 import com.example.foodpreference.repository.CartRepository;
 import com.example.foodpreference.repository.ItemRepository;
 import com.example.foodpreference.repository.MemberRepository;
+import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,10 +19,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +54,7 @@ class ShopServiceTest {
       Optional<Member> member = Optional.of(new Member());
       member.get().setIdx(1L);
       member.get().setId("admin");
+      member.get().setName("testAdmin");
       member.get().setPassword("1234");
       member.get().setRole("USER");
 
@@ -70,28 +75,28 @@ class ShopServiceTest {
       cartList.add(cart1);
       Page<Cart> cartPage = new PageImpl<>(cartList);
 
+      User user = mock(User.class);
+      when(user.getUsername()).thenReturn("admin");
+
+      // 스프링 시큐리티 mock
+      Authentication auth = Mockito.mock(Authentication.class);
+      lenient().when(auth.getPrincipal()).thenReturn(member);
+      lenient().when(auth.isAuthenticated()).thenReturn(true);
+
+      SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+      lenient().when(securityContext.getAuthentication()).thenReturn(auth);
+      SecurityContextHolder.setContext(securityContext);
+
       given(memberRepository.findById(anyString())).willReturn(member);
       given(cartRepository.findAllByMember(any(),any())).willReturn(cartPage);
-
-      //테스트용
-      given(memberRepository.findById(anyString())).willReturn(member);
-      given(cartRepository.findAllByMember(any())).willReturn(cartList);
 
       assertNotNull(SecurityContextHolder.getContext().getAuthentication());
       System.out.println(SecurityContextHolder.getContext().getAuthentication());
 
       //when
-
-      // 통과
-      List<Cart> showCartTest = shopService.showCart();
-      assertEquals(1L,showCartTest.get(0).getIdx());
-
-      User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
       Page<Cart> showCart = shopService.showCart(user, Pageable.ofSize(1),0);
-//      Page<Cart> showCart = shopService.showCart((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal(),
-//              Pageable.ofSize(1),0);
-
+      assertEquals(5,showCart.getContent().get(0).getAmount());
+      assertEquals(item,showCart.getContent().get(0).getItem());
     }
 
     @Test
