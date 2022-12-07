@@ -47,7 +47,7 @@ public class ShopService {
       if (item == null)
         throw new IllegalArgumentException("아이템이 존재하지 않습니다.");
 
-      Cart cart = cartRepository.findByMemberAndItem(member, item).orElseGet(Cart::new);
+      Cart cart = cartRepository.findByMemberAndItem(member, item).orElse(new Cart());
       cart.setAmount(cartDto.getAmount());
       cart.setItem(item);
       cart.setMember(member);
@@ -58,8 +58,11 @@ public class ShopService {
     } catch (UsernameNotFoundException e) {
       log.error("addCart error : no login");
       return false;
-    } catch (RuntimeException e) {
+    } catch (IllegalArgumentException e) {
       log.error("addCart error : no item");
+      return false;
+    } catch (RuntimeException e) {
+      log.error("addCart error");
       return false;
     }
   }
@@ -73,8 +76,11 @@ public class ShopService {
       cartRepository.save(cart);
 
       return true;
-    } catch (RuntimeException e) {
+    } catch (IllegalArgumentException e) {
       log.error("update cart error : no cart");
+      return false;
+    } catch (RuntimeException e) {
+      log.error("update cart error");
       return false;
     }
   }
@@ -85,8 +91,11 @@ public class ShopService {
       Cart cart = cartRepository.findById(idx).orElseThrow(()->new IllegalArgumentException("no cart"));
       cartRepository.delete(cart);
       return true;
-    } catch (RuntimeException e) {
+    } catch (IllegalArgumentException e) {
       log.error("delete cart : no cart");
+      return false;
+    } catch (RuntimeException e) {
+      log.error("delete cart");
       return false;
     }
   }

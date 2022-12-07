@@ -4,6 +4,7 @@ import com.example.foodpreference.annotation.WithCustomUser;
 import com.example.foodpreference.domain.Cart;
 import com.example.foodpreference.domain.Item;
 import com.example.foodpreference.domain.Member;
+import com.example.foodpreference.dto.CartDto;
 import com.example.foodpreference.repository.CartRepository;
 import com.example.foodpreference.repository.ItemRepository;
 import com.example.foodpreference.repository.MemberRepository;
@@ -24,6 +25,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,6 +52,7 @@ class ShopServiceTest {
   private static Member member;
   private static Item item;
   private static Cart cart;
+  private static CartDto cartDto;
   private static final List<Cart> cartList = new ArrayList<>();
   private static Page<Cart> cartPage;
   private static User user;
@@ -78,6 +81,10 @@ class ShopServiceTest {
 
     cartList.add(cart);
     cartPage = new PageImpl<>(cartList);
+
+    cartDto = new CartDto();
+    cartDto.setAmount(10);
+    cartDto.setItemIdx(1L);
 
     user = mock(User.class);
   }
@@ -134,20 +141,99 @@ class ShopServiceTest {
   class addCart {
     @Test
     void success() {
+      //given
+      when(user.getUsername()).thenReturn("admin");
+      when(memberRepository.findById(anyString())).thenReturn(Optional.ofNullable(member));
+      when(itemRepository.findByIdx(anyLong())).thenReturn(item);
+      when(cartRepository.findByMemberAndItem(any(),any())).thenReturn(Optional.of(new Cart()));
+      when(cartRepository.save(any())).thenReturn(cart);
 
+      //when
+      boolean result = shopService.addCart(cartDto,user);
+
+      //then
+      assertTrue(result);
+    }
+
+    @Test
+    void loginFail() {
+      //given
+      when(user.getUsername()).thenReturn("admin");
+      when(memberRepository.findById(anyString())).thenThrow(new UsernameNotFoundException("no login"));
+
+      //when
+      boolean result = shopService.addCart(cartDto,user);
+
+      //then
+      assertFalse(result);
+    }
+
+    @Test
+    void itemFail() {
+      //given
+      when(user.getUsername()).thenReturn("admin");
+      when(memberRepository.findById(anyString())).thenReturn(Optional.ofNullable(member));
+      when(itemRepository.findByIdx(anyLong())).thenReturn(null);
+
+      //when
+      boolean result = shopService.addCart(cartDto,user);
+
+      //then
+      assertFalse(result);
+    }
+  }
+
+  @Nested
+  class updateCart {
+    @Test
+    void success() {
+      //given
+      when(cartRepository.findById(anyLong())).thenReturn(Optional.ofNullable(cart));
+
+      //when
+      boolean result = shopService.updateCart(1L,5);
+
+      //then
+      assertTrue(result);
     }
 
     @Test
     void fail() {
+      //given
+      when(cartRepository.findById(anyLong())).thenThrow(new IllegalArgumentException("no cart"));
 
+      //when
+      boolean result = shopService.updateCart(1L,5);
+
+      //then
+      assertFalse(result);
     }
   }
 
-  @Test
-  void updateCart() {
-  }
+  @Nested
+  class deleteCart {
+    @Test
+    void success() {
+      //given
+      when(cartRepository.findById(anyLong())).thenReturn(Optional.ofNullable(cart));
 
-  @Test
-  void deleteCart() {
+      //when
+      boolean result = shopService.deleteCart(1L);
+
+      //then
+      assertTrue(result);
+    }
+
+    @Test
+    void fail() {
+      //given
+      when(cartRepository.findById(anyLong())).thenThrow(new IllegalArgumentException("no cart"));
+
+      //when
+      boolean result = shopService.deleteCart(1L);
+
+      //then
+      assertFalse(result);
+    }
   }
 }
