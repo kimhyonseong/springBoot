@@ -2,10 +2,7 @@ package com.example.foodpreference.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.DynamicInsert;
@@ -18,7 +15,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @DynamicInsert
 @DynamicUpdate
 public class Item extends BaseEntity{
@@ -42,11 +40,11 @@ public class Item extends BaseEntity{
   @ToString.Exclude
   private Member member;
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name = "item_idx")
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "idx")
   @JsonManagedReference
   @ToString.Exclude
-  private List<ItemImg> imgs;
+  private ItemImg itemImg;
 
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "item_idx")

@@ -23,7 +23,7 @@ public class ItemRestController {
           @PathVariable String code) {
     Page<Item> itemList = null;
     try {
-      itemList = itemRepository.findAllByCode(code,pageable);
+      itemList = itemRepository.findAllByCodeAndStateIs(code,10,pageable);
     } catch (RuntimeException e) {
       return ResponseEntity.badRequest().build();
     }
@@ -36,7 +36,7 @@ public class ItemRestController {
   ) {
     List<Item> itemList = null;
     try {
-      itemList = itemRepository.findAll(pageable).getContent();
+      itemList = itemRepository.findAllByStateIs(pageable,10).getContent();
     } catch (RuntimeException e) {
       return ResponseEntity.badRequest().build();
     }

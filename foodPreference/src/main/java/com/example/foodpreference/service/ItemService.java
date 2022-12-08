@@ -33,6 +33,7 @@ public class ItemService {
       map.put("description",item.getDescription());
       map.put("price",item.getPrice());
       map.put("quantity",item.getQuantity());
+      map.put("state",item.getState());
 
       ItemImg itemImg = itemImgRepository.findByItem(item);
       map.put("img", itemImg != null ? itemImg.getImgUrl() : null);
@@ -60,6 +61,7 @@ public class ItemService {
       item.setCode(itemDto.getCode());
       item.setPrice(itemDto.getPrice());
       item.setQuantity(itemDto.getQuantity());
+      item.setState(itemDto.getState());
 
       return itemRepository.save(item).getIdx();
     } catch (RuntimeException e) {

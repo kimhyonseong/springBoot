@@ -3,10 +3,12 @@ package com.example.foodpreference.controller;
 import com.example.foodpreference.domain.Item;
 import com.example.foodpreference.dto.ItemDto;
 import com.example.foodpreference.dto.ItemImgDto;
+import com.example.foodpreference.service.AdminService;
 import com.example.foodpreference.service.ItemImgService;
 import com.example.foodpreference.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -24,6 +28,7 @@ import java.util.Map;
 public class AdminController {
   private final ItemService itemService;
   private final ItemImgService itemImgService;
+  private final AdminService adminService;
 
   @GetMapping({"/item/{idx}","/item"})
   public String itemPage(
@@ -72,7 +77,14 @@ public class AdminController {
   }
 
   @GetMapping("/myItemList")
-  public String myItem() {
-    return "";
+  public String myItem(@AuthenticationPrincipal User user,Model model) {
+    Map<String, Object> map = new HashMap<>();
+    List<Object> itemList = adminService.findAdminItem(user);
+
+    map.put("itemList",itemList);
+
+    model.addAllAttributes(map);
+
+    return "admin/myItemList";
   }
 }

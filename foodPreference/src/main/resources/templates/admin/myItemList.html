@@ -5,11 +5,32 @@
 <head>
     <meta charset="UTF-8">
     <title>등록한 아이템 목록</title>
+    <link rel="stylesheet" th:href="@{/css/itemList.css}">
 </head>
 <body>
 <th:block layout:fragment="content">
     <div class="itemListDiv">
-        <ul class="itemList"></ul>
+        <ul class="itemList">
+            <li th:each="list : ${itemList}">
+                <a th:href="${'/admin/item/'+list?.idx}">
+                    <dl>
+                        <dt>
+                            <img src="https://via.placeholder.com/150">
+<!--                            <img th:src="${list?.itemImg?.imgPath}${list?.itemImg?.imgUrl}">-->
+                        </dt>
+                        <dd>
+                            <div>
+                                <div class="item-name" th:text="${list?.name}"></div>
+                                <div class="item-price" th:text="${list?.price}"></div>
+                                <div class="item-other" th:text="${list?.description}"></div>
+                                <div class="item-state" th:text="${list?.state==10 ? '공개':'비공개'}"></div>
+                                <div class="item-quantity" th:text="${list?.quantity}"></div>
+                            </div>
+                        </dd>
+                    </dl>
+                </a>
+            </li>
+        </ul>
     </div>
 </th:block>
 </body>

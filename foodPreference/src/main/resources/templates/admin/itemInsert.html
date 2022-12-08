@@ -48,6 +48,14 @@
             <p th:text="${valid_quantity}"></p>
             <input type="text" id="itemQuantity" name="quantity" th:value="${quantity}">
         </div>
+        <div>
+            <p th:text="${valid_state}"></p>
+            <p>공개 여부</p>
+            <label for="itemState10">공개</label>
+            <input type="radio" id="itemState10" name="state" value="10" th:checked="${state!=90}">
+            <label for="itemState90">비공개</label>
+            <input type="radio" id="itemState90" name="state" value="90" th:checked="${state==90}">
+        </div>
         <div style="margin: 20px;
                     display: flex;
                     flex-direction: column;

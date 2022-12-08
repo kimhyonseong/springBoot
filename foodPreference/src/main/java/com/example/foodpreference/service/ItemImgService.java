@@ -73,14 +73,14 @@ public class ItemImgService {
   }
 
   public Map<String, Object> imgTmpSave(MultipartFile file) {
-    final List<String> ALLOW_TYPE = Arrays.asList("image/jpeg", "image/png");
+    final List<String> ALLOW_TYPE = Arrays.asList("image/jpeg", "image/png","image/gif");
     FileUtil fileUtil = new FileUtil();
     Map<String, Object> fileInfo = fileUtil.fileInfo(file);
     String uploadPath = Paths.get("./images/tmp").toAbsolutePath().toString();
 
     try {
       if (!ALLOW_TYPE.contains((String) fileInfo.get("contentType"))) {
-        log.error("업로드 불가능한 파일");
+        log.error("업로드 불가능한 확장자 : "+fileInfo.get("contentType"));
       } else {
         String reName = fileUtil.makeFileName(Objects.requireNonNull(file.getOriginalFilename()));
         fileInfo.put("newName", reName);

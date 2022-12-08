@@ -26,7 +26,9 @@ public class ItemImg extends BaseEntity {
   private Integer size;
   private String extension;
 
-  @ManyToOne
+  @OneToOne
+  @JoinColumn(name = "item_idx")
+  @ToString.Exclude
   @JsonBackReference
   private Item item;
 }

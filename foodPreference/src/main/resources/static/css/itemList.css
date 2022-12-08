@@ -1,0 +1,12 @@
+.itemListDiv {
+    width: 100%;
+}
+.itemList {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    list-style: none;
+}
+.itemList>li {
+    margin: 5px;
+}
