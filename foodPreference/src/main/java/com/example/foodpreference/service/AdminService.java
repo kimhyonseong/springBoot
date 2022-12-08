@@ -20,8 +20,8 @@ public class AdminService {
   private final MemberRepository memberRepository;
   private final ItemRepository itemRepository;
 
-  public List<Object> findAdminItem(@AuthenticationPrincipal User user) {
-    List<Object> itemList = null;
+  public List<Item> findAdminItem(@AuthenticationPrincipal User user) {
+    List<Item> itemList = null;
     Member member = null;
 
     try {

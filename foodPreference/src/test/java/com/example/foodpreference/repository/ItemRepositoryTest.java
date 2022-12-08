@@ -9,8 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 class ItemRepositoryTest {
   @Autowired
@@ -48,6 +46,12 @@ class ItemRepositoryTest {
     itemImg.setImgPath("/path/");
     itemImgRepository.save(itemImg);
 
-//    System.out.println(itemRepository.findByMember(findMember.getIdx()).get(0).toString());
+    List<Item> newItem = itemRepository.findByMember(findMember.getIdx());
+    System.out.println(newItem.get(0).toString());
+    System.out.println(newItem.get(0).getItemImg().toString());
+
+    List<Item> newItem2 = itemRepository.findByMember(findMember);
+    System.out.println(newItem2.get(0).toString());
+    System.out.println(newItem2.get(0).getItemImg().toString());
   }
 }

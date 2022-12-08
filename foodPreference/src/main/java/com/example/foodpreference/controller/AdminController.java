@@ -79,7 +79,7 @@ public class AdminController {
   @GetMapping("/myItemList")
   public String myItem(@AuthenticationPrincipal User user,Model model) {
     Map<String, Object> map = new HashMap<>();
-    List<Object> itemList = adminService.findAdminItem(user);
+    List<Item> itemList = adminService.findAdminItem(user);
 
     map.put("itemList",itemList);
 

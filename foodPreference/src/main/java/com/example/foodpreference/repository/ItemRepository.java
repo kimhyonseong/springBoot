@@ -21,8 +21,9 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
   Page<Item> findAllByCode(String code, Pageable pageable);
   Page<Item> findAllByCodeAndStateIs(String code,int state, Pageable pageable);
 
-  @EntityGraph(attributePaths = {"member","item_img"},type = EntityGraph.EntityGraphType.FETCH)
+  //@EntityGraph(attributePaths = {"member","itemImg"},type = EntityGraph.EntityGraphType.FETCH)
   @Query("select i,img from Item i join i.member m " +
           "left join i.itemImg img where m.idx = :member")
-  List<Object> findByMember(@Param("member") Long memberIdx);
+  List<Item> findByMember(@Param("member") Long memberIdx);
+  List<Item> findByMember(Member member);
 }
