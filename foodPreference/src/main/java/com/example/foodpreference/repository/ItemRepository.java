@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -20,6 +21,8 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
   Page<Item> findAllByCode(String code, Pageable pageable);
   Page<Item> findAllByCodeAndStateIs(String code,int state, Pageable pageable);
 
-  @Query("select i,img from Item i left join i.itemImg img")
-  List<Object> findByMember(Member member);
+  @EntityGraph(attributePaths = {"member","item_img"},type = EntityGraph.EntityGraphType.FETCH)
+  @Query("select i,img from Item i join i.member m " +
+          "left join i.itemImg img where m.idx = :member")
+  List<Object> findByMember(@Param("member") Long memberIdx);
 }

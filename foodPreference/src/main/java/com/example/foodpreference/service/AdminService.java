@@ -26,8 +26,7 @@ public class AdminService {
 
     try {
       member = memberRepository.findById(user.getUsername()).orElseThrow(() ->new UsernameNotFoundException("no member"));
-      itemList = itemRepository.findByMember(member);
-
+      itemList = itemRepository.findByMember(member.getIdx());
     } catch (UsernameNotFoundException e) {
       log.error("findAdminItem error : no member");
       return null;
