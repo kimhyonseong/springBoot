@@ -9,7 +9,4 @@ import java.util.Optional;
 
 public interface ItemImgRepository extends JpaRepository<ItemImg,Long> {
   ItemImg findByIdx(Long idx);
-
-  @Nullable
-  ItemImg findByItem(Item item);
 }

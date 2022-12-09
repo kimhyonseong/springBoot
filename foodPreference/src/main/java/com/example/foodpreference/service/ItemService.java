@@ -35,7 +35,7 @@ public class ItemService {
       map.put("quantity",item.getQuantity());
       map.put("state",item.getState());
 
-      ItemImg itemImg = itemImgRepository.findByItem(item);
+      ItemImg itemImg = itemImgRepository.findByIdx(item.getItemImg().getIdx());
       map.put("img", itemImg != null ? itemImg.getImgUrl() : null);
 
     } catch (RuntimeException e) {
@@ -46,7 +46,28 @@ public class ItemService {
     return map;
   }
 
-  public Long itemSave(ItemDto itemDto, Long idx) throws RuntimeException {
+  public Long itemSave(ItemDto itemDto,Long itemImgIdx) throws RuntimeException {
+    try {
+      ItemImg itemImg = itemImgRepository.findByIdx(itemImgIdx);
+
+      Item item = new Item();
+
+      item.setName(itemDto.getName());
+      item.setDescription(itemDto.getDescription());
+      item.setCode(itemDto.getCode());
+      item.setPrice(itemDto.getPrice());
+      item.setQuantity(itemDto.getQuantity());
+      item.setState(itemDto.getState());
+      item.setItemImg(itemImg);
+
+      return itemRepository.save(item).getIdx();
+    } catch (RuntimeException e) {
+      log.error("save error");
+      throw new RuntimeException("item save error");
+    }
+  }
+
+  public Long itemModify(ItemDto itemDto, Long idx) throws RuntimeException {
     try {
       Item item = null;
 
@@ -69,6 +90,4 @@ public class ItemService {
       throw new RuntimeException("item save error");
     }
   }
-
-
 }

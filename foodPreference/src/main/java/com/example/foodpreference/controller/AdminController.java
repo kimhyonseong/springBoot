@@ -52,16 +52,36 @@ public class AdminController {
   }
 
   @Transactional
-  @PostMapping({"/item/{idx}","/item"})
+  @PostMapping({"/item"})
   public String itemSave(
           @PathVariable(required = false) Long idx,
           @Validated ItemDto itemDto,
           ItemImgDto itemImgDto,
           Model model) {
     try {
-      Long saveIdx = itemService.itemSave(itemDto, idx);
+      itemImgService.imgSave(itemImgDto);
+      itemService.itemSave(itemDto);
 
-      itemImgService.imgSave(itemImgDto,saveIdx);
+    } catch (RuntimeException e) {
+      log.error("insert error. page : admin/item/"+idx);
+      model.addAttribute("errMsg","저장 오류");
+      return "item/itemInsert";
+    }
+
+    return "pages/main";
+  }
+
+  @Transactional
+  @PutMapping({"/item/{idx}"})
+  public String itemModify(
+          @PathVariable Long idx,
+          @Validated ItemDto itemDto,
+          ItemImgDto itemImgDto,
+          Model model) {
+    try {
+      Long saveIdx = itemService.itemModify(itemDto, idx);
+      itemImgService.imgModify(itemImgDto,saveIdx);
+
     } catch (RuntimeException e) {
       log.error("insert error. page : admin/item/"+idx);
       model.addAttribute("errMsg","저장 오류");
@@ -80,7 +100,7 @@ public class AdminController {
   public String myItem(@AuthenticationPrincipal User user,Model model) {
     Map<String, Object> map = new HashMap<>();
     List<Item> itemList = adminService.findAdminItem(user);
-
+    System.out.println(itemList.get(0).getItemImg().getImgUrl());
     map.put("itemList",itemList);
 
     model.addAllAttributes(map);

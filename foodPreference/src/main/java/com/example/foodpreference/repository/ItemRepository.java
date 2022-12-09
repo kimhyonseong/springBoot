@@ -24,6 +24,14 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
   //@EntityGraph(attributePaths = {"member","itemImg"},type = EntityGraph.EntityGraphType.FETCH)
   @Query("select i,img from Item i join i.member m " +
           "left join i.itemImg img where m.idx = :member")
-  List<Item> findByMember(@Param("member") Long memberIdx);
+//  @Query("select i from Item i join i.member m where m.idx = :member")
+  List<Item> findAllByMember(@Param("member") Long memberIdx);
+//  @Query("select i,img from Item i join fetch Member m on i.member.idx=m.idx " +
+//          "left join fetch ItemImg img on i.itemImg.idx=img.idx where m.idx = :member")
+  @Query("select i from Item i join fetch i.member m where m.idx =:member")
+  List<Item> fetchJoinMember(@Param("member") Long memberIdx);
+
+  List<Item> findAllByMember(Member member);
+
   List<Item> findByMember(Member member);
 }

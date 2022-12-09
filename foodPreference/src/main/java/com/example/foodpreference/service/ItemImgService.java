@@ -27,7 +27,7 @@ public class ItemImgService {
   public Map<String,Object> showImg(Item item) {
     Map<String, Object> map = new HashMap<>();
 
-    ItemImg itemImg = itemImgRepository.findByItem(item);
+    ItemImg itemImg = itemImgRepository.findByIdx(item.getItemImg().getIdx());
 
     if (itemImg != null) {
       map.put("src",itemImg.getImgPath()+itemImg.getImgUrl());
@@ -41,18 +41,35 @@ public class ItemImgService {
     return map;
   }
 
-  public void imgSave(ItemImgDto imgDto, Long idx) throws RuntimeException {
+  public void imgSave(ItemImgDto imgDto) throws RuntimeException {
+    ItemImg itemImg;
+
+    try {
+      itemImg = new ItemImg();
+      itemImg.setImgPath("/images/real/");
+      itemImg.setImgUrl(imgDto.getImgUrl());
+      itemImg.setOriginName(imgDto.getOriginName());
+
+      itemImgRepository.save(itemImg);
+
+      moveTmpImgToReal(itemImg.getImgUrl());
+    } catch (RuntimeException e) {
+      log.error("itemImg save error");
+      throw new RuntimeException("itemImg save error");
+    }
+  }
+
+  public void imgModify(ItemImgDto imgDto, Long idx) throws RuntimeException {
     Item item;
     ItemImg itemImg;
 
     try {
       item = itemRepository.findByIdx(idx);
-      itemImg = itemImgRepository.findByItem(item);
+      itemImg = itemImgRepository.findByIdx(item.getItemImg().getIdx());
       String preImg = "";
 
       if (itemImg == null) {
         itemImg = new ItemImg();
-        itemImg.setItem(item);
         preImg = itemImg.getImgUrl();
       }
 
@@ -63,9 +80,8 @@ public class ItemImgService {
       itemImgRepository.save(itemImg);
 
       // 업데이트 시에만 동작
-      if (!Objects.equals(preImg, imgDto.getImgUrl())) {
-        moveTmpImgToReal(itemImg.getImgUrl());
-      }
+      moveTmpImgToReal(itemImg.getImgUrl());
+
     } catch (RuntimeException e) {
       log.error("itemImg save error");
       throw new RuntimeException("itemImg save error");

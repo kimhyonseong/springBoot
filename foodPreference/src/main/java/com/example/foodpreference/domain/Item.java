@@ -41,7 +41,7 @@ public class Item extends BaseEntity{
   private Member member;
 
   @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "idx")
+  @JoinColumn(name = "img_idx")
   @JsonManagedReference
   @ToString.Exclude
   private ItemImg itemImg;

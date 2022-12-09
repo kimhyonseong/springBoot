@@ -25,33 +25,44 @@ class ItemRepositoryTest {
     member.setId("user1");
     member.setPassword("1234");
     memberRepository.save(member);
+    memberRepository.flush();
     System.out.println("member save");
 
     Member findMember = memberRepository.findByName("user1");
+    System.out.println(member);
     System.out.println("member findByName");
 
     Item item = new Item();
-    item.setIdx(1L);
     item.setMember(findMember);
     item.setName("test1");
     itemRepository.save(item);
+    itemRepository.flush();
     System.out.println("item save");
 
-    Item saveItem = itemRepository.findByIdx(1L);
+    List<Item> saveItem = itemRepository.findByMember(findMember);
+    System.out.println(saveItem.get(0));
     System.out.println("item findByIdx");
 
-    ItemImg itemImg = new ItemImg();
-    itemImg.setItem(saveItem);
-    itemImg.setImgUrl("test.jpg");
-    itemImg.setImgPath("/path/");
-    itemImgRepository.save(itemImg);
+//    ItemImg itemImg = new ItemImg();
+//    itemImg.setItem(saveItem);
+//    itemImg.setImgUrl("test.jpg");
+//    itemImg.setImgPath("/path/");
+//    itemImgRepository.save(itemImg);
 
-    List<Item> newItem = itemRepository.findByMember(findMember.getIdx());
-    System.out.println(newItem.get(0).toString());
-    System.out.println(newItem.get(0).getItemImg().toString());
+//    List<Item> newItem = itemRepository.findAllByMember(findMember.getIdx());
+//    System.out.println(newItem.get(0).toString());
+//    //System.out.println(newItem.get(0).getItemImg().toString());
+//
+//    List<Item> newItem2 = itemRepository.findAllByMember(findMember);
+//    System.out.println(newItem2.get(0).toString());
+//
+//    List<Item> newItem3 = itemRepository.findByMember(findMember);
+//    System.out.println(newItem3.get(0).toString());
+    //System.out.println(newItem2.get(0).getItemImg().toString());
 
-    List<Item> newItem2 = itemRepository.findByMember(findMember);
-    System.out.println(newItem2.get(0).toString());
-    System.out.println(newItem2.get(0).getItemImg().toString());
+
+    System.out.println("findByMember-------------------------------------");
+    List<Item> newItem4 = itemRepository.fetchJoinMember(findMember.getIdx());
+    System.out.println(newItem4);
   }
 }

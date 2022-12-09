@@ -1,5 +1,6 @@
 package com.example.foodpreference.dto;
 
+import com.example.foodpreference.domain.ItemImg;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

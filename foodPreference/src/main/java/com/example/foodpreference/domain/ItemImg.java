@@ -25,10 +25,4 @@ public class ItemImg extends BaseEntity {
   private String originName;
   private Integer size;
   private String extension;
-
-  @OneToOne
-  @JoinColumn(name = "item_idx")
-  @ToString.Exclude
-  @JsonBackReference
-  private Item item;
 }
