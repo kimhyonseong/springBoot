@@ -8,5 +8,5 @@ import org.springframework.lang.Nullable;
 import java.util.Optional;
 
 public interface ItemImgRepository extends JpaRepository<ItemImg,Long> {
-  ItemImg findByIdx(Long idx);
+  Optional<ItemImg> findByIdx(Long idx);
 }

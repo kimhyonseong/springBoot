@@ -54,21 +54,27 @@ public class AdminController {
   @Transactional
   @PostMapping({"/item"})
   public String itemSave(
-          @PathVariable(required = false) Long idx,
           @Validated ItemDto itemDto,
           ItemImgDto itemImgDto,
+          @AuthenticationPrincipal User user,
           Model model) {
+    Map<String, String> result = new HashMap<>();
     try {
       Long imgIdx = itemImgService.imgSave(itemImgDto);
-      itemService.itemSave(itemDto,imgIdx);
+      itemService.itemSave(itemDto,imgIdx,user);
+
+      result.put("url","/admin/myItemList");
+      result.put("message","정상적으로 처리되었습니다.");
+
+      model.addAllAttributes(result);
 
     } catch (RuntimeException e) {
-      log.error("insert error. page : admin/item/"+idx);
+      log.error("insert error. page : admin/item/");
       model.addAttribute("errMsg","저장 오류");
       return "item/itemInsert";
     }
 
-    return "pages/main";
+    return "common/redirect";
   }
 
   @Transactional
@@ -100,7 +106,7 @@ public class AdminController {
   public String myItem(@AuthenticationPrincipal User user,Model model) {
     Map<String, Object> map = new HashMap<>();
     List<Item> itemList = adminService.findAdminItem(user);
-    System.out.println(itemList.get(0).getItemImg().getImgUrl());
+
     map.put("itemList",itemList);
 
     model.addAllAttributes(map);

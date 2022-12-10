@@ -13,7 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Slf4j
@@ -27,13 +32,13 @@ public class ItemImgService {
   public Map<String,Object> showImg(Item item) {
     Map<String, Object> map = new HashMap<>();
 
-    ItemImg itemImg = itemImgRepository.findByIdx(item.getItemImg().getIdx());
+    ItemImg itemImg = itemImgRepository.findByIdx(item.getItemImg().getIdx()).orElse(null);
 
     if (itemImg != null) {
-      map.put("src",itemImg.getImgPath()+itemImg.getImgUrl());
-      map.put("imgUrl",itemImg.getImgUrl());
+      map.put("src",itemImg.getImgPath()+itemImg.getFileName());
+      map.put("fileName",itemImg.getFileName());
       map.put("size",itemImg.getSize());
-      map.put("originName",itemImg.getOriginName());
+      map.put("originFileName",itemImg.getOriginFileName());
     } else {
       map = null;
     }
@@ -41,18 +46,20 @@ public class ItemImgService {
     return map;
   }
 
+  @Transactional
   public Long imgSave(ItemImgDto imgDto) throws RuntimeException {
     Long returnIdx = 0L;
     ItemImg itemImg;
 
     try {
+      String path = moveTmpImgToReal(imgDto.getFileName());
+
       itemImg = new ItemImg();
-      itemImg.setImgPath("/images/real/");
-      itemImg.setImgUrl(imgDto.getImgUrl());
-      itemImg.setOriginName(imgDto.getOriginName());
+      itemImg.setImgPath(path);
+      itemImg.setFileName(imgDto.getFileName());
+      itemImg.setOriginFileName(imgDto.getOriginFileName());
 
       returnIdx = itemImgRepository.save(itemImg).getIdx();
-      moveTmpImgToReal(itemImg.getImgUrl());
       return returnIdx;
     } catch (RuntimeException e) {
       log.error("itemImg save error");
@@ -62,27 +69,21 @@ public class ItemImgService {
 
   public void imgModify(ItemImgDto imgDto, Long idx) throws RuntimeException {
     Item item;
-    ItemImg itemImg;
 
     try {
+      String path = moveTmpImgToReal(imgDto.getFileName());
       item = itemRepository.findByIdx(idx);
-      itemImg = itemImgRepository.findByIdx(item.getItemImg().getIdx());
-      String preImg = "";
+      ItemImg itemImg = itemImgRepository.findByIdx(item.getItemImg().getIdx()).orElseThrow(NullPointerException::new);
 
-      if (itemImg == null) {
-        itemImg = new ItemImg();
-        preImg = itemImg.getImgUrl();
-      }
-
-      itemImg.setImgPath("/images/real/");
-      itemImg.setImgUrl(imgDto.getImgUrl());
-      itemImg.setOriginName(imgDto.getOriginName());
-
+      itemImg.setImgPath(path);
+      itemImg.setFileName(imgDto.getFileName());
+      itemImg.setOriginFileName(imgDto.getOriginFileName());
       itemImgRepository.save(itemImg);
 
-      // 업데이트 시에만 동작
-      moveTmpImgToReal(itemImg.getImgUrl());
 
+    } catch (NullPointerException e) {
+      log.error("itemImg no img");
+      throw new RuntimeException();
     } catch (RuntimeException e) {
       log.error("itemImg save error");
       throw new RuntimeException("itemImg save error");
@@ -96,12 +97,20 @@ public class ItemImgService {
     String uploadPath = Paths.get("./images/tmp").toAbsolutePath().toString();
 
     try {
+      Path path = Paths.get("./images/tmp").toAbsolutePath();
+      Files.createDirectories(path);
+    } catch (IOException e) {
+      log.error("can't make tmp directory");
+      return null;
+    }
+
+    try {
       if (!ALLOW_TYPE.contains((String) fileInfo.get("contentType"))) {
         log.error("업로드 불가능한 확장자 : "+fileInfo.get("contentType"));
       } else {
         String reName = fileUtil.makeFileName(Objects.requireNonNull(file.getOriginalFilename()));
-        fileInfo.put("newName", reName);
-        fileInfo.put("originName", file.getOriginalFilename());
+        fileInfo.put("fileName", reName);
+        fileInfo.put("originFileName", file.getOriginalFilename());
 
         File newFile = new File(uploadPath, reName);
 
@@ -115,18 +124,38 @@ public class ItemImgService {
     return fileInfo;
   }
 
-  public void moveTmpImgToReal(String fileName) {
-    File tmpFile = new File(Paths.get("./images/tmp/").toAbsolutePath().toString(),fileName);
-    File moveFile = new File(Paths.get("./images/real/").toAbsolutePath().toString(),fileName);
+  public String moveTmpImgToReal(String fileName) throws RuntimeException {
+    LocalDate now = LocalDate.now();
+    DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd");
+    String dateDir = now.format(format)+"/";
 
-    if (tmpFile.exists()) {
-      if (tmpFile.renameTo(moveFile)) {
-        log.info("move to real - "+fileName);
+    try {
+      Path path = Paths.get("./images/real/"+dateDir).toAbsolutePath();
+      Files.createDirectories(path);
+
+      File tmpFile = new File(Paths.get("./images/tmp/").toAbsolutePath().toString(), fileName);
+      File moveFile = new File(Paths.get("./images/real/"+dateDir).toAbsolutePath().toString(), fileName);
+
+      if (tmpFile.exists()) {
+        if (tmpFile.renameTo(moveFile)) {
+          log.info("move to real - " + fileName);
+        } else {
+          log.error("fail move to real - " + fileName);
+          throw new RuntimeException("fail move");
+        }
       } else {
-        log.error("fail move to real - "+fileName);
+        log.info("tmpFile - " + tmpFile);
+        log.error("no file - " + fileName);
+        throw new RuntimeException("no file");
       }
-    } else {
-      log.error("no file - "+fileName);
+
+      return "/images/real/"+dateDir;
+    } catch (IOException e) {
+      log.error("fail create Directory");
+      throw new RuntimeException();
+    } catch (RuntimeException e) {
+      log.error("fail move img to real");
+      throw new RuntimeException();
     }
   }
 }

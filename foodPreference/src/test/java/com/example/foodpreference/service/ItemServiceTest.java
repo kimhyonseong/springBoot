@@ -59,7 +59,7 @@ class ItemServiceTest {
     itemDto.setDescription("강원도 꿀 사과");
 
     try {
-      itemService.itemSave(itemDto, null);
+      itemService.itemSave(itemDto, null,null);
       Item item = itemRepository.findByIdx(1L);
       System.out.println(item.toString());
     } catch (RuntimeException e) {
@@ -67,7 +67,7 @@ class ItemServiceTest {
     }
 
     try {
-      itemService.itemSave(itemDto, 2L);
+      itemService.itemSave(itemDto, 2L,null);
     } catch(RuntimeException e) {
       System.out.println("저장 오류 2L");
     }

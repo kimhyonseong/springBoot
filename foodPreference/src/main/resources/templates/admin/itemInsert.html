@@ -64,10 +64,10 @@
             <p>아이템 사진</p>
             <div style="display: flex;
                         flex-direction: column;">
-                <label th:for="itemImg" th:text="${img?.originName ?: '이미지'}"></label>
+                <label th:for="itemImg" th:text="${img?.originFileName ?: '이미지'}"></label>
                 <input style="display: none" type="file" th:id="itemImg">
-                <input type="hidden" name="originName" th:id="originName" th:value="${img?.originName}">
-                <input type="hidden" name="imgUrl" th:id="imgUrl" th:value="${img?.imgUrl}">
+                <input type="hidden" name="originFileName" th:id="originFileName" th:value="${img?.originFileName}">
+                <input type="hidden" name="fileName" th:id="fileName" th:value="${img?.fileName}">
                 <img class="preImage" th:id="itemImgPre" th:src="${img?.src ?: 'https://via.placeholder.com/150'}" alt="img">
             </div>
         </div>
@@ -94,10 +94,10 @@
                 data : formData,
                 success : function (data) {
                     console.log(data);
-                    $(`#${target.id}Pre`).attr("src",`/images/tmp/${data.newName}`);
+                    $(`#${target.id}Pre`).attr("src",`/images/tmp/${data.fileName}`);
                     $(target).val("");
-                    $("#imgUrl").val(`${data.newName}`);
-                    $("#originName").val(`${data.originName}`);
+                    $("#fileName").val(`${data.fileName}`);
+                    $("#originFileName").val(`${data.originFileName}`);
                 }
             })
         }

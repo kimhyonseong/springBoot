@@ -2,11 +2,15 @@ package com.example.foodpreference.service;
 
 import com.example.foodpreference.domain.Item;
 import com.example.foodpreference.domain.ItemImg;
+import com.example.foodpreference.domain.Member;
 import com.example.foodpreference.dto.ItemDto;
 import com.example.foodpreference.repository.ItemImgRepository;
 import com.example.foodpreference.repository.ItemRepository;
+import com.example.foodpreference.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +24,7 @@ import java.util.Map;
 public class ItemService {
   private final ItemRepository itemRepository;
   private final ItemImgRepository itemImgRepository;
+  private final MemberRepository memberRepository;
 
   public Map<String,Object> findItem(Long idx) throws RuntimeException{
     Map<String, Object> map = new HashMap<>();
@@ -35,8 +40,8 @@ public class ItemService {
       map.put("quantity",item.getQuantity());
       map.put("state",item.getState());
 
-      ItemImg itemImg = itemImgRepository.findByIdx(item.getItemImg().getIdx());
-      map.put("img", itemImg != null ? itemImg.getImgUrl() : null);
+      ItemImg itemImg = itemImgRepository.findByIdx(item.getItemImg().getIdx()).orElseThrow(RuntimeException::new);
+      map.put("img", itemImg.getFileName());
 
     } catch (RuntimeException e) {
       log.error("존재하지 않는 idx - "+idx);
@@ -46,9 +51,10 @@ public class ItemService {
     return map;
   }
 
-  public void itemSave(ItemDto itemDto,Long itemImgIdx) throws RuntimeException {
+  public void itemSave(ItemDto itemDto,Long itemImgIdx,User user) throws RuntimeException {
     try {
-      ItemImg itemImg = itemImgRepository.findByIdx(itemImgIdx);
+      Member member = memberRepository.findById(user.getUsername()).orElseThrow(()->new UsernameNotFoundException("no member"));
+      ItemImg itemImg = itemImgRepository.findByIdx(itemImgIdx).orElse(null);
 
       Item item = new Item();
 
@@ -59,10 +65,13 @@ public class ItemService {
       item.setQuantity(itemDto.getQuantity());
       item.setState(itemDto.getState());
       item.setItemImg(itemImg);
+      item.setMember(member);
 
       itemRepository.save(item);
+    } catch (UsernameNotFoundException e) {
+      log.error("itemService - no member id");
     } catch (RuntimeException e) {
-      log.error("save error");
+      log.error("itemService - save error");
       throw new RuntimeException("item save error");
     }
   }

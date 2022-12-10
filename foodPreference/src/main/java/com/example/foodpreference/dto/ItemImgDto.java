@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class ItemImgDto {
-    private String imgUrl;
-    private String originName;
+    private String fileName;
+    private String originFileName;
     private List<ItemImgDto> itemImgDtoList;
 }

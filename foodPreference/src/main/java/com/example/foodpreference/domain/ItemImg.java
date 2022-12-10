@@ -21,8 +21,8 @@ public class ItemImg extends BaseEntity {
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long idx;
   private String imgPath;
-  private String imgUrl;
-  private String originName;
+  private String fileName;
+  private String originFileName;
   private Integer size;
   private String extension;
 }
