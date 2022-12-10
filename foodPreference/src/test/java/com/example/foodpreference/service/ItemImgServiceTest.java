@@ -20,34 +20,31 @@ class ItemImgServiceTest {
 
   @Test
   void imgSave() {
-    Item insertItem = new Item();
-    insertItem.setName("사과");
-    insertItem.setCode("과일");
-    insertItem.setPrice(1000);
-    insertItem.setQuantity(100);
-    insertItem.setDescription("꿀 사과");
-    itemRepository.save(insertItem);
-
-    Item item = itemRepository.findByIdx(1L);
-    ItemImg itemImg;
-
     try {
-//      itemImg = itemImgRepository.findByItem(item);
+      ItemImg itemImg = new ItemImg();
+      itemImg.setFileName("tmp.jpg");
+      itemImg.setOriginFileName("originName.jpg");
+      Long insertImgIdx = itemImgRepository.save(itemImg).getIdx();
+      System.out.println(insertImgIdx);
+      ItemImg resultImg = itemImgRepository.findByIdx(insertImgIdx).orElse(null);
+      System.out.println(resultImg);
 
-//      System.out.println("itemImg"+itemImg);
-//      if (itemImg == null) {
-        itemImg = new ItemImg();
-//      }
+      Item item = new Item();
+      item.setName("사과");
+      item.setCode("과일");
+      item.setPrice(1000);
+      item.setQuantity(100);
+      item.setDescription("꿀 사과");
+      item.setItemImg(resultImg);
+      Long insertIdx = itemRepository.save(item).getIdx();
 
-//      itemImg.setItem(item);
-      itemImg.setImgUrl("tmp.jpg");
-      itemImg.setOriginName("originName.jpg");
+      Item findItem = itemRepository.findByIdx(insertIdx);
 
-      Long idx = itemImgRepository.save(itemImg).getIdx();
-      ItemImg result = itemImgRepository.findByIdx(idx);
-      System.out.println(result);
+      System.out.println(findItem);
+      System.out.println(findItem.getItemImg());
 
     } catch (RuntimeException e) {
+      e.printStackTrace();
       System.out.println("itemImg save error");
     }
   }

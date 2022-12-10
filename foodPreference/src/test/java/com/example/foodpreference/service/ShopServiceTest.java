@@ -83,8 +83,6 @@ class ShopServiceTest {
     cartPage = new PageImpl<>(cartList);
 
     cartDto = new CartDto();
-    cartDto.setAmount(10);
-    cartDto.setItemIdx(1L);
 
     user = mock(User.class);
   }
@@ -144,7 +142,7 @@ class ShopServiceTest {
       //given
       when(user.getUsername()).thenReturn("admin");
       when(memberRepository.findById(anyString())).thenReturn(Optional.ofNullable(member));
-      when(itemRepository.findByIdx(anyLong())).thenReturn(item);
+      when(itemRepository.findByIdx(any())).thenReturn(item);
       when(cartRepository.findByMemberAndItem(any(),any())).thenReturn(Optional.of(new Cart()));
       when(cartRepository.save(any())).thenReturn(cart);
 

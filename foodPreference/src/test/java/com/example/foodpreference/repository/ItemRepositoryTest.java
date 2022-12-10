@@ -3,6 +3,7 @@ package com.example.foodpreference.repository;
 import com.example.foodpreference.domain.Item;
 import com.example.foodpreference.domain.ItemImg;
 import com.example.foodpreference.domain.Member;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,26 +44,17 @@ class ItemRepositoryTest {
     System.out.println(saveItem.get(0));
     System.out.println("item findByIdx");
 
-//    ItemImg itemImg = new ItemImg();
-//    itemImg.setItem(saveItem);
-//    itemImg.setImgUrl("test.jpg");
-//    itemImg.setImgPath("/path/");
-//    itemImgRepository.save(itemImg);
-
-//    List<Item> newItem = itemRepository.findAllByMember(findMember.getIdx());
-//    System.out.println(newItem.get(0).toString());
-//    //System.out.println(newItem.get(0).getItemImg().toString());
-//
-//    List<Item> newItem2 = itemRepository.findAllByMember(findMember);
-//    System.out.println(newItem2.get(0).toString());
-//
-//    List<Item> newItem3 = itemRepository.findByMember(findMember);
-//    System.out.println(newItem3.get(0).toString());
-    //System.out.println(newItem2.get(0).getItemImg().toString());
-
-
     System.out.println("findByMember-------------------------------------");
-    List<Item> newItem4 = itemRepository.fetchJoinMember(findMember.getIdx());
+    List<Item> newItem4 = itemRepository.findByMember(findMember);
     System.out.println(newItem4);
+  }
+
+  @Test
+  @DisplayName("멤버가 등록한 아이템, 아이템 이미지 찾기")
+  void joinMemberTest() {
+    List<Item> list = itemRepository.joinMember(1L);
+    System.out.println(list.size());
+    System.out.println(list.get(0));
+    System.out.println(list.get(0).getItemImg());
   }
 }

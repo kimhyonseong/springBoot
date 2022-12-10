@@ -6,7 +6,10 @@ import com.example.foodpreference.repository.ItemRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,12 +54,8 @@ class ItemServiceTest {
 
   @Test
   void itemSaveTest() {
-    ItemDto itemDto = new ItemDto();
-    itemDto.setName("사과");
-    itemDto.setQuantity(10);
-    itemDto.setPrice(1000);
-    itemDto.setCode("과일");
-    itemDto.setDescription("강원도 꿀 사과");
+    ItemDto itemDto = new ItemDto("사과","강원도 꿀 사과","과일",10,1000,100);
+    //User user = new User("admin","1234", null);
 
     try {
       itemService.itemSave(itemDto, null,null);
@@ -69,7 +68,7 @@ class ItemServiceTest {
     try {
       itemService.itemSave(itemDto, 2L,null);
     } catch(RuntimeException e) {
-      System.out.println("저장 오류 2L");
+      System.out.println("저장 오류");
     }
   }
 }

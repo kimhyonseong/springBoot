@@ -1,11 +1,15 @@
 package com.example.foodpreference.dto;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class MemberDto {
     @NotBlank(message = "아이디는 필수값입니다.")
     @Pattern(regexp = "^[a-z0-9]{4,10}$",message = "아이디는 소문자 영문과 숫자만 사용할 수 있습니다.")
