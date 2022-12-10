@@ -34,10 +34,4 @@ public class PurchaseItem extends BaseEntity{
   @JoinColumn(name = "item_idx")
   @JsonBackReference
   private Item item;
-
-  @ManyToOne
-  @ToString.Exclude
-  @JoinColumn(name = "purchase_idx")
-  @JsonBackReference
-  private Purchase purchase;
 }

@@ -32,19 +32,19 @@ class ItemImgServiceTest {
     ItemImg itemImg;
 
     try {
-      itemImg = itemImgRepository.findByItem(item);
+//      itemImg = itemImgRepository.findByItem(item);
 
-      System.out.println("itemImg"+itemImg);
-      if (itemImg == null) {
+//      System.out.println("itemImg"+itemImg);
+//      if (itemImg == null) {
         itemImg = new ItemImg();
-      }
+//      }
 
-      itemImg.setItem(item);
+//      itemImg.setItem(item);
       itemImg.setImgUrl("tmp.jpg");
       itemImg.setOriginName("originName.jpg");
 
-      itemImgRepository.save(itemImg);
-      ItemImg result = itemImgRepository.findByItem(item);
+      Long idx = itemImgRepository.save(itemImg).getIdx();
+      ItemImg result = itemImgRepository.findByIdx(idx);
       System.out.println(result);
 
     } catch (RuntimeException e) {

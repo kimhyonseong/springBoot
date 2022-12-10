@@ -45,10 +45,4 @@ public class Item extends BaseEntity{
   @JsonManagedReference
   @ToString.Exclude
   private ItemImg itemImg;
-
-  @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "item_idx")
-  @JsonBackReference
-  @ToString.Exclude
-  private List<Cart> carts;
 }

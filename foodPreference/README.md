@@ -31,3 +31,11 @@
 관리자
 - 아이템 등록/수정
 - 회원 관리
+___
+### DB
+- Member : 회원
+- Item : 아이템
+- ItemImg : 아이템 이미지
+- Purchase : 구매내역
+- PurchaseItem : 구매내역 속 아이템들
+- Cart : 장바구니 - 구매전 아이템 저장소

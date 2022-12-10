@@ -46,7 +46,7 @@ public class ItemService {
     return map;
   }
 
-  public Long itemSave(ItemDto itemDto,Long itemImgIdx) throws RuntimeException {
+  public void itemSave(ItemDto itemDto,Long itemImgIdx) throws RuntimeException {
     try {
       ItemImg itemImg = itemImgRepository.findByIdx(itemImgIdx);
 
@@ -60,7 +60,7 @@ public class ItemService {
       item.setState(itemDto.getState());
       item.setItemImg(itemImg);
 
-      return itemRepository.save(item).getIdx();
+      itemRepository.save(item);
     } catch (RuntimeException e) {
       log.error("save error");
       throw new RuntimeException("item save error");

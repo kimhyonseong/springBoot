@@ -41,7 +41,8 @@ public class ItemImgService {
     return map;
   }
 
-  public void imgSave(ItemImgDto imgDto) throws RuntimeException {
+  public Long imgSave(ItemImgDto imgDto) throws RuntimeException {
+    Long returnIdx = 0L;
     ItemImg itemImg;
 
     try {
@@ -50,9 +51,9 @@ public class ItemImgService {
       itemImg.setImgUrl(imgDto.getImgUrl());
       itemImg.setOriginName(imgDto.getOriginName());
 
-      itemImgRepository.save(itemImg);
-
+      returnIdx = itemImgRepository.save(itemImg).getIdx();
       moveTmpImgToReal(itemImg.getImgUrl());
+      return returnIdx;
     } catch (RuntimeException e) {
       log.error("itemImg save error");
       throw new RuntimeException("itemImg save error");

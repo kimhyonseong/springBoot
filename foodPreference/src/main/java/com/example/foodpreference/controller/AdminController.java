@@ -59,8 +59,8 @@ public class AdminController {
           ItemImgDto itemImgDto,
           Model model) {
     try {
-      itemImgService.imgSave(itemImgDto);
-      itemService.itemSave(itemDto);
+      Long imgIdx = itemImgService.imgSave(itemImgDto);
+      itemService.itemSave(itemDto,imgIdx);
 
     } catch (RuntimeException e) {
       log.error("insert error. page : admin/item/"+idx);

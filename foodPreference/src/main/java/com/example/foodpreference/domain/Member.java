@@ -13,10 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Setter
 @Getter
@@ -48,13 +45,13 @@ public class Member extends BaseEntity implements UserDetails {
     @JoinColumn(name = "member_idx")
     @JsonManagedReference
     @ToString.Exclude
-    private List<Item> items;
+    private List<Item> items = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "member_idx")
     @JsonManagedReference
     @ToString.Exclude
-    private List<Cart> cart;
+    private List<Cart> cart = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
