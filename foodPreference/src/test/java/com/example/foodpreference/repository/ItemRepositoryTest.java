@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 
@@ -56,5 +57,22 @@ class ItemRepositoryTest {
     System.out.println(list.size());
     System.out.println(list.get(0));
     System.out.println(list.get(0).getItemImg());
+  }
+
+  @Test
+  void findAllByMember() {
+    List<Item> itemList = null;
+    Member member = null;
+
+    try {
+      member = memberRepository.findById("admin").orElseThrow(() ->new UsernameNotFoundException("no member"));
+      itemList = itemRepository.findAllByMember(member);
+      System.out.println(itemList);
+      System.out.println(itemList.get(0).getItemImg());
+    } catch (UsernameNotFoundException e) {
+      System.out.println("findAdminItem error : no member");
+    } catch (Exception e) {
+      System.out.println("findAdminItem Runtime exception");
+    }
   }
 }
