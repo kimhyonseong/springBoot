@@ -2,6 +2,7 @@ package com.example.foodpreference.service;
 
 import com.example.foodpreference.domain.Item;
 import com.example.foodpreference.domain.Member;
+import com.example.foodpreference.dto.ItemJoinImgInterface;
 import com.example.foodpreference.repository.ItemRepository;
 import com.example.foodpreference.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,18 +22,20 @@ public class AdminService {
   private final MemberRepository memberRepository;
   private final ItemRepository itemRepository;
 
-  public List<Item> findAdminItem(@AuthenticationPrincipal User user, Pageable pageable) {
-    List<Item> itemList = null;
+  public List<ItemJoinImgInterface> findAdminItem(@AuthenticationPrincipal User user, Pageable pageable) {
+    List<ItemJoinImgInterface> itemList = null;
     Member member = null;
 
     try {
       member = memberRepository.findById(user.getUsername()).orElseThrow(() ->new UsernameNotFoundException("no member"));
-      itemList = itemRepository.findAllByMember(member,pageable);
+      itemList = itemRepository.itemJoinItemImg(member.getIdx(),0, 10);
+      System.out.println(itemList);
 
     } catch (UsernameNotFoundException e) {
       log.error("findAdminItem error : no member");
       return null;
     } catch (Exception e) {
+      e.printStackTrace();
       log.error("findAdminItem Runtime exception");
       return null;
     }

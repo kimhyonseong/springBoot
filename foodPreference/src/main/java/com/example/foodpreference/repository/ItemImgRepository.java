@@ -9,4 +9,6 @@ import java.util.Optional;
 
 public interface ItemImgRepository extends JpaRepository<ItemImg,Long> {
   Optional<ItemImg> findByIdx(Long idx);
+  Optional<ItemImg> findByItem(Item item);
+  void deleteByItem(Item item);
 }

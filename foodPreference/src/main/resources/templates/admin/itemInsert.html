@@ -16,6 +16,7 @@
     </style>
 
     <form method="post" enctype="multipart/form-data">
+        <input type="hidden" id="idx" th:value="${idx ?: ''}">
         <div>
             <label for="itemName">아이템 이름</label>
             <p th:text="${valid_name}" style="height: max-content"></p>
@@ -71,14 +72,18 @@
                 <img class="preImage" th:id="itemImgPre" th:src="${img?.src ?: 'https://via.placeholder.com/150'}" alt="img">
             </div>
         </div>
-        <input type="submit">
+        <input type="submit" value="저장">
+        <th:block th:if="${idx != null}">
+            <input type="button" id="deleteItem" value="삭제">
+        </th:block>
     </form>
 
-    <script>
+    <script th:inline="javascript">
         $(function () {
             $("input[type=file]").on("change", function () {
                 upload($(this)[0]);
             })
+            $("#deleteItem").on("click",deleteItem);
         })
 
         function upload(target) {
@@ -100,6 +105,35 @@
                     $("#originFileName").val(`${data.originFileName}`);
                 }
             })
+        }
+
+        function deleteItem() {
+            const formData = new FormData();
+            formData.append("idx",/*[[${idx}]]*/"");
+            let idx = /*[[${idx}]]*/ "";
+
+            if (idx.length < 1) {
+                alert("오류가 발생하였습니다.")
+                return false;
+            }
+
+            if (confirm("정말 삭제하시겠습니까?")) {
+
+                $.ajax({
+                    url: `/admin/item/${idx}`,
+                    type: "DELETE",
+                    success: function (data) {
+                        console.log(data);
+
+                        if (data) {
+                            alert("삭제되었습니다.");
+                            history.back();
+                        } else {
+                            alert("처리하지 못하였습니다.");
+                        }
+                    }
+                })
+            }
         }
     </script>
 </th:block>

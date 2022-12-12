@@ -39,10 +39,4 @@ public class Item extends BaseEntity{
   @JsonBackReference
   @ToString.Exclude
   private Member member;
-
-  @OneToOne
-  @JoinColumn(name = "img_idx")
-  @JsonManagedReference
-  @ToString.Exclude
-  private ItemImg itemImg;
 }

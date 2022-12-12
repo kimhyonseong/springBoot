@@ -1,8 +1,10 @@
 package com.example.foodpreference.controller;
 
 import com.example.foodpreference.domain.Item;
+import com.example.foodpreference.domain.ItemImg;
 import com.example.foodpreference.dto.ItemDto;
 import com.example.foodpreference.dto.ItemImgDto;
+import com.example.foodpreference.dto.ItemJoinImgInterface;
 import com.example.foodpreference.service.AdminService;
 import com.example.foodpreference.service.ItemImgService;
 import com.example.foodpreference.service.ItemService;
@@ -94,18 +96,33 @@ public class AdminController {
       return "item/itemInsert";
     }
 
-    return "pages/main";
+    model.addAttribute("message","정상적으로 처리되었습니다.");
+    model.addAttribute("url","/admin/item/"+idx);
+
+    return "common/redirect";
   }
 
+  @ResponseBody
   @DeleteMapping("/item/{idx}")
-  public void deleteItem(@PathVariable Long idx) {
+  public Boolean deleteItem(@PathVariable Long idx,@AuthenticationPrincipal User user,Model model) {
+    try {
+      if (!itemService.itemDelete(user,idx)) {
+        throw new RuntimeException("error");
+      }
+    } catch (RuntimeException e) {
+      log.error("fail delete item");
 
+      return false;
+    }
+
+    return true;
   }
 
   @GetMapping("/myItemList")
   public String myItem(@AuthenticationPrincipal User user, Pageable pageable, Model model) {
     Map<String, Object> map = new HashMap<>();
-    List<Item> itemList = adminService.findAdminItem(user,pageable);
+    List<ItemJoinImgInterface> itemList = adminService.findAdminItem(user,pageable);
+    //List<ItemImg> itemImgList = adminService.
 
     map.put("itemList",itemList);
 

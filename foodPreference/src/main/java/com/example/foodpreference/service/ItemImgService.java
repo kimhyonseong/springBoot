@@ -32,7 +32,7 @@ public class ItemImgService {
   public Map<String,Object> showImg(Item item) {
     Map<String, Object> map = new HashMap<>();
 
-    ItemImg itemImg = itemImgRepository.findByIdx(item.getItemImg().getIdx()).orElse(null);
+    ItemImg itemImg = itemImgRepository.findByItem(item).orElse(null);
 
     if (itemImg != null) {
       map.put("src",itemImg.getImgPath()+itemImg.getFileName());
@@ -73,7 +73,7 @@ public class ItemImgService {
     try {
       String path = moveTmpImgToReal(imgDto.getFileName());
       item = itemRepository.findByIdx(idx);
-      ItemImg itemImg = itemImgRepository.findByIdx(item.getItemImg().getIdx()).orElseThrow(NullPointerException::new);
+      ItemImg itemImg = itemImgRepository.findByItem(item).orElseThrow(NullPointerException::new);
 
       itemImg.setImgPath(path);
       itemImg.setFileName(imgDto.getFileName());

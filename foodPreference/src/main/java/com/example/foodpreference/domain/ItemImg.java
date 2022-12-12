@@ -1,6 +1,7 @@
 package com.example.foodpreference.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,4 +26,10 @@ public class ItemImg extends BaseEntity {
   private String originFileName;
   private Integer size;
   private String extension;
+
+  @OneToOne(cascade = CascadeType.REMOVE)
+  @JoinColumn(name = "item_idx")
+  @JsonBackReference
+  @ToString.Exclude
+  private Item item;
 }

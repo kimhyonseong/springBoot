@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -40,7 +41,7 @@ public class ItemService {
       map.put("quantity",item.getQuantity());
       map.put("state",item.getState());
 
-      ItemImg itemImg = itemImgRepository.findByIdx(item.getItemImg().getIdx()).orElseThrow(RuntimeException::new);
+      ItemImg itemImg = itemImgRepository.findByItem(item).orElse(new ItemImg());
       map.put("img", itemImg.getFileName());
 
     } catch (RuntimeException e) {
@@ -64,7 +65,6 @@ public class ItemService {
       item.setPrice(itemDto.getPrice());
       item.setQuantity(itemDto.getQuantity());
       item.setState(itemDto.getState());
-      item.setItemImg(itemImg);
       item.setMember(member);
 
       itemRepository.save(item);
@@ -98,6 +98,27 @@ public class ItemService {
     } catch (RuntimeException e) {
       log.error("save error");
       throw new RuntimeException("item save error");
+    }
+  }
+
+  public boolean itemDelete(User user,Long idx) {
+    try {
+      Item item = itemRepository.findByIdx(idx);
+
+      if (Objects.equals(item.getMember().getId(), user.getUsername())) {
+        itemImgRepository.deleteByItem(item);
+        itemRepository.delete(item);
+
+        return true;
+      } else {
+        throw new UsernameNotFoundException("not correct");
+      }
+    } catch (UsernameNotFoundException e) {
+      log.error("itemDelete error : not coincide user id");
+      return false;
+    } catch (RuntimeException e) {
+      log.error("itemDelete error");
+      return false;
     }
   }
 }
