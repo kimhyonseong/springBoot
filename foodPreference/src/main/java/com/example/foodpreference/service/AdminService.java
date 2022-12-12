@@ -6,6 +6,7 @@ import com.example.foodpreference.repository.ItemRepository;
 import com.example.foodpreference.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,13 +21,14 @@ public class AdminService {
   private final MemberRepository memberRepository;
   private final ItemRepository itemRepository;
 
-  public List<Item> findAdminItem(@AuthenticationPrincipal User user) {
+  public List<Item> findAdminItem(@AuthenticationPrincipal User user, Pageable pageable) {
     List<Item> itemList = null;
     Member member = null;
 
     try {
       member = memberRepository.findById(user.getUsername()).orElseThrow(() ->new UsernameNotFoundException("no member"));
-      itemList = itemRepository.findAllByMember(member);
+      itemList = itemRepository.findAllByMember(member,pageable);
+
     } catch (UsernameNotFoundException e) {
       log.error("findAdminItem error : no member");
       return null;

@@ -1,9 +1,7 @@
 package com.example.foodpreference.repository;
 
 import com.example.foodpreference.domain.Item;
-import com.example.foodpreference.domain.ItemImg;
 import com.example.foodpreference.domain.Member;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -48,15 +46,6 @@ class ItemRepositoryTest {
     System.out.println("findByMember-------------------------------------");
     List<Item> newItem4 = itemRepository.findByMember(findMember);
     System.out.println(newItem4);
-  }
-
-  @Test
-  @DisplayName("멤버가 등록한 아이템, 아이템 이미지 찾기")
-  void joinMemberTest() {
-    List<Item> list = itemRepository.joinMember(1L);
-    System.out.println(list.size());
-    System.out.println(list.get(0));
-    System.out.println(list.get(0).getItemImg());
   }
 
   @Test

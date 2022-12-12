@@ -70,6 +70,7 @@ public class ItemService {
       itemRepository.save(item);
     } catch (UsernameNotFoundException e) {
       log.error("itemService - no member id");
+      throw new UsernameNotFoundException("no member id");
     } catch (RuntimeException e) {
       log.error("itemService - save error");
       throw new RuntimeException("item save error");

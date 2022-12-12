@@ -4,7 +4,6 @@ import com.example.foodpreference.domain.Item;
 import com.example.foodpreference.domain.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,12 +20,12 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
   Page<Item> findAllByCode(String code, Pageable pageable);
   Page<Item> findAllByCodeAndStateIs(String code,int state, Pageable pageable);
 
-  //@EntityGraph(attributePaths = {"member","itemImg"},type = EntityGraph.EntityGraphType.FETCH)
-  @Query("select i,img from Item i join i.member m " +
+  // 사용 안함
+  @Query("select i from Item i join i.member m " +
           "left join i.itemImg img where m.idx = :member")
   List<Item> joinMember(@Param("member") Long memberIdx);
 
+  List<Item> findAllByMember(Member member,Pageable pageable);
   List<Item> findAllByMember(Member member);
-
   List<Item> findByMember(Member member);
 }

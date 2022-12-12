@@ -8,7 +8,7 @@ import com.example.foodpreference.service.ItemImgService;
 import com.example.foodpreference.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -103,9 +103,9 @@ public class AdminController {
   }
 
   @GetMapping("/myItemList")
-  public String myItem(@AuthenticationPrincipal User user,Model model) {
+  public String myItem(@AuthenticationPrincipal User user, Pageable pageable, Model model) {
     Map<String, Object> map = new HashMap<>();
-    List<Item> itemList = adminService.findAdminItem(user);
+    List<Item> itemList = adminService.findAdminItem(user,pageable);
 
     map.put("itemList",itemList);
 
