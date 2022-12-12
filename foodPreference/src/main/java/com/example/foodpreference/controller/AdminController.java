@@ -1,10 +1,9 @@
 package com.example.foodpreference.controller;
 
 import com.example.foodpreference.domain.Item;
-import com.example.foodpreference.domain.ItemImg;
 import com.example.foodpreference.dto.ItemDto;
 import com.example.foodpreference.dto.ItemImgDto;
-import com.example.foodpreference.dto.ItemJoinImgInterface;
+import com.example.foodpreference.dto.ItemJoinImg;
 import com.example.foodpreference.service.AdminService;
 import com.example.foodpreference.service.ItemImgService;
 import com.example.foodpreference.service.ItemService;
@@ -121,7 +120,7 @@ public class AdminController {
   @GetMapping("/myItemList")
   public String myItem(@AuthenticationPrincipal User user, Pageable pageable, Model model) {
     Map<String, Object> map = new HashMap<>();
-    List<ItemJoinImgInterface> itemList = adminService.findAdminItem(user,pageable);
+    List<ItemJoinImg> itemList = adminService.findAdminItem(user,pageable);
     //List<ItemImg> itemImgList = adminService.
 
     map.put("itemList",itemList);

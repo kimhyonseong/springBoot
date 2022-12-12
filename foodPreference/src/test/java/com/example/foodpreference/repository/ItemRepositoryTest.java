@@ -2,9 +2,11 @@ package com.example.foodpreference.repository;
 
 import com.example.foodpreference.domain.Item;
 import com.example.foodpreference.domain.Member;
+import com.example.foodpreference.dto.ItemJoinImg;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
@@ -57,11 +59,24 @@ class ItemRepositoryTest {
       member = memberRepository.findById("admin").orElseThrow(() ->new UsernameNotFoundException("no member"));
       itemList = itemRepository.findAllByMember(member);
       System.out.println(itemList);
-      System.out.println(itemList.get(0).getItemImg());
+      System.out.println(itemList.get(0));
     } catch (UsernameNotFoundException e) {
       System.out.println("findAdminItem error : no member");
     } catch (Exception e) {
       System.out.println("findAdminItem Runtime exception");
+    }
+  }
+
+  @Test
+  void joinTest() {
+    try {
+      List<ItemJoinImg> list = itemRepository.itemJoinItemImg(1L);
+      System.out.println(list.get(0));
+      //System.out.println(list.get(0).getFileName());  // null
+      //System.out.println(list.get(0).getItem().getName());  //NullPointerException
+      //System.out.println(list.get(0).getItemImg().getImgPath());  //NullPointerException
+    } catch (RuntimeException e) {
+      e.printStackTrace();
     }
   }
 }

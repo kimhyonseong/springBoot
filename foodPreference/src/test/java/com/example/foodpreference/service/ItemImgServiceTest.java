@@ -35,13 +35,11 @@ class ItemImgServiceTest {
       item.setPrice(1000);
       item.setQuantity(100);
       item.setDescription("꿀 사과");
-      item.setItemImg(resultImg);
       Long insertIdx = itemRepository.save(item).getIdx();
 
       Item findItem = itemRepository.findByIdx(insertIdx);
 
       System.out.println(findItem);
-      System.out.println(findItem.getItemImg());
 
     } catch (RuntimeException e) {
       e.printStackTrace();
