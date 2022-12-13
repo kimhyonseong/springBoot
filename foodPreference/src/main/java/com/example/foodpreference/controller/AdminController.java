@@ -121,7 +121,6 @@ public class AdminController {
   public String myItem(@AuthenticationPrincipal User user, Pageable pageable, Model model) {
     Map<String, Object> map = new HashMap<>();
     List<ItemJoinImg> itemList = adminService.findAdminItem(user,pageable);
-    //List<ItemImg> itemImgList = adminService.
 
     map.put("itemList",itemList);
 

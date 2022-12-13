@@ -1,6 +1,7 @@
 package com.example.foodpreference.repository;
 
 import com.example.foodpreference.domain.Item;
+import com.example.foodpreference.domain.ItemImg;
 import com.example.foodpreference.domain.Member;
 import com.example.foodpreference.dto.ItemJoinImg;
 import org.junit.jupiter.api.Test;
@@ -70,11 +71,13 @@ class ItemRepositoryTest {
   @Test
   void joinTest() {
     try {
-      List<ItemJoinImg> list = itemRepository.itemJoinItemImg(1L);
+      List<ItemJoinImg> list = itemRepository.itemJoinItemImgByMember(1L,Pageable.ofSize(1));
       System.out.println(list.get(0));
-      //System.out.println(list.get(0).getFileName());  // null
-      //System.out.println(list.get(0).getItem().getName());  //NullPointerException
-      //System.out.println(list.get(0).getItemImg().getImgPath());  //NullPointerException
+      System.out.println(list.get(0).getItem().orElse(new Item()).getName());
+      System.out.println(list.get(0).getItemImg().orElse(new ItemImg()).getImgPath());
+
+      System.out.println(list.get(1).getItem().orElse(new Item()).getName());
+      System.out.println(list.get(1).getItemImg().orElse(new ItemImg()).getImgPath());
     } catch (RuntimeException e) {
       e.printStackTrace();
     }

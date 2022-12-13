@@ -27,17 +27,10 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
   List<Item> findAllByMember(Member member);
   List<Item> findByMember(Member member);
 
-//  @Query(value = "SELECT i.* " +
-//          ",img.img_path AS img_path,img.file_name AS file_name FROM item AS i " +
-//          "LEFT JOIN item_img AS img ON i.idx=img.item_idx " +
-//          "WHERE i.member_idx = ?1 " +
-//          "limit ?2,?3"
-//          , nativeQuery = true)
-  @Query(value = "SELECT i " +
-//        ",img.imgPath,img.fileName " +  // 이 부분 없으면 인터페이스에 getItem만 넣어서 잘 나옴
-        ",img " +  // 이 부분 없으면 인터페이스에 getItem만 넣어서 잘 나옴
+  @Query(value = "SELECT i AS item " +
+        ",img AS itemImg " +  // 이 부분 없으면 인터페이스에 getItem만 넣어서 잘 나옴
           "FROM Item AS i " +
         "LEFT JOIN ItemImg AS img ON i.idx = img.item.idx " +
         "WHERE i.member.idx = :memberIdx")
-  List<ItemJoinImg> itemJoinItemImg(@Param("memberIdx") Long memberIdx);
+  List<ItemJoinImg> itemJoinItemImgByMember(@Param("memberIdx") Long memberIdx,Pageable pageable);
 }

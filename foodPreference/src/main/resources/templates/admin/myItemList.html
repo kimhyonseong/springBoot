@@ -12,19 +12,21 @@
     <div class="itemListDiv">
         <ul class="itemList">
             <li th:each="list : ${itemList}">
-                <a th:href="|/admin/item/${list?.idx}|">
+                <a th:href="|/admin/item/${list?.item?.get()?.idx}|">
                     <dl>
                         <dt>
-<!--                            <img src="https://via.placeholder.com/150">-->
-                            <img style="max-width: 250px;" th:src="|${list?.itemImg?.imgPath}${list?.itemImg?.fileName}|">
+                            <img style="max-width: 250px;"
+                                 th:src="|${list?.itemImg.isPresent() == true ?
+                                 (list?.itemImg.get()?.imgPath+list?.itemImg.get()?.fileName) :
+                                 'https://via.placeholder.com/150'}|">
                         </dt>
                         <dd>
                             <div>
-                                <div class="item-name" th:text="${list?.name}"></div>
-                                <div class="item-price" th:text="${list?.price}"></div>
-                                <div class="item-other" th:text="${list?.description}"></div>
-                                <div class="item-state" th:text="${list?.state==10 ? '공개':'비공개'}"></div>
-                                <div class="item-quantity" th:text="${list?.quantity}"></div>
+                                <div class="item-name" th:text="${list?.item?.get()?.name}"></div>
+                                <div class="item-price" th:text="${list?.item?.get()?.price}"></div>
+                                <div class="item-other" th:text="${list?.item?.get()?.description}"></div>
+                                <div class="item-state" th:text="${list?.item?.get()?.state==10 ? '공개':'비공개'}"></div>
+                                <div class="item-quantity" th:text="${list?.item?.get()?.quantity}"></div>
                             </div>
                         </dd>
                     </dl>
