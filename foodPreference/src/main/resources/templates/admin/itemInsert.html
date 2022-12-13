@@ -15,7 +15,7 @@
         }
     </style>
 
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" id="form" enctype="multipart/form-data">
         <input type="hidden" id="idx" th:value="${idx ?: ''}">
         <div>
             <label for="itemName">아이템 이름</label>
@@ -67,12 +67,13 @@
                         flex-direction: column;">
                 <label th:for="itemImg" th:text="${img?.originFileName ?: '이미지'}"></label>
                 <input style="display: none" type="file" th:id="itemImg">
+                <input type="hidden" name="fileIdx" th:id="fileIdx" th:value="${img?.idx}">
                 <input type="hidden" name="originFileName" th:id="originFileName" th:value="${img?.originFileName}">
                 <input type="hidden" name="fileName" th:id="fileName" th:value="${img?.fileName}">
                 <img class="preImage" th:id="itemImgPre" th:src="${img?.src ?: 'https://via.placeholder.com/150'}" alt="img">
             </div>
         </div>
-        <input type="submit" value="저장">
+        <input type="submit" id="submit" value="저장">
         <th:block th:if="${idx != null}">
             <input type="button" id="deleteItem" value="삭제">
         </th:block>
@@ -84,6 +85,7 @@
                 upload($(this)[0]);
             })
             $("#deleteItem").on("click",deleteItem);
+            $("input[type=submit]").on("click", save)
         })
 
         function upload(target) {
@@ -91,6 +93,7 @@
             const formData = new FormData();
             formData.append("image",image.files[0]);
 
+            //if ($("#fileIdx").val() === "") {
             $.ajax({
                 url:"/admin/imgUpload",
                 type:"POST",
@@ -118,19 +121,37 @@
             }
 
             if (confirm("정말 삭제하시겠습니까?")) {
-
                 $.ajax({
                     url: `/admin/item/${idx}`,
                     type: "DELETE",
                     success: function (data) {
-                        console.log(data);
-
                         if (data) {
                             alert("삭제되었습니다.");
                             history.back();
                         } else {
                             alert("처리하지 못하였습니다.");
                         }
+                    }
+                })
+            }
+        }
+
+        function save(e) {
+            e.preventDefault();
+
+            let idx = /*[[${idx}]]*/ "";
+
+            if (idx.length < 1) {
+                //$("#form").submit();
+            } else {
+                const formData = new FormData($("#form")[0]);
+
+                $.ajax({
+                    url : `/admin/item/${idx}`,
+                    type: 'PATCH',
+                    data: JSON.stringify(formData),
+                    success : function (data) {
+                        console.log(data);
                     }
                 })
             }

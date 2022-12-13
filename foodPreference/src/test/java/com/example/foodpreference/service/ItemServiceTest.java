@@ -58,7 +58,7 @@ class ItemServiceTest {
     //User user = new User("admin","1234", null);
 
     try {
-      itemService.itemSave(itemDto, null,null);
+      itemService.itemSave(itemDto, null);
       Item item = itemRepository.findByIdx(1L);
       System.out.println(item.toString());
     } catch (RuntimeException e) {
@@ -66,7 +66,7 @@ class ItemServiceTest {
     }
 
     try {
-      itemService.itemSave(itemDto, 2L,null);
+      itemService.itemSave(itemDto, null);
     } catch(RuntimeException e) {
       System.out.println("저장 오류");
     }

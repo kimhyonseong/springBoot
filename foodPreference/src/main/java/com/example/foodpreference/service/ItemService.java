@@ -52,10 +52,9 @@ public class ItemService {
     return map;
   }
 
-  public void itemSave(ItemDto itemDto,Long itemImgIdx,User user) throws RuntimeException {
+  public void itemSave(ItemDto itemDto,User user) throws RuntimeException {
     try {
       Member member = memberRepository.findById(user.getUsername()).orElseThrow(()->new UsernameNotFoundException("no member"));
-      ItemImg itemImg = itemImgRepository.findByIdx(itemImgIdx).orElse(null);
 
       Item item = new Item();
 

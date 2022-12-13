@@ -51,6 +51,10 @@ public class ItemImgService {
     Long returnIdx = 0L;
     ItemImg itemImg;
 
+    if (Objects.equals(imgDto.getFileName(), "")) {
+      return returnIdx;
+    }
+
     try {
       String path = moveTmpImgToReal(imgDto.getFileName());
 

@@ -61,8 +61,8 @@ public class AdminController {
           Model model) {
     Map<String, String> result = new HashMap<>();
     try {
-      Long imgIdx = itemImgService.imgSave(itemImgDto);
-      itemService.itemSave(itemDto,imgIdx,user);
+      itemImgService.imgSave(itemImgDto);
+      itemService.itemSave(itemDto,user);
 
       result.put("url","/admin/myItemList");
       result.put("message","정상적으로 처리되었습니다.");
@@ -79,13 +79,14 @@ public class AdminController {
   }
 
   @Transactional
-  @PutMapping({"/item/{idx}"})
+  @PatchMapping({"/item/{idx}"})
   public String itemModify(
           @PathVariable Long idx,
           @Validated ItemDto itemDto,
           ItemImgDto itemImgDto,
           Model model) {
     try {
+      System.out.println(itemDto.getCode());
       Long saveIdx = itemService.itemModify(itemDto, idx);
       itemImgService.imgModify(itemImgDto,saveIdx);
 
