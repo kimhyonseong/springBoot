@@ -61,8 +61,8 @@ public class AdminController {
           Model model) {
     Map<String, String> result = new HashMap<>();
     try {
-      itemImgService.imgSave(itemImgDto);
-      itemService.itemSave(itemDto,user);
+      Long itemIdx = itemService.itemSave(itemDto,user);
+      itemImgService.imgSave(itemImgDto,itemIdx,null);
 
       result.put("url","/admin/myItemList");
       result.put("message","정상적으로 처리되었습니다.");
@@ -84,11 +84,16 @@ public class AdminController {
           @PathVariable Long idx,
           @Validated ItemDto itemDto,
           ItemImgDto itemImgDto,
+          Long fileIdx,
           Model model) {
     try {
-      System.out.println(itemDto.getCode());
-      Long saveIdx = itemService.itemModify(itemDto, idx);
-      itemImgService.imgModify(itemImgDto,saveIdx);
+      System.out.println(itemDto);
+      System.out.println(itemImgDto);
+      System.out.println("idx : "+idx);
+      System.out.println("fileIdx : "+fileIdx);
+
+      Long itemIdx = itemService.itemModify(itemDto, idx);
+      itemImgService.imgSave(itemImgDto,itemIdx, fileIdx);
 
     } catch (RuntimeException e) {
       log.error("insert error. page : admin/item/"+idx);

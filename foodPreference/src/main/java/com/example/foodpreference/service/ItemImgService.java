@@ -35,6 +35,7 @@ public class ItemImgService {
     ItemImg itemImg = itemImgRepository.findByItem(item).orElse(null);
 
     if (itemImg != null) {
+      map.put("idx",itemImg.getIdx());
       map.put("src",itemImg.getImgPath()+itemImg.getFileName());
       map.put("fileName",itemImg.getFileName());
       map.put("size",itemImg.getSize());
@@ -47,9 +48,8 @@ public class ItemImgService {
   }
 
   @Transactional
-  public Long imgSave(ItemImgDto imgDto) throws RuntimeException {
+  public Long imgSave(ItemImgDto imgDto,Long itemIdx,Long fileIdx) throws RuntimeException {
     Long returnIdx = 0L;
-    ItemImg itemImg;
 
     if (Objects.equals(imgDto.getFileName(), "")) {
       return returnIdx;
@@ -58,36 +58,16 @@ public class ItemImgService {
     try {
       String path = moveTmpImgToReal(imgDto.getFileName());
 
-      itemImg = new ItemImg();
+      Item item = itemRepository.findByIdx(itemIdx);
+      ItemImg itemImg = itemImgRepository.findByIdx(fileIdx).orElse(new ItemImg());
+
+      itemImg.setItem(item);
       itemImg.setImgPath(path);
       itemImg.setFileName(imgDto.getFileName());
       itemImg.setOriginFileName(imgDto.getOriginFileName());
 
       returnIdx = itemImgRepository.save(itemImg).getIdx();
       return returnIdx;
-    } catch (RuntimeException e) {
-      log.error("itemImg save error");
-      throw new RuntimeException("itemImg save error");
-    }
-  }
-
-  public void imgModify(ItemImgDto imgDto, Long idx) throws RuntimeException {
-    Item item;
-
-    try {
-      String path = moveTmpImgToReal(imgDto.getFileName());
-      item = itemRepository.findByIdx(idx);
-      ItemImg itemImg = itemImgRepository.findByItem(item).orElseThrow(NullPointerException::new);
-
-      itemImg.setImgPath(path);
-      itemImg.setFileName(imgDto.getFileName());
-      itemImg.setOriginFileName(imgDto.getOriginFileName());
-      itemImgRepository.save(itemImg);
-
-
-    } catch (NullPointerException e) {
-      log.error("itemImg no img");
-      throw new RuntimeException();
     } catch (RuntimeException e) {
       log.error("itemImg save error");
       throw new RuntimeException("itemImg save error");

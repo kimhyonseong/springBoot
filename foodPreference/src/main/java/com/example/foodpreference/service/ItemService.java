@@ -40,10 +40,6 @@ public class ItemService {
       map.put("price",item.getPrice());
       map.put("quantity",item.getQuantity());
       map.put("state",item.getState());
-
-      ItemImg itemImg = itemImgRepository.findByItem(item).orElse(new ItemImg());
-      map.put("img", itemImg.getFileName());
-
     } catch (RuntimeException e) {
       log.error("존재하지 않는 idx - "+idx);
       throw new RuntimeException("not exist item idx");
@@ -52,7 +48,7 @@ public class ItemService {
     return map;
   }
 
-  public void itemSave(ItemDto itemDto,User user) throws RuntimeException {
+  public Long itemSave(ItemDto itemDto,User user) throws RuntimeException {
     try {
       Member member = memberRepository.findById(user.getUsername()).orElseThrow(()->new UsernameNotFoundException("no member"));
 
@@ -66,7 +62,7 @@ public class ItemService {
       item.setState(itemDto.getState());
       item.setMember(member);
 
-      itemRepository.save(item);
+      return itemRepository.save(item).getIdx();
     } catch (UsernameNotFoundException e) {
       log.error("itemService - no member id");
       throw new UsernameNotFoundException("no member id");

@@ -24,7 +24,6 @@ public class ItemImgController {
   public ResponseEntity<?> imgUpload(
           @RequestParam(value = "image", required = false) MultipartFile file
   ) {
-    FileUtil fileUtil = new FileUtil();
     Map<String, Object> fileInfo = new HashMap<>();
 
     try {

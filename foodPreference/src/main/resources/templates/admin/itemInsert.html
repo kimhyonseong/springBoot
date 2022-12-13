@@ -144,7 +144,9 @@
             if (idx.length < 1) {
                 //$("#form").submit();
             } else {
-                const formData = new FormData($("#form")[0]);
+                const formData = new FormData($("#form")[0]);  // 이쪽에서 아무것도 안들어감
+                console.log(formData);
+                console.log(JSON.stringify(formData));
 
                 $.ajax({
                     url : `/admin/item/${idx}`,
