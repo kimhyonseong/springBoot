@@ -25,13 +25,13 @@
         <div>
             <p>아이템 분류</p>
             <p th:text="${valid_code}"></p>
-            <input type="radio" id="radio1" name="code" th:value="A001">
+            <input type="radio" id="radio1" name="code" th:checked="${code == 'A001'}" th:value="A001">
             <label for="radio1">한식</label>
-            <input type="radio" id="radio2" name="code" th:value="A002">
+            <input type="radio" id="radio2" name="code" th:checked="${code == 'A002'}" th:value="A002">
             <label for="radio2">양식</label>
-            <input type="radio" id="radio3" name="code" th:value="A003">
+            <input type="radio" id="radio3" name="code" th:checked="${code == 'A003'}" th:value="A003">
             <label for="radio3">일식</label>
-            <input type="radio" id="radio4" name="code" th:value="A004">
+            <input type="radio" id="radio4" name="code" th:checked="${code == 'A004'}" th:value="A004">
             <label for="radio4">중식</label>
         </div>
         <div>
@@ -144,14 +144,35 @@
             if (idx.length < 1) {
                 //$("#form").submit();
             } else {
-                const formData = new FormData($("#form")[0]);  // 이쪽에서 아무것도 안들어감
-                console.log(formData);
+                const form = $("#form")[0];
+                const formData = new FormData();  // 이쪽에서 아무것도 안들어감
+                // const formData = new FormData(form);
+
+                formData.append("name",form.name.value);
+                formData.append("description",form.description.value);
+                formData.append("code",form.code.value);
+                formData.append("state",form.state.value);
+                formData.append("price",form.price.value);
+                formData.append("quantity",form.quantity.value);
+                formData.append("fileName",form.fileName.value);
+                formData.append("originFileName",form.originFileName.value);
+                formData.append("fileIdx",form.fileIdx.value);
+
+                const newData = $("#form").serializeArray();
+
+
                 console.log(JSON.stringify(formData));
+                console.log(JSON.stringify(formData));
+                console.log(JSON.stringify(newData));
+                console.log((newData));
 
                 $.ajax({
                     url : `/admin/item/${idx}`,
                     type: 'PATCH',
-                    data: JSON.stringify(formData),
+                    //contentType: 'application/json-patch+json; charset=utf-8',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(newData),
+                    //dataType : 'json',
                     success : function (data) {
                         console.log(data);
                     }

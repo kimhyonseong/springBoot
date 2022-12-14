@@ -10,6 +10,7 @@ import com.example.foodpreference.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -79,16 +80,18 @@ public class AdminController {
   }
 
   @Transactional
-  @PatchMapping({"/item/{idx}"})
+  @PatchMapping(value = {"/item/{idx}"}, consumes = "application/json")
+//  @PatchMapping({"/item/{idx}"})
   public String itemModify(
           @PathVariable Long idx,
-          @Validated ItemDto itemDto,
-          ItemImgDto itemImgDto,
-          Long fileIdx,
+//          String searchDate,
+          @RequestBody @Validated ItemDto itemDto,
+          @RequestBody ItemImgDto itemImgDto,
+          @RequestParam(value = "fileIdx", required = false) Long fileIdx,
           Model model) {
     try {
-      System.out.println(itemDto);
-      System.out.println(itemImgDto);
+      System.out.println(itemDto.getName());
+      System.out.println(itemImgDto.getFileName());
       System.out.println("idx : "+idx);
       System.out.println("fileIdx : "+fileIdx);
 
