@@ -15,7 +15,7 @@
         }
     </style>
 
-    <form method="post" id="form" action="/admin/item">
+    <form method="post" id="form" action="/admin/item" >
         <input type="hidden" id="idx" th:value="${idx ?: ''}">
         <div>
             <label for="itemName">아이템 이름</label>
@@ -160,8 +160,19 @@
                 formData.append("originFileName",form.originFileName.value);
                 formData.append("fileIdx",form.fileIdx.value);
 
+                let obj = null;
                 const newData = $("#form").serializeArray();
-
+                if ( newData ) {
+                    obj = {};
+                    jQuery.each(newData, function() {
+                        // obj[this.name.replace(/[A-Z]/g, function(upp, i, st) {
+                        //     return (i==0 ? '' : '_') + upp.toLowerCase()
+                        // })] = this.value;
+                        obj[this.name] = this.value;
+                    });
+                }
+                console.log(obj);
+                console.log(JSON.stringify(obj)); // JSON 문자열로 만듬
                 console.log(JSON.stringify(formData));
                 console.log(JSON.stringify(newData));
                 console.log(newData);  // 문자열로 전송 name=asd&num=12...
@@ -174,7 +185,9 @@
                     // dataType : 'json',
                     processData: false,
                     //contentType: false,
-                    data: JSON.stringify(formData),
+                    //data: JSON.stringify(formData),
+                    //data: obj,
+                    data: JSON.stringify(obj),
                     success : function (data) {
                         console.log(data);
                     }

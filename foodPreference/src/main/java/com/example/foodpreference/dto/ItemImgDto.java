@@ -1,5 +1,6 @@
 package com.example.foodpreference.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.util.List;
@@ -12,5 +13,4 @@ import java.util.List;
 public class ItemImgDto {
     private String fileName;
     private String originFileName;
-    private List<ItemImgDto> itemImgDtoList;
 }
