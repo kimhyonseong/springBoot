@@ -62,6 +62,7 @@ public class AdminController {
           Model model) {
     Map<String, String> result = new HashMap<>();
     try {
+      System.out.println(itemDto.getName());  // null..?
       Long itemIdx = itemService.itemSave(itemDto,user);
       itemImgService.imgSave(itemImgDto,itemIdx,null);
 
@@ -80,18 +81,19 @@ public class AdminController {
   }
 
   @Transactional
-  @PatchMapping(value = {"/item/{idx}"}, consumes = "application/json")
-//  @PatchMapping({"/item/{idx}"})
+//  @PatchMapping(value = {"/item/{idx}"}, consumes = "application/json-patch+json")
+  @PatchMapping({"/item/{idx}"})
   public String itemModify(
           @PathVariable Long idx,
-//          String searchDate,
-          @RequestBody @Validated ItemDto itemDto,
-          @RequestBody ItemImgDto itemImgDto,
+          @Validated ItemDto itemDto,
+          ItemImgDto itemImgDto,
           @RequestParam(value = "fileIdx", required = false) Long fileIdx,
+          Map<String, String> requestMap,
           Model model) {
     try {
-      System.out.println(itemDto.getName());
-      System.out.println(itemImgDto.getFileName());
+      System.out.println(requestMap);
+      System.out.println(itemDto);
+      System.out.println(itemImgDto);
       System.out.println("idx : "+idx);
       System.out.println("fileIdx : "+fileIdx);
 

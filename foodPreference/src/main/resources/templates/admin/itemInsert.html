@@ -15,7 +15,7 @@
         }
     </style>
 
-    <form method="post" id="form" enctype="multipart/form-data">
+    <form method="post" id="form" action="/admin/item">
         <input type="hidden" id="idx" th:value="${idx ?: ''}">
         <div>
             <label for="itemName">아이템 이름</label>
@@ -73,7 +73,7 @@
                 <img class="preImage" th:id="itemImgPre" th:src="${img?.src ?: 'https://via.placeholder.com/150'}" alt="img">
             </div>
         </div>
-        <input type="submit" id="submit" value="저장">
+        <input type="button" id="save" value="저장">
         <th:block th:if="${idx != null}">
             <input type="button" id="deleteItem" value="삭제">
         </th:block>
@@ -85,13 +85,14 @@
                 upload($(this)[0]);
             })
             $("#deleteItem").on("click",deleteItem);
-            $("input[type=submit]").on("click", save)
+            $("#save").on("click", save)
         })
 
         function upload(target) {
             const image = target;
             const formData = new FormData();
             formData.append("image",image.files[0]);
+            console.log(formData);
 
             //if ($("#fileIdx").val() === "") {
             $.ajax({
@@ -139,14 +140,15 @@
         function save(e) {
             e.preventDefault();
 
-            let idx = /*[[${idx}]]*/ "";
+            let idx = $("#idx").val();
 
             if (idx.length < 1) {
-                //$("#form").submit();
+                $("#form").submit();
             } else {
                 const form = $("#form")[0];
-                const formData = new FormData();  // 이쪽에서 아무것도 안들어감
-                // const formData = new FormData(form);
+                const formData = new FormData(form);
+                console.log(formData.get("name"));
+                // const formData = new FormData();  // 이쪽에서 아무것도 안들어감
 
                 formData.append("name",form.name.value);
                 formData.append("description",form.description.value);
@@ -160,19 +162,19 @@
 
                 const newData = $("#form").serializeArray();
 
-
-                console.log(JSON.stringify(formData));
                 console.log(JSON.stringify(formData));
                 console.log(JSON.stringify(newData));
-                console.log((newData));
+                console.log(newData);  // 문자열로 전송 name=asd&num=12...
 
                 $.ajax({
                     url : `/admin/item/${idx}`,
                     type: 'PATCH',
                     //contentType: 'application/json-patch+json; charset=utf-8',
                     contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify(newData),
-                    //dataType : 'json',
+                    // dataType : 'json',
+                    processData: false,
+                    //contentType: false,
+                    data: JSON.stringify(formData),
                     success : function (data) {
                         console.log(data);
                     }

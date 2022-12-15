@@ -48,29 +48,24 @@ public class ItemImgService {
   }
 
   @Transactional
-  public Long imgSave(ItemImgDto imgDto,Long itemIdx,Long fileIdx) throws RuntimeException {
-    Long returnIdx = 0L;
+  public void imgSave(ItemImgDto imgDto,Long itemIdx,Long fileIdx) throws RuntimeException {
+    if (!(Objects.equals(imgDto.getFileName(), "") || imgDto.getFileName() == null)) {
+      try {
+        String path = moveTmpImgToReal(imgDto.getFileName());
 
-    if (Objects.equals(imgDto.getFileName(), "")) {
-      return returnIdx;
-    }
+        Item item = itemRepository.findByIdx(itemIdx);
+        ItemImg itemImg = itemImgRepository.findByIdx(fileIdx).orElse(new ItemImg());
 
-    try {
-      String path = moveTmpImgToReal(imgDto.getFileName());
+        itemImg.setItem(item);
+        itemImg.setImgPath(path);
+        itemImg.setFileName(imgDto.getFileName());
+        itemImg.setOriginFileName(imgDto.getOriginFileName());
 
-      Item item = itemRepository.findByIdx(itemIdx);
-      ItemImg itemImg = itemImgRepository.findByIdx(fileIdx).orElse(new ItemImg());
-
-      itemImg.setItem(item);
-      itemImg.setImgPath(path);
-      itemImg.setFileName(imgDto.getFileName());
-      itemImg.setOriginFileName(imgDto.getOriginFileName());
-
-      returnIdx = itemImgRepository.save(itemImg).getIdx();
-      return returnIdx;
-    } catch (RuntimeException e) {
-      log.error("itemImg save error");
-      throw new RuntimeException("itemImg save error");
+        itemImgRepository.save(itemImg);
+      } catch (RuntimeException e) {
+        log.error("itemImg save error");
+        throw new RuntimeException("itemImg save error");
+      }
     }
   }
 
