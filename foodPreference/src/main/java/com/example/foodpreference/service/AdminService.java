@@ -38,4 +38,14 @@ public class AdminService {
     }
     return itemList;
   }
+
+  public int countAdminItem(@AuthenticationPrincipal User user) {
+    try {
+      Member member = memberRepository.findById(user.getUsername()).orElseThrow(() ->new UsernameNotFoundException("no member"));
+      return itemRepository.countByItemJoinItemImgByMember(member.getIdx());
+    } catch (RuntimeException e) {
+      log.error("countAdminItem");
+      return 0;
+    }
+  }
 }

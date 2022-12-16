@@ -1,0 +1,16 @@
+.page-box {
+    display: flex;
+    justify-content: center;
+}
+.page-box ul {
+    display: flex;
+    justify-content: center;
+}
+.page-box li {
+    margin: 5px;
+    list-style: none;
+}
+
+.page-box li .on {
+    color: red;
+}

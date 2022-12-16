@@ -9,6 +9,7 @@ import com.example.foodpreference.dto.ItemModifyDto;
 import com.example.foodpreference.service.AdminService;
 import com.example.foodpreference.service.ItemImgService;
 import com.example.foodpreference.service.ItemService;
+import com.example.foodpreference.utils.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -122,8 +123,11 @@ public class AdminController {
   public String myItem(@AuthenticationPrincipal User user, Pageable pageable, Model model) {
     Map<String, Object> map = new HashMap<>();
     List<ItemJoinImg> itemList = adminService.findAdminItem(user,pageable);
+    Page page = new Page(adminService.countAdminItem(user), pageable.getPageNumber()+1);
+    page.setLink("/admin/myItem");
 
     map.put("itemList",itemList);
+    map.put("paging",page);
 
     model.addAllAttributes(map);
 

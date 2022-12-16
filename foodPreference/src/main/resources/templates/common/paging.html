@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Paging</title>
+</head>
+<body>
+<th:block th:fragment="page(pageObject)" xmlns:th="http://www.thymeleaf.org">
+    <link rel="stylesheet" th:href="@{/css/paging.css}">
+    <div class="page-box">
+        <th:block th:if="${pageObject?.prev}">
+            <a th:href="|${pageObject?.link}?page=${pageObject?.start - pageObject?.blockSize}|">이전</a>
+        </th:block>
+        <ul>
+            <th:block th:each="num : ${#numbers.sequence(pageObject?.start,pageObject?.end)}">
+                <li><a th:class="${pageObject.currentPage == num ? 'on':''}" th:href="|${pageObject?.link}?page=${num - 1}|" th:text="${num}">번호</a></li>
+            </th:block>
+        </ul>
+        <th:block th:if="${pageObject?.next}">
+            <a th:href="|${pageObject?.link}?page=${pageObject?.end + 1}|">다음</a>
+        </th:block>
+    </div>
+</th:block>
+</body>
+</html>
