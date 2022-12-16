@@ -73,6 +73,7 @@
                 <img class="preImage" th:id="itemImgPre" th:src="${img?.src ?: 'https://via.placeholder.com/150'}" alt="img">
             </div>
         </div>
+        <input type="button" id="list" value="목록">
         <input type="button" id="save" value="저장">
         <th:block th:if="${idx != null}">
             <input type="button" id="deleteItem" value="삭제">
@@ -86,6 +87,7 @@
             })
             $("#deleteItem").on("click",deleteItem);
             $("#save").on("click", save)
+            $("#list").on("click", () => location.href=`/admin/myItem`)
         })
 
         function upload(target) {
@@ -128,7 +130,7 @@
                     success: function (data) {
                         if (data) {
                             alert("삭제되었습니다.");
-                            history.back();
+                            location.href = `/admin/myItem`;
                         } else {
                             alert("처리하지 못하였습니다.");
                         }
@@ -140,56 +142,38 @@
         function save(e) {
             e.preventDefault();
 
+            const form = document.querySelector("form");
             let idx = $("#idx").val();
 
             if (idx.length < 1) {
-                $("#form").submit();
+                form.submit();
             } else {
-                const form = $("#form")[0];
-                const formData = new FormData(form);
-                console.log(formData.get("name"));
-                // const formData = new FormData();  // 이쪽에서 아무것도 안들어감
-
-                formData.append("name",form.name.value);
-                formData.append("description",form.description.value);
-                formData.append("code",form.code.value);
-                formData.append("state",form.state.value);
-                formData.append("price",form.price.value);
-                formData.append("quantity",form.quantity.value);
-                formData.append("fileName",form.fileName.value);
-                formData.append("originFileName",form.originFileName.value);
-                formData.append("fileIdx",form.fileIdx.value);
-
-                let obj = null;
+                let obj = {};
                 const newData = $("#form").serializeArray();
-                if ( newData ) {
+
+                // 데이터 객체화
+                if (newData) {
                     obj = {};
                     jQuery.each(newData, function() {
-                        // obj[this.name.replace(/[A-Z]/g, function(upp, i, st) {
-                        //     return (i==0 ? '' : '_') + upp.toLowerCase()
-                        // })] = this.value;
                         obj[this.name] = this.value;
                     });
                 }
-                console.log(obj);
-                console.log(JSON.stringify(obj)); // JSON 문자열로 만듬
-                console.log(JSON.stringify(formData));
-                console.log(JSON.stringify(newData));
-                console.log(newData);  // 문자열로 전송 name=asd&num=12...
 
                 $.ajax({
                     url : `/admin/item/${idx}`,
                     type: 'PATCH',
-                    //contentType: 'application/json-patch+json; charset=utf-8',
                     contentType: 'application/json; charset=utf-8',
-                    // dataType : 'json',
                     processData: false,
-                    //contentType: false,
-                    //data: JSON.stringify(formData),
-                    //data: obj,
                     data: JSON.stringify(obj),
                     success : function (data) {
-                        console.log(data);
+                        if(data) {
+                            alert("수정되었습니다.");
+                        } else {
+                            alert("처리도중 에러가 발생하였습니다.");
+                        }
+                    },
+                    error : function (){
+                        alert("에러가 발생하였습니다.");
                     }
                 })
             }

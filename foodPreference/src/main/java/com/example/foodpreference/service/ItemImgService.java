@@ -51,17 +51,22 @@ public class ItemImgService {
   public void imgSave(ItemImgDto imgDto,Long itemIdx,Long fileIdx) throws RuntimeException {
     if (!(Objects.equals(imgDto.getFileName(), "") || imgDto.getFileName() == null)) {
       try {
-        String path = moveTmpImgToReal(imgDto.getFileName());
+        String path = newImgPath();
 
         Item item = itemRepository.findByIdx(itemIdx);
         ItemImg itemImg = itemImgRepository.findByIdx(fileIdx).orElse(new ItemImg());
 
-        itemImg.setItem(item);
-        itemImg.setImgPath(path);
-        itemImg.setFileName(imgDto.getFileName());
-        itemImg.setOriginFileName(imgDto.getOriginFileName());
+        // 이전 파일이름과 현재 파일 이름이 다를때 저장 및 수정
+        if (!imgDto.getFileName().equals(itemImg.getFileName())) {
+          itemImg.setItem(item);
+          itemImg.setImgPath(path);
+          itemImg.setFileName(imgDto.getFileName());
+          itemImg.setOriginFileName(imgDto.getOriginFileName());
 
-        itemImgRepository.save(itemImg);
+          moveTmpImgToReal(imgDto.getFileName());
+
+          itemImgRepository.save(itemImg);
+        }
       } catch (RuntimeException e) {
         log.error("itemImg save error");
         throw new RuntimeException("itemImg save error");
@@ -103,17 +108,15 @@ public class ItemImgService {
     return fileInfo;
   }
 
-  public String moveTmpImgToReal(String fileName) throws RuntimeException {
-    LocalDate now = LocalDate.now();
-    DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd");
-    String dateDir = now.format(format)+"/";
+  public void moveTmpImgToReal(String fileName) throws RuntimeException {
+    String dateDir = newImgPath();
 
     try {
-      Path path = Paths.get("./images/real/"+dateDir).toAbsolutePath();
+      Path path = Paths.get("."+dateDir).toAbsolutePath();
       Files.createDirectories(path);
 
       File tmpFile = new File(Paths.get("./images/tmp/").toAbsolutePath().toString(), fileName);
-      File moveFile = new File(Paths.get("./images/real/"+dateDir).toAbsolutePath().toString(), fileName);
+      File moveFile = new File(Paths.get("."+dateDir).toAbsolutePath().toString(), fileName);
 
       if (tmpFile.exists()) {
         if (tmpFile.renameTo(moveFile)) {
@@ -127,8 +130,6 @@ public class ItemImgService {
         log.error("no file - " + fileName);
         throw new RuntimeException("no file");
       }
-
-      return "/images/real/"+dateDir;
     } catch (IOException e) {
       log.error("fail create Directory");
       throw new RuntimeException();
@@ -136,5 +137,13 @@ public class ItemImgService {
       log.error("fail move img to real");
       throw new RuntimeException();
     }
+  }
+
+  private String newImgPath() {
+    LocalDate now = LocalDate.now();
+    DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd");
+    String dateDir = now.format(format)+"/";
+
+    return "/images/real/"+dateDir;
   }
 }

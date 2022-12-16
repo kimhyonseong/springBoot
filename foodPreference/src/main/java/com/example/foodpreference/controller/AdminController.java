@@ -1,6 +1,7 @@
 package com.example.foodpreference.controller;
 
 import com.example.foodpreference.domain.Item;
+import com.example.foodpreference.domain.ItemImg;
 import com.example.foodpreference.dto.ItemDto;
 import com.example.foodpreference.dto.ItemImgDto;
 import com.example.foodpreference.dto.ItemJoinImg;
@@ -67,7 +68,7 @@ public class AdminController {
       Long itemIdx = itemService.itemSave(itemDto,user);
       itemImgService.imgSave(itemImgDto,itemIdx,null);
 
-      result.put("url","/admin/myItemList");
+      result.put("url","/admin/myItem");
       result.put("message","정상적으로 처리되었습니다.");
 
       model.addAllAttributes(result);
@@ -82,43 +83,23 @@ public class AdminController {
   }
 
   @Transactional
-//  @PatchMapping(value = {"/item/{idx}"}, consumes = "application/json-patch+json")
-  @PatchMapping({"/item/{idx}"})
   @ResponseBody
+  @PatchMapping({"/item/{idx}"})
   public Boolean itemModify(
           @PathVariable Long idx,
-          /*
-          @RequestBody(required = false) ItemDto itemDto,  // 이거만 정상적으로 들어옴
-          @RequestBody(required = false) ItemImgDto itemImgDto,
-          @RequestParam(required = false) Long fileIdx,
-          @RequestParam(required = false) Long file_idx,
-          */
           @RequestBody(required = false) ItemModifyDto itemModifyDto,
           Model model) {
     try {
-      System.out.println(itemModifyDto);
-      /*
-      System.out.println(requestMap.get("fileName"));
-      System.out.println(itemDto);
-      System.out.println(itemImgDto);
-      System.out.println("idx : "+idx);
-      System.out.println("fileIdx : "+fileIdx);
-      System.out.println("file_idx : "+file_idx);
+      ItemImgDto itemImgDto = new ItemImgDto(itemModifyDto.getFileName(),itemModifyDto.getFileName());
+      Long fileIdx = itemModifyDto.getFileIdx();
 
-      Long itemIdx = itemService.itemModify(itemDto, idx);
-      itemImgService.imgSave(itemImgDto,itemIdx, fileIdx);
-*/
+      Long itemIdx = itemService.itemModify(itemModifyDto, idx);
+      itemImgService.imgSave(itemImgDto, itemIdx, fileIdx);
     } catch (RuntimeException e) {
       log.error("insert error. page : admin/item/"+idx);
       model.addAttribute("errMsg","저장 오류");
-//      return "item/itemInsert";
       return false;
     }
-
-//    model.addAttribute("message","정상적으로 처리되었습니다.");
-//    model.addAttribute("url","/admin/item/"+idx);
-
-//    return "common/redirect";
 
     return true;
   }
@@ -130,16 +111,14 @@ public class AdminController {
       if (!itemService.itemDelete(user,idx)) {
         throw new RuntimeException("error");
       }
+      return true;
     } catch (RuntimeException e) {
       log.error("fail delete item");
-
       return false;
     }
-
-    return true;
   }
 
-  @GetMapping("/myItemList")
+  @GetMapping("/myItem")
   public String myItem(@AuthenticationPrincipal User user, Pageable pageable, Model model) {
     Map<String, Object> map = new HashMap<>();
     List<ItemJoinImg> itemList = adminService.findAdminItem(user,pageable);
@@ -148,6 +127,6 @@ public class AdminController {
 
     model.addAllAttributes(map);
 
-    return "admin/myItemList";
+    return "admin/myItem";
   }
 }
