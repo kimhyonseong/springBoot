@@ -71,7 +71,7 @@ class ItemRepositoryTest {
   @Test
   void joinTest() {
     try {
-      List<ItemJoinImg> list = itemRepository.itemJoinItemImgByMember(1L,Pageable.ofSize(1));
+      List<ItemJoinImg> list = itemRepository.itemJoinImgByMember(1L,Pageable.ofSize(1));
       System.out.println(list.get(0));
       System.out.println(list.get(0).getItem().orElse(new Item()).getName());
       System.out.println(list.get(0).getItemImg().orElse(new ItemImg()).getImgPath());

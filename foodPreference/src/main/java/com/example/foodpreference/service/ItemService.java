@@ -4,17 +4,20 @@ import com.example.foodpreference.domain.Item;
 import com.example.foodpreference.domain.ItemImg;
 import com.example.foodpreference.domain.Member;
 import com.example.foodpreference.dto.ItemDto;
+import com.example.foodpreference.dto.ItemJoinImg;
 import com.example.foodpreference.repository.ItemImgRepository;
 import com.example.foodpreference.repository.ItemRepository;
 import com.example.foodpreference.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -115,5 +118,16 @@ public class ItemService {
       log.error("itemDelete error");
       return false;
     }
+  }
+
+  public List<ItemJoinImg> showItemWithImg(Pageable pageable) {
+    List<ItemJoinImg> list = null;
+
+    try {
+      list = itemRepository.itemJoinImg(pageable);
+    } catch (RuntimeException e) {
+      log.error("itemJoinImgList error");
+    }
+    return list;
   }
 }

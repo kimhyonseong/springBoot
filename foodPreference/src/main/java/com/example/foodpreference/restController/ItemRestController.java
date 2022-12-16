@@ -1,7 +1,9 @@
 package com.example.foodpreference.restController;
 
 import com.example.foodpreference.domain.Item;
+import com.example.foodpreference.dto.ItemJoinImg;
 import com.example.foodpreference.repository.ItemRepository;
+import com.example.foodpreference.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemRestController {
   private final ItemRepository itemRepository;
+  private final ItemService itemService;
 
   @GetMapping("/itemList/{code}")
   public ResponseEntity<?> itemList(
@@ -32,14 +35,10 @@ public class ItemRestController {
 
   @GetMapping("/itemList/all")
   public ResponseEntity<?> itemAllList(
-          @PageableDefault(size = 20,sort = "regDate", direction = Sort.Direction.DESC) Pageable pageable
+//          @PageableDefault(size = 20,sort = "reg_dt", direction = Sort.Direction.DESC)
+                  Pageable pageable
   ) {
-    List<Item> itemList = null;
-    try {
-      itemList = itemRepository.findAllByStateIs(pageable,10).getContent();
-    } catch (RuntimeException e) {
-      return ResponseEntity.badRequest().build();
-    }
+    List<ItemJoinImg> itemList = itemService.showItemWithImg(pageable);
     return ResponseEntity.ok(itemList);
   }
 }

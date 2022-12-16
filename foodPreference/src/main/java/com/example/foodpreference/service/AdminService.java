@@ -27,7 +27,7 @@ public class AdminService {
 
     try {
       member = memberRepository.findById(user.getUsername()).orElseThrow(() ->new UsernameNotFoundException("no member"));
-      itemList = itemRepository.itemJoinItemImgByMember(member.getIdx(),pageable);
+      itemList = itemRepository.itemJoinImgByMember(member.getIdx(),pageable);
     } catch (UsernameNotFoundException e) {
       log.error("findAdminItem error : no member");
       return null;
@@ -42,7 +42,7 @@ public class AdminService {
   public int countAdminItem(@AuthenticationPrincipal User user) {
     try {
       Member member = memberRepository.findById(user.getUsername()).orElseThrow(() ->new UsernameNotFoundException("no member"));
-      return itemRepository.countByItemJoinItemImgByMember(member.getIdx());
+      return itemRepository.countByItemJoinImgByMember(member.getIdx());
     } catch (RuntimeException e) {
       log.error("countAdminItem");
       return 0;
