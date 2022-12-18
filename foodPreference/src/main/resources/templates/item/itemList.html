@@ -7,12 +7,14 @@
     <meta charset="UTF-8">
     <title>ItemList</title>
     <link rel="stylesheet" th:href="@{/css/itemList.css}">
+    <link rel="stylesheet" th:href="@{/css/paging.css}">
     <script th:src="@{/js/itemList.js}"></script>
 </head>
 <body>
 <th:block layout:fragment="content">
     <div class="itemListDiv">
         <ul class="itemList"></ul>
+        <div class="page-box"></div>
     </div>
 </th:block>
 </body>

@@ -8,6 +8,7 @@ import com.example.foodpreference.dto.ItemJoinImg;
 import com.example.foodpreference.repository.ItemImgRepository;
 import com.example.foodpreference.repository.ItemRepository;
 import com.example.foodpreference.repository.MemberRepository;
+import com.example.foodpreference.utils.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -120,14 +121,29 @@ public class ItemService {
     }
   }
 
-  public List<ItemJoinImg> showItemWithImg(Pageable pageable) {
-    List<ItemJoinImg> list = null;
+  public Map<String,Object> showItemWithImg(Pageable pageable) {
+    Map<String, Object> returnMap = new HashMap<>();
+    List<ItemJoinImg> itemList = null;
+    Map<String, Object> pageMap = new HashMap<>();
 
     try {
-      list = itemRepository.itemJoinImg(pageable);
+      itemList = itemRepository.itemJoinImg(pageable);
+      Page page = new Page(itemRepository.countItemJoinImg(),pageable.getPageNumber());
+
+      pageMap.put("start",page.getStart());
+      pageMap.put("end",page.getEnd());
+      pageMap.put("prev",page.isPrev());
+      pageMap.put("next",page.isNext());
+      pageMap.put("blockSize",page.getBlockSize());
+      pageMap.put("link","/itemList");
+      pageMap.put("currentPage",pageable.getPageNumber());
+      pageMap.put("pageObj",page);
+
+      returnMap.put("itemList",itemList);
+      returnMap.put("page",pageMap);
     } catch (RuntimeException e) {
       log.error("itemJoinImgList error");
     }
-    return list;
+    return returnMap;
   }
 }

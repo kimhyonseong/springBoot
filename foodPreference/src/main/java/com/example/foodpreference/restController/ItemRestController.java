@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,11 +35,8 @@ public class ItemRestController {
   }
 
   @GetMapping("/itemList/all")
-  public ResponseEntity<?> itemAllList(
-//          @PageableDefault(size = 20,sort = "reg_dt", direction = Sort.Direction.DESC)
-                  Pageable pageable
-  ) {
-    List<ItemJoinImg> itemList = itemService.showItemWithImg(pageable);
+  public ResponseEntity<?> itemAllList(Pageable pageable) {
+    Map<String,Object> itemList = itemService.showItemWithImg(pageable);
     return ResponseEntity.ok(itemList);
   }
 }

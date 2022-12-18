@@ -42,12 +42,12 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
 
   // item
   @Query(value = "SELECT i AS item, img AS itemImg " +
-          "FROM Item AS i JOIN ItemImg AS img ON i.idx = img.item.idx " +
+          "FROM Item AS i LEFT JOIN ItemImg AS img ON i.idx = img.item.idx " +
           "WHERE i.state = 10")
   List<ItemJoinImg> itemJoinImg(Pageable pageable);
 
-  @Query(value = "SELECT COUNT(i) " +
-          "FROM Item AS i JOIN ItemImg AS img ON i.idx = img.item.idx " +
+  @Query(value = "SELECT COUNT(i) AS count " +
+          "FROM Item AS i LEFT JOIN ItemImg AS img ON i.idx = img.item.idx " +
           "WHERE i.state = 10")
   int countItemJoinImg();
 }
