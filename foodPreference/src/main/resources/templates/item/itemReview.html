@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Review</title>
+</head>
+<body>
+<th:block th:fragment="reviews(reivewsObject)">
+    <link rel="stylesheet" href="/css/review.css">
+    <div class="review-box">
+        <div class="total-score">
+            <p class="score">5.0</p>
+        </div>
+        <th:block th:each="반복문">
+        <div class="reply">
+            <div class="score">5</div>
+            <div class="reply-id">아이디</div>
+            <div class="reply-date">2022.12.25</div>
+            <div class="comment">정말 좋아요</div>
+        </div>
+        </th:block>
+    </div>
+</th:block>
+<th:block th:fragment="reviewWrite">
+    <div class="my-review">
+        <div class="my-score">
+            <th:block th:each="num : ${#numbers.sequence(1,5)}">
+                <label>
+                    <input type="radio" th:value="${num}">
+                </label>
+            </th:block>
+        </div>
+        <textarea class="my-comment" th:text=""></textarea>
+    </div>
+</th:block>
+</body>
+</html>
