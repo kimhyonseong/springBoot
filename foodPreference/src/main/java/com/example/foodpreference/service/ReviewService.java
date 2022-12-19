@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -20,12 +22,16 @@ public class ReviewService {
   private final ItemRepository itemRepository;
 
   public List<Review> showReview(Long itemIdx, Pageable pageable) {
-    List<Map<String,Object>> list = null;
-
     try {
       Item item = itemRepository.findByIdx(itemIdx).orElseThrow(NullPointerException::new);
+      List<Review> reviews = reviewRepository.findAllByItem(item,pageable);
 
-      return reviewRepository.findAllByItem(item,pageable);
+      for (Review review : reviews) {
+        String tmpDate = review.getRegDate().format(DateTimeFormatter.ISO_DATE);
+        //review.setRegDate(tmpDate);
+      }
+
+      return reviews;
     } catch (NullPointerException e) {
       log.error("showReview error : item is null");
       return null;

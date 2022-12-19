@@ -29,6 +29,7 @@ public class ReviewRestController {
     try {
       List<Review> reviews = reviewService.showReview(itemIdx, pageable);
       Map<String, Object> totalScore = reviewService.showScore(itemIdx);
+
       result.put("review",reviews);
       result.put("totalScore",totalScore);
 

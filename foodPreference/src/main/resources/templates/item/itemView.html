@@ -5,26 +5,34 @@
 <head>
     <meta charset="UTF-8">
     <title>ItemView</title>
+    <link rel="stylesheet" href="/css/review.css">
     <style>
         .item-review-more {
             cursor: pointer;
+        }
+        .item-box {
+            width: 80%;
+            display: flex;
+            flex-direction: column;
         }
     </style>
 </head>
 <body>
 <th:block layout:fragment="content">
     <input type="hidden" id="itemIdx" th:value="${itemIdx}">
-    <div style="width: 80%">
-        <div class="item-img-box">
-            <img th:src="${img ?: 'https://via.placeholder.com/150'}" th:alt="${name}">
-        </div>
-        <div class="item-info">
-            <p th:text="${name}"></p>
-            <p th:text="${price}"></p>
-            <p th:text="${description}"></p>
-            <input type="number" id="itemCount" value="1" min="1" th:max="${quantity < 999 ?: 999}">
-            <a th:href="${'/item/buy?itemIdx='+itemIdx}">구매하기</a>
-            <button id="addCart">카트 담기</button>
+    <div class="item-box">
+        <div class="item-box-in">
+            <div class="item-img-box">
+                <img th:src="${img ?: 'https://via.placeholder.com/150'}" th:alt="${name}">
+            </div>
+            <div class="item-info">
+                <p th:text="${name}"></p>
+                <p th:text="${price}"></p>
+                <p th:text="${description}"></p>
+                <input type="number" id="itemCount" value="1" min="1" th:max="${quantity < 999 ?: 999}">
+                <a th:href="${'/item/buy?itemIdx='+itemIdx}">구매하기</a>
+                <button id="addCart">카트 담기</button>
+            </div>
         </div>
         <div class="item-review">
             <div class="review-total"></div>
@@ -35,7 +43,8 @@
                 </div>
                 <label>
                     리뷰
-                    <textarea></textarea>
+                    <textarea class="review-comment"></textarea>
+                    <button class="review-submit">작성</button>
                 </label>
             </div>
             <div class="review-list"></div>
@@ -90,11 +99,13 @@
                               </div>`;
             let reviewList = `
                             <div class="reply">
-                                <div class="score">USER_SCORE</div>
-                                <div class="reply-id">USER_ID</div>
-                                <div class="reply-date">
-                                    <div class="reply-regDate">USER_REG_DATE</div>
-                                    <div class="reply-updDate">USER_UPD_DATE</div>
+                                <div class="user-info">
+                                    <div class="score">USER_SCORE</div>
+                                    <div class="reply-id">USER_ID</div>
+                                    <div class="reply-date">
+                                        <div class="reply-regDate">USER_REG_DATE</div>
+                                        <div class="reply-updDate">USER_UPD_DATE</div>
+                                    </div>
                                 </div>
                                 <div class="comment">USER_COMMENT</div>
                             </div>`;
@@ -118,8 +129,8 @@
                             html = reviewList
                                 .replace("USER_SCORE",data.review[i].score)
                                 .replace("USER_ID",data.review[i].memberId)
-                                .replace("USER_REG_DATE",data.review[i].regDate)
-                                .replace("USER_UPD_DATE",data.review[i].updDate)
+                                .replace("USER_REG_DATE","작성일 "+data.review[i].regDate)
+                                .replace("USER_UPD_DATE",data.review[i].updDate ? "수정일 "+data.review[i].updDate : '')
                                 .replace("USER_COMMENT",data.review[i].comment);
                             $(".review-list").append(html);
                         }
