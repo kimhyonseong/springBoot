@@ -59,8 +59,8 @@ class ItemServiceTest {
 
     try {
       itemService.itemSave(itemDto, null);
-      Item item = itemRepository.findByIdx(1L);
-      System.out.println(item.toString());
+      Item item = itemRepository.findByIdx(1L).orElse(null);
+      System.out.println(item);
     } catch (RuntimeException e) {
       System.out.println("저장 오류");
     }

@@ -17,11 +17,14 @@ $(function () {
             </li>`;
 
     let param = window.location.search.match(/page=[0-9]+/gi);
-    showItem(param[0].match(/[0-9]+/)[0]);
+    showItem(param);
 
     function showItem(page) {
         let requestUrl = "/itemList/all";
-        page = parseInt(page);
+
+        if (page != null) {
+            page = parseInt(param[0].match(/[0-9]+/)[0]);
+        }
 
         if (page > 0) {
             requestUrl += `?page=${page}`;

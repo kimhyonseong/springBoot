@@ -11,10 +11,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item,Long> {
-  Item findByIdx(Long idx);
+  Optional<Item> findByIdx(Long idx);
   List<Item> findAll();
   List<Item> findAllByState(int state);
   List<Item> findAllByCode(String code);

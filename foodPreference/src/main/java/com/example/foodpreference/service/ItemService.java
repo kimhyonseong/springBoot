@@ -35,7 +35,9 @@ public class ItemService {
     Map<String, Object> map = new HashMap<>();
 
     try {
-      Item item = itemRepository.findByIdx(idx);
+      Item item = itemRepository.findByIdx(idx).orElseThrow(NullPointerException::new);
+      ItemImg itemImg = itemImgRepository.findByItem(item).orElse(new ItemImg());
+
       map.put("item",item);
       map.put("itemIdx",item.getIdx());
       map.put("name",item.getName());
@@ -44,9 +46,13 @@ public class ItemService {
       map.put("price",item.getPrice());
       map.put("quantity",item.getQuantity());
       map.put("state",item.getState());
-    } catch (RuntimeException e) {
+      map.put("img",itemImg.getImgPath()+itemImg.getFileName());
+    } catch (NullPointerException e) {
       log.error("존재하지 않는 idx - "+idx);
       throw new RuntimeException("not exist item idx");
+    } catch (RuntimeException e) {
+      log.error("find item error : "+idx);
+      throw new RuntimeException("error");
     }
 
     return map;
@@ -78,13 +84,7 @@ public class ItemService {
 
   public Long itemModify(ItemDto itemDto, Long idx) throws RuntimeException {
     try {
-      Item item = null;
-
-      if (idx == null) {
-        item = new Item();
-      } else {
-        item = itemRepository.findByIdx(idx);
-      }
+      Item item = itemRepository.findByIdx(idx).orElseThrow(NullPointerException::new);
 
       item.setName(itemDto.getName());
       item.setDescription(itemDto.getDescription());
@@ -94,15 +94,18 @@ public class ItemService {
       item.setState(itemDto.getState());
 
       return itemRepository.save(item).getIdx();
+    } catch (NullPointerException e) {
+      log.error("modify error");
+      throw new RuntimeException("item modify error : item is null");
     } catch (RuntimeException e) {
-      log.error("save error");
-      throw new RuntimeException("item save error");
+      log.error("modify error");
+      throw new RuntimeException("item modify error");
     }
   }
 
   public boolean itemDelete(User user,Long idx) {
     try {
-      Item item = itemRepository.findByIdx(idx);
+      Item item = itemRepository.findByIdx(idx).orElseThrow(NullPointerException::new);
 
       if (Objects.equals(item.getMember().getId(), user.getUsername())) {
         itemImgRepository.deleteByItem(item);
@@ -112,6 +115,9 @@ public class ItemService {
       } else {
         throw new UsernameNotFoundException("not correct");
       }
+    } catch (NullPointerException e) {
+      log.error("itemDelete error : item is null");
+      return false;
     } catch (UsernameNotFoundException e) {
       log.error("itemDelete error : not coincide user id");
       return false;

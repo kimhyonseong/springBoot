@@ -42,10 +42,7 @@ public class ShopService {
   public boolean addCart(CartDto cartDto, @AuthenticationPrincipal User user) {
     try {
       Member member = memberRepository.findById(user.getUsername()).orElseThrow(()->new UsernameNotFoundException("no login"));
-      Item item = itemRepository.findByIdx(cartDto.getItemIdx());
-
-      if (item == null)
-        throw new IllegalArgumentException("아이템이 존재하지 않습니다.");
+      Item item = itemRepository.findByIdx(cartDto.getItemIdx()).orElseThrow(NullPointerException::new);
 
       Cart cart = cartRepository.findByMemberAndItem(member, item).orElse(new Cart());
       cart.setAmount(cartDto.getAmount());
@@ -58,8 +55,8 @@ public class ShopService {
     } catch (UsernameNotFoundException e) {
       log.error("addCart error : no login");
       return false;
-    } catch (IllegalArgumentException e) {
-      log.error("addCart error : no item");
+    } catch (NullPointerException e) {
+      log.error("addCart error : item is null");
       return false;
     } catch (RuntimeException e) {
       log.error("addCart error");

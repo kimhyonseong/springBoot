@@ -17,6 +17,9 @@ import java.util.List;
 @ToString
 @DynamicInsert
 @DynamicUpdate
+@Table(indexes = {
+        @Index(name = "member_item", columnList = "member_idx, item_idx", unique = true)
+})
 public class Review extends BaseEntity{
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int idx;
@@ -28,10 +31,11 @@ public class Review extends BaseEntity{
   @JsonBackReference
   @ToString.Exclude
   private Member member;
+  private String memberId;
 
-  @ManyToMany
+  @ManyToOne
   @JoinColumn(name = "item_idx")
   @JsonBackReference
   @ToString.Exclude
-  private List<Item> item = new ArrayList<>();
+  private Item item;
 }

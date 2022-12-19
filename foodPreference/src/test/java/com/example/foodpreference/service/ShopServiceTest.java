@@ -142,7 +142,7 @@ class ShopServiceTest {
       //given
       when(user.getUsername()).thenReturn("admin");
       when(memberRepository.findById(anyString())).thenReturn(Optional.ofNullable(member));
-      when(itemRepository.findByIdx(any())).thenReturn(item);
+      when(itemRepository.findByIdx(any()).orElse(null)).thenReturn(item);
       when(cartRepository.findByMemberAndItem(any(),any())).thenReturn(Optional.of(new Cart()));
       when(cartRepository.save(any())).thenReturn(cart);
 

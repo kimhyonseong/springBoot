@@ -37,7 +37,7 @@ class ItemImgServiceTest {
       item.setDescription("꿀 사과");
       Long insertIdx = itemRepository.save(item).getIdx();
 
-      Item findItem = itemRepository.findByIdx(insertIdx);
+      Item findItem = itemRepository.findByIdx(insertIdx).orElse(null);
 
       System.out.println(findItem);
 

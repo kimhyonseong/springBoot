@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="layout/base">
+      layout:decorate="~{layout/base}">
 <head>
     <meta charset="UTF-8">
     <title>ItemView</title>
+    <style>
+        .item-review-more {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 <th:block layout:fragment="content">
@@ -13,7 +18,7 @@
         <div class="item-img-box">
             <img th:src="${img ?: 'https://via.placeholder.com/150'}" th:alt="${name}">
         </div>
-        <div>
+        <div class="item-info">
             <p th:text="${name}"></p>
             <p th:text="${price}"></p>
             <p th:text="${description}"></p>
@@ -21,25 +26,45 @@
             <a th:href="${'/item/buy?itemIdx='+itemIdx}">구매하기</a>
             <button id="addCart">카트 담기</button>
         </div>
+        <div class="item-review">
+            <div class="review-total"></div>
+            <div class="review-write">
+                <div>
+                    점수 :
+                    반복 라디오 버튼
+                </div>
+                <label>
+                    리뷰
+                    <textarea></textarea>
+                </label>
+            </div>
+            <div class="review-list"></div>
+        </div>
+        <div class="item-review-more">리뷰 더보기</div>
     </div>
     <script>
+        let page = 0;
+        let reviewAjax = true;
+
         document.querySelector("#itemCount").addEventListener("focusout",function (e) {
             minCount(e.target);
         })
+        document.querySelector(".item-review-more").addEventListener("click",showReview);
 
-        $("#addCart").on("click", function () {
+        $("#addCart").on("click", addCart);
+        showReview();
+
+        function addCart() {
             $.ajax({
-                url:`/api/shopping/cart`,
-                type : `POST`,
-                contentType : 'application/json',
-                data : JSON.stringify({
-                    'itemIdx' : $('#itemIdx').val(),
-                    'amount' : $('#itemCount').val()
+                url: `/api/shopping/cart`,
+                type: `POST`,
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    'itemIdx': $('#itemIdx').val(),
+                    'amount': $('#itemCount').val()
                 }),
                 success: function (result) {
-                    console.log(result);
-
-                    if(result.code === 400) {
+                    if (result.code === 400) {
                         alert(result.message);
                         location.href = "/login";
                     } else {
@@ -47,12 +72,61 @@
                     }
                 }
             })
-        })
+        }
 
         function minCount(target) {
             if (target.value < 1) {
                 alert("최소 수량은 1입니다.");
                 target.value = 1;
+            }
+        }
+
+        function showReview() {
+            let html = "";
+            let requestUrl = `/review/${$('#itemIdx').val()}`;
+            let reviewFrom = `<div class="total-score">
+                                <p class="score">TOTAL_SCORE</p>
+                                <p class="count">TOTAL_COUNT명 참여</p>
+                              </div>`;
+            let reviewList = `
+                            <div class="reply">
+                                <div class="score">USER_SCORE</div>
+                                <div class="reply-id">USER_ID</div>
+                                <div class="reply-date">
+                                    <div class="reply-regDate">USER_REG_DATE</div>
+                                    <div class="reply-updDate">USER_UPD_DATE</div>
+                                </div>
+                                <div class="comment">USER_COMMENT</div>
+                            </div>`;
+            if (page > 0) {
+                requestUrl += `?page=${page}`;
+            }
+
+            if (reviewAjax) {
+                reviewAjax = false;
+                $.ajax({
+                    url: requestUrl,
+                    success: function (data) {
+                        console.log(data);
+                        // 전체 점수
+                        reviewFrom = reviewFrom.replace("TOTAL_SCORE",data.totalScore.avg.toFixed(2))
+                            .replace("TOTAL_COUNT",data.totalScore.count);
+                        $(".review-total").append(reviewFrom);
+
+                        // 리뷰 리스트
+                        for (let i=0; i<data.review.length; i++) {
+                            html = reviewList
+                                .replace("USER_SCORE",data.review[i].score)
+                                .replace("USER_ID",data.review[i].memberId)
+                                .replace("USER_REG_DATE",data.review[i].regDate)
+                                .replace("USER_UPD_DATE",data.review[i].updDate)
+                                .replace("USER_COMMENT",data.review[i].comment);
+                            $(".review-list").append(html);
+                        }
+
+                        page++;
+                    }
+                }).done(()=>reviewAjax=true)
             }
         }
     </script>

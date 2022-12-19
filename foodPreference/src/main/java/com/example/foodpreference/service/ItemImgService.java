@@ -53,7 +53,7 @@ public class ItemImgService {
       try {
         String path = newImgPath();
 
-        Item item = itemRepository.findByIdx(itemIdx);
+        Item item = itemRepository.findByIdx(itemIdx).orElseThrow(NullPointerException::new);
         ItemImg itemImg = itemImgRepository.findByIdx(fileIdx).orElse(new ItemImg());
 
         // 이전 파일이름과 현재 파일 이름이 다를때 저장 및 수정
@@ -67,6 +67,8 @@ public class ItemImgService {
 
           itemImgRepository.save(itemImg);
         }
+      } catch (NullPointerException e) {
+        log.error("itemImg save error : item is null");
       } catch (RuntimeException e) {
         log.error("itemImg save error");
         throw new RuntimeException("itemImg save error");
