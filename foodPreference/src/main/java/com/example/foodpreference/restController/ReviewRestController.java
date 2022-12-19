@@ -24,7 +24,6 @@ public class ReviewRestController {
   @GetMapping("/{itemIdx}")
   public Map<String, Object> showReview(@PathVariable Long itemIdx, Pageable pageable) {
     Map<String, Object> result = new HashMap<>();
-    Map<String, Object> total = new HashMap<>();
 
     try {
       List<Review> reviews = reviewService.showReview(itemIdx, pageable);

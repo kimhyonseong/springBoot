@@ -24,14 +24,8 @@ public class ReviewService {
   public List<Review> showReview(Long itemIdx, Pageable pageable) {
     try {
       Item item = itemRepository.findByIdx(itemIdx).orElseThrow(NullPointerException::new);
-      List<Review> reviews = reviewRepository.findAllByItem(item,pageable);
 
-      for (Review review : reviews) {
-        String tmpDate = review.getRegDate().format(DateTimeFormatter.ISO_DATE);
-        //review.setRegDate(tmpDate);
-      }
-
-      return reviews;
+      return reviewRepository.findAllByItem(item,pageable);
     } catch (NullPointerException e) {
       log.error("showReview error : item is null");
       return null;
