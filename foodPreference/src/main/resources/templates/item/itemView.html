@@ -67,12 +67,15 @@
         $("#addCart").on("click", addCart);
         showReview();
 
+        function modifyReview() {
+
+        }
+
         function writeReview() {
             let obj = {
                 score : $(".review-score:checked").val(),
                 comment: $(".review-comment").val()
             }
-            console.log(obj);
 
             $.ajax({
                 url:`/review/${$("#itemIdx").val()}`,
@@ -82,6 +85,7 @@
                 success: function (data) {
                     if (data === 200) {
                         alert("정상적으로 처리되었습니다.");
+                        location.reload();
                     } else if(data === 403) {
                         alert("로그인이 필요합니다.");
                         location.href = "/login";

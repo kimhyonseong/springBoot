@@ -48,4 +48,24 @@ public class ReviewRestController {
       return 400;
     }
   }
+
+  @PatchMapping("/{itemIdx}")
+  public int modifyReview(@PathVariable Long itemIdx, @AuthenticationPrincipal User user, @RequestBody ReviewDto reviewDto) {
+    try {
+      return reviewService.modifyReview(itemIdx, user, reviewDto);
+    } catch (RuntimeException e) {
+      log.error("modify write error");
+      return 400;
+    }
+  }
+
+  @DeleteMapping("/{itemIdx}")
+  public int deleteReview(@PathVariable Long itemIdx, @AuthenticationPrincipal User user) {
+    try {
+      return reviewService.deleteReview(itemIdx, user);
+    } catch (RuntimeException e) {
+      log.error("delete review error");
+      return 400;
+    }
+  }
 }

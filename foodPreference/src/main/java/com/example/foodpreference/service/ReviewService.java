@@ -78,4 +78,37 @@ public class ReviewService {
       return 401;
     }
   }
+
+  @Transactional
+  public int modifyReview(Long itemIdx, User user,ReviewDto reviewDto) {
+    try {
+      Member member = memberRepository.findById(user.getUsername()).orElseThrow(() -> new UsernameNotFoundException("no user"));
+      Item item = itemRepository.findByIdx(itemIdx).orElseThrow(() -> new IllegalArgumentException("no item"));
+      Review review = reviewRepository.findByItemAndMember(item, member).orElseThrow(() -> new IllegalArgumentException("no review"));
+      review.setScore(reviewDto.getScore());
+      review.setComment(reviewDto.getComment());
+
+      reviewRepository.save(review);
+      return 200;
+    } catch (IllegalArgumentException e) {
+      String message = e.getMessage();
+      log.error("write review error - " + message);
+      return 402;
+    } catch (UsernameNotFoundException | NullPointerException e) {
+      log.error("write review error - not member");
+      return 403;
+    } catch (RuntimeException e) {
+      log.error("write review error");
+      return 401;
+    }
+  }
+
+  public int deleteReview(Long itemIdx, User user) {
+    try {
+      // 삭제 로직
+      return 200;
+    } catch (RuntimeException e) {
+      return 401;
+    }
+  }
 }
