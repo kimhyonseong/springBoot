@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +49,23 @@ public class ReviewService {
       return result;
     } catch (RuntimeException e) {
       log.error("showScore error");
+      return null;
+    }
+  }
+
+  public Map<String,Object> myReview(User user, Long itemIdx) {
+    Map<String,Object> result = new HashMap<>();
+
+    try {
+      Member member = memberRepository.findById(user.getUsername()).orElseThrow();
+      Item item = itemRepository.findByIdx(itemIdx).orElseThrow();
+      Review review = reviewRepository.findByItemAndMember(item,member).orElseThrow();
+
+      result.put("score",review.getScore());
+      result.put("comment",review.getComment());
+
+      return result;
+    } catch (RuntimeException e) {
       return null;
     }
   }
@@ -105,8 +123,18 @@ public class ReviewService {
 
   public int deleteReview(Long itemIdx, User user) {
     try {
-      // 삭제 로직
+      Member member = memberRepository.findById(user.getUsername()).orElseThrow(()->new UsernameNotFoundException("no member"));
+      Item item = itemRepository.findByIdx(itemIdx).orElseThrow(()->new IllegalArgumentException("no item"));
+      Review review = reviewRepository.findByItemAndMember(item,member).orElseThrow(()->new IllegalArgumentException("no review"));
+      reviewRepository.delete(review);
       return 200;
+    } catch (UsernameNotFoundException | NullPointerException e) {
+      log.error("write review error - not member");
+      return 403;
+    } catch (IllegalArgumentException e) {
+      String message = e.getMessage();
+      log.error("write review error - " + message);
+      return 402;
     } catch (RuntimeException e) {
       return 401;
     }

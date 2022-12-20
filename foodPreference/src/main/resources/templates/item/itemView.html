@@ -46,8 +46,8 @@
                 </div>
                 <label>
                     리뷰
-                    <textarea class="review-comment"></textarea>
-                    <button class="review-submit">작성</button>
+                    <textarea class="review-comment" th:text="${comment}"></textarea>
+                    <button th:class="${comment != null ? 'review-modify':'review-submit'}">작성</button>
                 </label>
             </div>
             <div class="review-list"></div>
@@ -63,23 +63,21 @@
         })
         document.querySelector(".item-review-more").addEventListener("click",showReview);
 
-        $(".review-submit").on("click", writeReview);
+        $(".review-submit").on("click", ()=>writeReview(null));
         $("#addCart").on("click", addCart);
         showReview();
 
-        function modifyReview() {
-
-        }
-
-        function writeReview() {
+        function writeReview(type) {
             let obj = {
                 score : $(".review-score:checked").val(),
                 comment: $(".review-comment").val()
             }
 
+            if (type !== "PATCH") type = "POST";
+
             $.ajax({
                 url:`/review/${$("#itemIdx").val()}`,
-                type: `POST`,
+                type: `${type}`,
                 data: JSON.stringify(obj),
                 contentType: 'application/json',
                 success: function (data) {
