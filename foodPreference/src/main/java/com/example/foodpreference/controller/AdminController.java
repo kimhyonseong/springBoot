@@ -83,42 +83,6 @@ public class AdminController {
     return "common/redirect";
   }
 
-  @Transactional
-  @ResponseBody
-  @PatchMapping({"/item/{idx}"})
-  public Boolean itemModify(
-          @PathVariable Long idx,
-          @RequestBody(required = false) ItemModifyDto itemModifyDto,
-          Model model) {
-    try {
-      ItemImgDto itemImgDto = new ItemImgDto(itemModifyDto.getFileName(),itemModifyDto.getFileName());
-      Long fileIdx = itemModifyDto.getFileIdx();
-
-      Long itemIdx = itemService.itemModify(itemModifyDto, idx);
-      itemImgService.imgSave(itemImgDto, itemIdx, fileIdx);
-    } catch (RuntimeException e) {
-      log.error("insert error. page : admin/item/"+idx);
-      model.addAttribute("errMsg","저장 오류");
-      return false;
-    }
-
-    return true;
-  }
-
-  @ResponseBody
-  @DeleteMapping("/item/{idx}")
-  public Boolean deleteItem(@PathVariable Long idx,@AuthenticationPrincipal User user,Model model) {
-    try {
-      if (!itemService.itemDelete(user,idx)) {
-        throw new RuntimeException("error");
-      }
-      return true;
-    } catch (RuntimeException e) {
-      log.error("fail delete item");
-      return false;
-    }
-  }
-
   @GetMapping("/myItem")
   public String myItem(@AuthenticationPrincipal User user, Pageable pageable, Model model) {
     Map<String, Object> map = new HashMap<>();

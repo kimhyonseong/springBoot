@@ -1,14 +1,14 @@
 package com.example.foodpreference.restController;
 
 import com.example.foodpreference.domain.Review;
+import com.example.foodpreference.dto.ReviewDto;
 import com.example.foodpreference.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +36,16 @@ public class ReviewRestController {
     } catch (RuntimeException e) {
       log.error("showReview");
       return null;
+    }
+  }
+
+  @PostMapping("/{itemIdx}")
+  public int writeReview(@PathVariable Long itemIdx, @AuthenticationPrincipal User user, @RequestBody ReviewDto reviewDto) {
+    try {
+      return reviewService.writeReview(itemIdx,user,reviewDto);
+    } catch (RuntimeException e) {
+      log.error("review write error");
+      return 400;
     }
   }
 }

@@ -34,7 +34,7 @@ insert into item(code,description,state,name,price,quantity,member_idx) values (
 insert into item_img(img_path,file_name,origin_file_name,size,extension,item_idx) values ("/images/real/","croissant.jpg","croissant.jpg",100,"jpg",1);
 
 insert into review(comment, score,item_idx,member_idx,member_id,reg_date,upd_date) values ("좋아요",5,1,1,"lss1545",20221219175050,20221219185050);
-insert into review(comment, score,item_idx,member_idx,member_id) values ("괜찮아요",4,1,2,"admin");
+-- insert into review(comment, score,item_idx,member_idx,member_id) values ("괜찮아요",4,1,2,"admin");
 insert into review(comment, score,item_idx,member_idx,member_id) values ("굳",4,1,3,"user");
 insert into review(comment, score,item_idx,member_idx,member_id) values ("나이스",4,1,4,"user2");
 insert into review(comment, score,item_idx,member_idx,member_id) values ("이게 좋냐",1,1,5,"user3");
