@@ -15,6 +15,7 @@ import java.util.Optional;
 public interface ReviewRepository extends JpaRepository<Review,Long> {
   Optional<Review> findByIdx(Long idx);
   Optional<Review> findByItemAndMember(Item item, Member member);
+  Optional<Review> findByIdxAndMember(Long idx, Member member);
   List<Review> findAllByItem(Item item, Pageable pageable);
 
   @Query(value = "SELECT SUM(r.score) AS sum,AVG(r.score) AS avg,COUNT(r.score) AS count " +

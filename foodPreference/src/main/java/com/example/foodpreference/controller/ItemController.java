@@ -31,6 +31,7 @@ public class ItemController {
     Map<String, Object> map = itemService.findItem(idx);
 
     if (reviewMap != null) {
+      map.put("reviewIdx",reviewMap.get("reviewIdx"));
       map.put("score",reviewMap.get("score"));
       map.put("comment",reviewMap.get("comment"));
     }

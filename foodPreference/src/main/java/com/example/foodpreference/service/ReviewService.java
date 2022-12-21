@@ -61,6 +61,7 @@ public class ReviewService {
       Item item = itemRepository.findByIdx(itemIdx).orElseThrow();
       Review review = reviewRepository.findByItemAndMember(item,member).orElseThrow();
 
+      result.put("reviewIdx",review.getIdx());
       result.put("score",review.getScore());
       result.put("comment",review.getComment());
 
@@ -71,10 +72,10 @@ public class ReviewService {
   }
 
   @Transactional
-  public int writeReview(Long itemIdx, User user, ReviewDto reviewDto) {
+  public int writeReview(User user, ReviewDto reviewDto) {
     try {
       Member member = memberRepository.findById(user.getUsername()).orElseThrow(()-> new UsernameNotFoundException("no user"));
-      Item item = itemRepository.findByIdx(itemIdx).orElseThrow(()->new IllegalArgumentException("no item"));
+      Item item = itemRepository.findByIdx(reviewDto.getItemIdx()).orElseThrow(()->new IllegalArgumentException("no item"));
 
       Review review = new Review();
       review.setItem(item);
@@ -98,11 +99,13 @@ public class ReviewService {
   }
 
   @Transactional
-  public int modifyReview(Long itemIdx, User user,ReviewDto reviewDto) {
+  public int modifyReview(Long reviewId, User user,ReviewDto reviewDto) {
     try {
-      Member member = memberRepository.findById(user.getUsername()).orElseThrow(() -> new UsernameNotFoundException("no user"));
-      Item item = itemRepository.findByIdx(itemIdx).orElseThrow(() -> new IllegalArgumentException("no item"));
-      Review review = reviewRepository.findByItemAndMember(item, member).orElseThrow(() -> new IllegalArgumentException("no review"));
+      log.info("로그인 아이디 = "+user.getUsername());
+      memberRepository.findById(user.getUsername()).orElseThrow(() -> new UsernameNotFoundException("no user"));
+      itemRepository.findByIdx(reviewDto.getItemIdx()).orElseThrow(() -> new IllegalArgumentException("no item"));
+
+      Review review = reviewRepository.findByIdx(reviewId).orElseThrow(() -> new IllegalArgumentException("no review"));
       review.setScore(reviewDto.getScore());
       review.setComment(reviewDto.getComment());
 
@@ -121,11 +124,10 @@ public class ReviewService {
     }
   }
 
-  public int deleteReview(Long itemIdx, User user) {
+  public int deleteReview(Long reviewId, User user) {
     try {
       Member member = memberRepository.findById(user.getUsername()).orElseThrow(()->new UsernameNotFoundException("no member"));
-      Item item = itemRepository.findByIdx(itemIdx).orElseThrow(()->new IllegalArgumentException("no item"));
-      Review review = reviewRepository.findByItemAndMember(item,member).orElseThrow(()->new IllegalArgumentException("no review"));
+      Review review = reviewRepository.findByIdxAndMember(reviewId,member).orElseThrow(()->new IllegalArgumentException("no review"));
       reviewRepository.delete(review);
       return 200;
     } catch (UsernameNotFoundException | NullPointerException e) {

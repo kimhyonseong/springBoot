@@ -8,6 +8,8 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class ReviewDto {
+  private Long idx;
   private int score;
   private String comment;
+  private Long itemIdx;
 }

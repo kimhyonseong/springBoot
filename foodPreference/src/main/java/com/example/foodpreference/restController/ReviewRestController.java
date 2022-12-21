@@ -21,7 +21,7 @@ import java.util.Map;
 public class ReviewRestController {
   private final ReviewService reviewService;
 
-  @GetMapping("/{itemIdx}")
+  @GetMapping("/item/{itemIdx}")
   public Map<String, Object> showReview(@PathVariable Long itemIdx, Pageable pageable) {
     Map<String, Object> result = new HashMap<>();
 
@@ -39,30 +39,30 @@ public class ReviewRestController {
     }
   }
 
-  @PostMapping("/{itemIdx}")
-  public int writeReview(@PathVariable Long itemIdx, @AuthenticationPrincipal User user, @RequestBody ReviewDto reviewDto) {
+  @PostMapping
+  public int writeReview(@AuthenticationPrincipal User user, @RequestBody ReviewDto reviewDto) {
     try {
-      return reviewService.writeReview(itemIdx,user,reviewDto);
+      return reviewService.writeReview(user,reviewDto);
     } catch (RuntimeException e) {
       log.error("review write error");
       return 400;
     }
   }
 
-  @PatchMapping("/{itemIdx}")
-  public int modifyReview(@PathVariable Long itemIdx, @AuthenticationPrincipal User user, @RequestBody ReviewDto reviewDto) {
+  @PatchMapping("/{reviewId}")
+  public int modifyReview(@PathVariable Long reviewId, @AuthenticationPrincipal User user, @RequestBody ReviewDto reviewDto) {
     try {
-      return reviewService.modifyReview(itemIdx, user, reviewDto);
+      return reviewService.modifyReview(reviewId, user, reviewDto);
     } catch (RuntimeException e) {
       log.error("modify write error");
       return 400;
     }
   }
 
-  @DeleteMapping("/{itemIdx}")
-  public int deleteReview(@PathVariable Long itemIdx, @AuthenticationPrincipal User user) {
+  @DeleteMapping("/{reviewId}")
+  public int deleteReview(@PathVariable Long reviewId, @AuthenticationPrincipal User user) {
     try {
-      return reviewService.deleteReview(itemIdx, user);
+      return reviewService.deleteReview(reviewId, user);
     } catch (RuntimeException e) {
       log.error("delete review error");
       return 400;

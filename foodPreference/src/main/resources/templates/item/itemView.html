@@ -37,6 +37,7 @@
         <div class="item-review">
             <div class="review-total"></div>
             <div class="review-write">
+                <input type="hidden" id="reviewId" th:value="${reviewIdx}">
                 <div>
                     점수
                     <th:block th:each="num : ${#numbers.sequence(1,5)}">
@@ -47,7 +48,10 @@
                 <label>
                     리뷰
                     <textarea class="review-comment" th:text="${comment}"></textarea>
-                    <button th:class="${comment != null ? 'review-modify':'review-submit'}">작성</button>
+                    <button class="review-submit">작성</button>
+                    <th:block th:if="${reviewIdx != null}">
+                        <button class="review-delete">삭제</button>
+                    </th:block>
                 </label>
             </div>
             <div class="review-list"></div>
@@ -58,25 +62,39 @@
         let page = 0;
         let reviewAjax = true;
 
-        document.querySelector("#itemCount").addEventListener("focusout",function (e) {
-            minCount(e.target);
-        })
+        document.querySelector("#itemCount").addEventListener("focusout", minCount);
         document.querySelector(".item-review-more").addEventListener("click",showReview);
 
-        $(".review-submit").on("click", ()=>writeReview(null));
+        $(".review-submit").on("click", restReview);
+        $(".review-delete").on("click", () => restReview("DELETE"));
         $("#addCart").on("click", addCart);
         showReview();
 
-        function writeReview(type) {
+        function restReview(method) {
+            let requestUrl = '/review';
+            let type = "POST";
             let obj = {
+                idx : $("#reviewId").val(),
                 score : $(".review-score:checked").val(),
-                comment: $(".review-comment").val()
+                comment: $(".review-comment").val(),
+                itemIdx: $("#itemIdx").val()
             }
 
-            if (type !== "PATCH") type = "POST";
+            if (obj.idx !== "") {
+                type = "PATCH";
+                requestUrl += `/${obj.idx}`;
+            }
+
+            if (method === "DELETE") {
+                if (confirm("정말로 삭제하시겠습니까?")) {
+                    type = "DELETE";
+                } else {
+                    return false;
+                }
+            }
 
             $.ajax({
-                url:`/review/${$("#itemIdx").val()}`,
+                url:requestUrl,
                 type: `${type}`,
                 data: JSON.stringify(obj),
                 contentType: 'application/json',
@@ -114,16 +132,16 @@
             })
         }
 
-        function minCount(target) {
-            if (target.value < 1) {
+        function minCount(e) {
+            if (e.target.value < 1) {
                 alert("최소 수량은 1입니다.");
-                target.value = 1;
+                e.target.value = 1;
             }
         }
 
         function showReview() {
             let html = "";
-            let requestUrl = `/review/${$('#itemIdx').val()}`;
+            let requestUrl = `/review/item/${$('#itemIdx').val()}`;
             let reviewFrom = `<div class="total-score">
                                 <p class="score">TOTAL_SCORE</p>
                                 <p class="count">TOTAL_COUNT명 참여</p>
