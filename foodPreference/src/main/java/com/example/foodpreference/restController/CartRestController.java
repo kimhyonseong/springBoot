@@ -1,9 +1,11 @@
 package com.example.foodpreference.restController;
 
+import com.example.foodpreference.domain.Cart;
 import com.example.foodpreference.dto.CartDto;
 import com.example.foodpreference.service.MemberService;
 import com.example.foodpreference.service.ShopService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,14 +19,15 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/shopping")
+@Slf4j
 public class CartRestController {
   private final MemberService memberService;
   private final ShopService shopService;
 
   @GetMapping("/cart")
-  public Page<?> showCart(@AuthenticationPrincipal User user, Pageable pageable,
-                          @RequestParam(required = false, defaultValue = "0") int page) {
-    return shopService.showCart(user,pageable,page);
+  public List<Cart> showCart(@AuthenticationPrincipal User user, Pageable pageable) {
+    log.info("showCart start");
+    return shopService.showCart(user,pageable);
   }
 
   // 테스트 케이스 만들어야함

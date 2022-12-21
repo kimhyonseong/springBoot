@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+<head>
+    <meta charset="UTF-8">
+    <title>Cart</title>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="cart-box"></div>
+    <div>체크항목 삭제</div>
+    <div>체크항목 구매</div>
+    <div>전체 구매</div>
+    <div>전체 삭제</div>
+    <script>
+        let listFrom = `<label>
+                            <input type="checkbox" class="itemCheck" value="1">
+                        </label>
+                        <div class="item-img">
+                            <img src="https://via.placeholder.com/150" alt="아이템 이미지">
+                        </div>
+                        <div class="item-info">
+                            <div>아이템 이름</div>
+                            <div>주문 수량</div>
+                            <div>상세보기</div>
+                        </div>`;
+
+        function showCart() {
+            $.ajax({
+                url : ``,
+                success:function (data) {
+                    console.log(data);
+                }
+            })
+        }
+    </script>
+</th:block>
+</body>
+</html>

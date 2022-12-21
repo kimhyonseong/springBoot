@@ -30,8 +30,7 @@ public class ReviewService {
   public List<Review> showReview(Long itemIdx, Pageable pageable) {
     try {
       Item item = itemRepository.findByIdx(itemIdx).orElseThrow(NullPointerException::new);
-
-      return reviewRepository.findAllByItem(item,pageable);
+      return reviewRepository.findAllFetchJoinMember(item.getIdx(),pageable);
     } catch (NullPointerException e) {
       log.error("showReview error : item is null");
       return null;
@@ -53,13 +52,11 @@ public class ReviewService {
     }
   }
 
-  public Map<String,Object> myReview(User user, Long itemIdx) {
+  public Map<String,Object> myReview(User user, Item item) {
     Map<String,Object> result = new HashMap<>();
 
     try {
-      Member member = memberRepository.findById(user.getUsername()).orElseThrow();
-      Item item = itemRepository.findByIdx(itemIdx).orElseThrow();
-      Review review = reviewRepository.findByItemAndMember(item,member).orElseThrow();
+      Review review = reviewRepository.findByItemAndMemberId(item, user.getUsername()).orElseThrow();
 
       result.put("reviewIdx",review.getIdx());
       result.put("score",review.getScore());

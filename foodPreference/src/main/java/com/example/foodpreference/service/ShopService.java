@@ -9,9 +9,7 @@ import com.example.foodpreference.repository.ItemRepository;
 import com.example.foodpreference.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -27,11 +25,12 @@ public class ShopService {
   private final ItemRepository itemRepository;
   private final MemberRepository memberRepository;
 
-  public Page<Cart> showCart(@AuthenticationPrincipal User user, Pageable pageable, int page) {
+  public List<Cart> showCart(User user, Pageable pageable) {
     try {
+      log.info("findById start");
       Member member = memberRepository.findById(user.getUsername()).orElseThrow(()->new IllegalArgumentException("no login"));
-
-      return cartRepository.findAllByMember(member,pageable);
+      log.info("findAllJoinMember start");
+      return cartRepository.findAllJoinMember(member.getIdx(),pageable);
     } catch (RuntimeException e) {
       log.error("showCart error");
       return null;
@@ -39,7 +38,7 @@ public class ShopService {
   }
 
   @Transactional
-  public boolean addCart(CartDto cartDto, @AuthenticationPrincipal User user) {
+  public boolean addCart(CartDto cartDto, User user) {
     try {
       Member member = memberRepository.findById(user.getUsername()).orElseThrow(()->new UsernameNotFoundException("no login"));
       Item item = itemRepository.findByIdx(cartDto.getItemIdx()).orElseThrow(NullPointerException::new);

@@ -22,7 +22,7 @@ import java.util.List;
 @DynamicInsert
 @DynamicUpdate
 // 구매내역
-public class PurchaseHistory extends BaseEntity{
+public class OrderHistory extends BaseEntity{
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long idx;
 
@@ -47,6 +47,6 @@ public class PurchaseHistory extends BaseEntity{
   @OneToMany
   @ToString.Exclude
   @JsonManagedReference
-  @JoinColumn(name = "purchase_idx")
-  private List<PurchaseItem> orderItemList = new ArrayList<>();
+  @JoinColumn(name = "order_idx")
+  private List<OrderItem> orderItemList = new ArrayList<>();
 }

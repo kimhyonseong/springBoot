@@ -34,7 +34,7 @@ public class Item extends BaseEntity{
   private int price;
   private int quantity;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_idx")
   @JsonBackReference
   @ToString.Exclude

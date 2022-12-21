@@ -45,12 +45,6 @@ public class Member extends BaseEntity implements UserDetails {
     @JoinColumn(name = "member_idx")
     @JsonManagedReference
     @ToString.Exclude
-    private List<Item> items = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "member_idx")
-    @JsonManagedReference
-    @ToString.Exclude
     private List<Cart> cart = new ArrayList<>();
 
     @Override

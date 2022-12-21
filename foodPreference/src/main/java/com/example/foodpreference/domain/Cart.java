@@ -31,6 +31,6 @@ public class Cart extends BaseEntity{
 
   @ManyToOne
   @JoinColumn(name = "item_idx")
-  @JsonManagedReference
+////  @JsonManagedReference
   private Item item;
 }

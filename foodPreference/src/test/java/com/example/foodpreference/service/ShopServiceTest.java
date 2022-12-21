@@ -80,7 +80,6 @@ class ShopServiceTest {
     cart.setItem(item);
 
     cartList.add(cart);
-    cartPage = new PageImpl<>(cartList);
 
     cartDto = new CartDto();
 
@@ -108,14 +107,14 @@ class ShopServiceTest {
       */
 
       given(memberRepository.findById(anyString())).willReturn(Optional.ofNullable(member));
-      given(cartRepository.findAllByMember(any(),any())).willReturn(cartPage);
+      given(cartRepository.findAllByMember(any(),any())).willReturn(cartList);
 
       //when
-      Page<Cart> showCart = shopService.showCart(user, Pageable.ofSize(1),0);
+      List<Cart> showCart = shopService.showCart(user, Pageable.ofSize(1));
 
       //then
-      assertEquals(5,showCart.getContent().get(0).getAmount());
-      assertEquals(item,showCart.getContent().get(0).getItem());
+      assertEquals(5,showCart.get(0).getAmount());
+      assertEquals(item,showCart.get(0).getItem());
     }
 
     @Test
@@ -125,10 +124,10 @@ class ShopServiceTest {
       // member 값이 null 값일 시 showCart error 출력 및 null 반환 예상
       when(memberRepository.findById(anyString())).thenReturn(null);
       // 이 로직은 사용하기 전에 예외 발생
-      lenient().when(cartRepository.findAllByMember(any(),any())).thenReturn(cartPage);
+      lenient().when(cartRepository.findAllByMember(any(),any())).thenReturn(cartList);
 
       //when
-      Page<Cart> result = shopService.showCart(user,Pageable.ofSize(1),0);
+      List<Cart> result = shopService.showCart(user,Pageable.ofSize(1));
 
       //then
       assertNull(result);

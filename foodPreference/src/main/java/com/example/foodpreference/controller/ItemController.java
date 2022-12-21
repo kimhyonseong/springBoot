@@ -1,5 +1,6 @@
 package com.example.foodpreference.controller;
 
+import com.example.foodpreference.domain.Item;
 import com.example.foodpreference.service.ItemService;
 import com.example.foodpreference.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +28,8 @@ public class ItemController {
   // 잘 나오는지 확인하기
   @GetMapping("/item/{idx}")
   public String itemView(@PathVariable Long idx, Model model, @AuthenticationPrincipal User user) {
-    Map<String, Object> reviewMap = reviewService.myReview(user, idx);
     Map<String, Object> map = itemService.findItem(idx);
+    Map<String, Object> reviewMap = reviewService.myReview(user, (Item) map.get("item"));
 
     if (reviewMap != null) {
       map.put("reviewIdx",reviewMap.get("reviewIdx"));

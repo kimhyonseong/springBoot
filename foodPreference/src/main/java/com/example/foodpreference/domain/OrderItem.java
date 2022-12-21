@@ -19,7 +19,7 @@ import javax.persistence.*;
 @DynamicInsert
 @DynamicUpdate
 // 구매 내역의 구매 상품
-public class PurchaseItem extends BaseEntity{
+public class OrderItem extends BaseEntity{
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long idx;
 
@@ -34,4 +34,10 @@ public class PurchaseItem extends BaseEntity{
   @JoinColumn(name = "item_idx")
   @JsonBackReference
   private Item item;
+
+  @ManyToOne
+  @ToString.Exclude
+  @JoinColumn(name = "order_idx")
+  @JsonBackReference
+  private OrderHistory orderHistory;
 }
