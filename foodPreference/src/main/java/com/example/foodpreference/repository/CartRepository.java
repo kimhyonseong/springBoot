@@ -3,6 +3,7 @@ package com.example.foodpreference.repository;
 import com.example.foodpreference.domain.Cart;
 import com.example.foodpreference.domain.Item;
 import com.example.foodpreference.domain.Member;
+import com.example.foodpreference.dto.CartItem;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +17,9 @@ public interface CartRepository extends JpaRepository<Cart,Long> {
   List<Cart> findAllByMember(Member member, Pageable pageable);
   Optional<Cart> findByMemberAndItem(Member member, Item item);
 
-  @Query("SELECT c FROM Cart AS c JOIN FETCH c.member JOIN FETCH c.item WHERE c.member.idx= :memberIdx")
-  List<Cart> findAllJoinMember(@Param("memberIdx") Long memberIdx, Pageable pageable);
+  @Query("SELECT c AS cart,img AS itemImg FROM Cart AS c JOIN FETCH c.member JOIN FETCH c.item " +
+          "LEFT JOIN FETCH ItemImg AS img ON c.item.idx = img.item.idx " +
+          "WHERE c.member.idx= :memberIdx")
+  //List<Cart> findAllJoinMember(@Param("memberIdx") Long memberIdx, Pageable pageable);
+  List<CartItem> findAllJoinMember(@Param("memberIdx") Long memberIdx, Pageable pageable);
 }

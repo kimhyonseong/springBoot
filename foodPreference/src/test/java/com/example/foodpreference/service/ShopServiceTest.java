@@ -3,34 +3,26 @@ package com.example.foodpreference.service;
 import com.example.foodpreference.annotation.WithCustomUser;
 import com.example.foodpreference.domain.Cart;
 import com.example.foodpreference.domain.Item;
+import com.example.foodpreference.domain.ItemImg;
 import com.example.foodpreference.domain.Member;
 import com.example.foodpreference.dto.CartDto;
+import com.example.foodpreference.dto.CartItem;
 import com.example.foodpreference.repository.CartRepository;
 import com.example.foodpreference.repository.ItemRepository;
 import com.example.foodpreference.repository.MemberRepository;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
@@ -51,9 +43,11 @@ class ShopServiceTest {
 
   private static Member member;
   private static Item item;
+  private static ItemImg itemImg;
   private static Cart cart;
   private static CartDto cartDto;
-  private static final List<Cart> cartList = new ArrayList<>();
+  private static CartItem cartItem;
+  private static final List<CartItem> cartList = new ArrayList<>();
   private static Page<Cart> cartPage;
   private static User user;
 
@@ -73,13 +67,55 @@ class ShopServiceTest {
     item.setQuantity(100);
     item.setPrice(1000);
 
+    itemImg = new ItemImg();
+    itemImg.setItem(item);
+    itemImg.setFileName("img.jpg");
+    itemImg.setImgPath("/src/");
+
     cart = new Cart();
     cart.setIdx(1L);
     cart.setMember(member);
     cart.setAmount(5);
     cart.setItem(item);
 
-    cartList.add(cart);
+//    class CartItem() {
+//      private Cart cart;
+//      private Item item;
+//      private ItemImg itemImg;
+//
+//      public void setCart(Cart cart) {
+//        this.cart = cart;
+//      }
+//
+//      public void setItem(Item item) {
+//        this.item = item;
+//      }
+//
+//      public void setItemImg(ItemImg itemImg) {
+//        this.itemImg = itemImg;
+//      }
+//
+//      @Override
+//      public Item getItem() {
+//        return item;
+//      }
+//
+//      @Override
+//      public Cart getCart() {
+//        return cart;
+//      }
+//
+//      @Override
+//      public ItemImg getItemImg() {
+//        return itemImg;
+//      }
+//    };
+//
+//    cartItem.setCart(cart);
+//    cartItem.setItem(item);
+//    cartItem.setItemImg(itemImg);
+
+//    cartList.add(cartItem);
 
     cartDto = new CartDto();
 
@@ -107,13 +143,14 @@ class ShopServiceTest {
       */
 
       given(memberRepository.findById(anyString())).willReturn(Optional.ofNullable(member));
-      given(cartRepository.findAllByMember(any(),any())).willReturn(cartList);
+      given(cartRepository.findAllJoinMember(anyLong(),any())).willReturn(cartList);
 
       //when
-      List<Cart> showCart = shopService.showCart(user, Pageable.ofSize(1));
+      List<CartItem> showCart = shopService.showCart(user, Pageable.ofSize(1));
+
 
       //then
-      assertEquals(5,showCart.get(0).getAmount());
+//      assertEquals(5, Objects.requireNonNull(showCart.get(0).getCart().orElse(null)).getAmount());
       assertEquals(item,showCart.get(0).getItem());
     }
 
@@ -124,10 +161,11 @@ class ShopServiceTest {
       // member 값이 null 값일 시 showCart error 출력 및 null 반환 예상
       when(memberRepository.findById(anyString())).thenReturn(null);
       // 이 로직은 사용하기 전에 예외 발생
-      lenient().when(cartRepository.findAllByMember(any(),any())).thenReturn(cartList);
+      //lenient().when(cartRepository.findAllByMember(any(),any())).thenReturn(cartList);
+      lenient().when(cartRepository.findAllJoinMember(any(),any())).thenReturn(cartList);
 
       //when
-      List<Cart> result = shopService.showCart(user,Pageable.ofSize(1));
+      List<CartItem> result = shopService.showCart(user,Pageable.ofSize(1));
 
       //then
       assertNull(result);

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+<head>
+    <meta charset="UTF-8">
+    <title>Cart</title>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="cart-box">
+        <div class="cart-item-box"></div>
+        <div>체크항목 삭제</div>
+        <div>체크항목 구매</div>
+        <div>전체 구매</div>
+        <div>전체 삭제</div>
+    </div>
+    <script>
+        let page = 0;
+        let listFrom = `<label>
+                            <input type="checkbox" class="itemCheck" value="1">
+                        </label>
+                        <div class="item-img">
+                            <img src="_IMG" alt="_ITEM_NAME">
+                        </div>
+                        <div class="item-info">
+                            <div>_ITEM_NAME</div>
+                            <div>_ITEM_QUANTITY</div>
+                            <div>_DETAIL</div>
+                        </div>`;
+
+        showCart();
+
+        function showCart() {
+            $.ajax({
+                url : `/api/shopping/cart?page=${page}`,
+                success:function (data) {
+                    console.log(data);
+                    let html = "";
+
+                    Array.from(data).forEach((result) => {
+                        html += listFrom.replaceAll("_ITEM_NAME",result.item.name)
+                        .replace("_ITEM_QUANTITY",result.amount)
+                        .replace("_DETAIL",result.item.description)
+                        //.replace("_IMG",)
+                    })
+
+                    $(".cart-item-box").append(html);
+                }
+            })
+        }
+    </script>
+</th:block>
+</body>
+</html>

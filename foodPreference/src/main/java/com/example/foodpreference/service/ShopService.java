@@ -4,6 +4,7 @@ import com.example.foodpreference.domain.Cart;
 import com.example.foodpreference.domain.Item;
 import com.example.foodpreference.domain.Member;
 import com.example.foodpreference.dto.CartDto;
+import com.example.foodpreference.dto.CartItem;
 import com.example.foodpreference.repository.CartRepository;
 import com.example.foodpreference.repository.ItemRepository;
 import com.example.foodpreference.repository.MemberRepository;
@@ -25,11 +26,9 @@ public class ShopService {
   private final ItemRepository itemRepository;
   private final MemberRepository memberRepository;
 
-  public List<Cart> showCart(User user, Pageable pageable) {
+  public List<CartItem> showCart(User user, Pageable pageable) {
     try {
-      log.info("findById start");
       Member member = memberRepository.findById(user.getUsername()).orElseThrow(()->new IllegalArgumentException("no login"));
-      log.info("findAllJoinMember start");
       return cartRepository.findAllJoinMember(member.getIdx(),pageable);
     } catch (RuntimeException e) {
       log.error("showCart error");

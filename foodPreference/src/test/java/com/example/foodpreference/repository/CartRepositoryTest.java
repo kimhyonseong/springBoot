@@ -3,6 +3,7 @@ package com.example.foodpreference.repository;
 import com.example.foodpreference.domain.Cart;
 import com.example.foodpreference.domain.Item;
 import com.example.foodpreference.domain.Member;
+import com.example.foodpreference.dto.CartItem;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,16 +33,14 @@ class CartRepositoryTest {
     cart.setMember(member);
     cartRepository.save(cart);
 
-    Cart cart2 = new Cart();
-    cart2.setItem(item);
-    cart2.setAmount(10);
-    cart2.setMember(member);
-    cartRepository.save(cart2);
+    List<Cart> cartList = cartRepository.findAllByMember(member, Pageable.unpaged());
+    System.out.println(cartList);
+    System.out.println(member);
 
-    System.out.println("findAllJoinMember start");
-    // 무조건 2번 실행됨... - 멤버가 한번 더 나옴
-    List<Cart> saveCart = cartRepository.findAllJoinMember(member.getIdx(), Pageable.unpaged());
-    System.out.println("findAllJoinMember end");
-    System.out.println(saveCart);
+    List<CartItem> saveCart = cartRepository.findAllJoinMember(member.getIdx(), Pageable.unpaged());
+    System.out.println(saveCart.get(0).getItem());
+    System.out.println(saveCart.get(0).getItemImg());
+    System.out.println(saveCart.get(0).getCart());
+    System.out.println(saveCart.get(0));
   }
 }

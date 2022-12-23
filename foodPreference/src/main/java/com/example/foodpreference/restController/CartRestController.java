@@ -2,6 +2,7 @@ package com.example.foodpreference.restController;
 
 import com.example.foodpreference.domain.Cart;
 import com.example.foodpreference.dto.CartDto;
+import com.example.foodpreference.dto.CartItem;
 import com.example.foodpreference.service.MemberService;
 import com.example.foodpreference.service.ShopService;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +26,7 @@ public class CartRestController {
   private final ShopService shopService;
 
   @GetMapping("/cart")
-  public List<Cart> showCart(@AuthenticationPrincipal User user, Pageable pageable) {
-    log.info("showCart start");
+  public List<CartItem> showCart(@AuthenticationPrincipal User user, Pageable pageable) {
     return shopService.showCart(user,pageable);
   }
 
