@@ -26,8 +26,16 @@ public class CartRestController {
   private final ShopService shopService;
 
   @GetMapping("/cart")
-  public List<CartItem> showCart(@AuthenticationPrincipal User user, Pageable pageable) {
-    return shopService.showCart(user,pageable);
+  public Map<String, Object> showCart(@AuthenticationPrincipal User user, Pageable pageable) {
+    int totalCnt = shopService.countCart(user);
+    Map<String,Object> map = new HashMap<>();
+
+    map.put("cart",shopService.showCart(user,pageable));
+    map.put("totalCount",totalCnt);
+    map.put("currentPage",pageable.getPageNumber());
+    map.put("totalPage",(int) Math.ceil((float)totalCnt / pageable.getPageSize()) - 1);
+
+    return map;
   }
 
   // 테스트 케이스 만들어야함
@@ -48,6 +56,17 @@ public class CartRestController {
           @PathVariable Long idx, @AuthenticationPrincipal User user
   ) {
     return makeResult(memberService.isLogin(user),shopService.deleteCart(idx));
+  }
+
+  @DeleteMapping("/cart")
+  public Map<String, Object> deleteCartAll(@AuthenticationPrincipal User user) {
+    return makeResult(memberService.isLogin(user),shopService.deleteAllCart(user));
+  }
+
+  @DeleteMapping("/cart/list")
+  public Map<String, Object> deleteCartList(@AuthenticationPrincipal User user, @RequestBody List<Long> itemIdxList) {
+    System.out.println(itemIdxList);
+    return makeResult(memberService.isLogin(user),shopService.deleteCartList(itemIdxList));
   }
 
   private Map<String, Object> makeResult(boolean login, boolean service) {

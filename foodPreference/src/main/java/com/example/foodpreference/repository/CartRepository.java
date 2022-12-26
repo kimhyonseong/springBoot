@@ -7,8 +7,10 @@ import com.example.foodpreference.dto.CartItem;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,4 +24,14 @@ public interface CartRepository extends JpaRepository<Cart,Long> {
           "WHERE c.member.idx= :memberIdx")
   //List<Cart> findAllJoinMember(@Param("memberIdx") Long memberIdx, Pageable pageable);
   List<CartItem> findAllJoinMember(@Param("memberIdx") Long memberIdx, Pageable pageable);
+
+  int countByMember(Member member);
+
+  @Modifying
+  @Query("DELETE FROM Cart AS c WHERE c.member.idx = :member")
+  void deleteCartByMember(@Param("member") Long member);
+
+  @Modifying
+  @Query("DELETE FROM Cart AS c where c.item.idx in (:list)")
+  void deleteCartByList(@Param("list") List<Long> list);
 }

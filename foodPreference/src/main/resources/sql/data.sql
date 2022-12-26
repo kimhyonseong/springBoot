@@ -41,3 +41,26 @@ insert into review(comment, score,item_idx,member_idx,member_id) values ("이게
 insert into review(comment, score,item_idx,member_idx,member_id) values ("중간",3,1,6,"user4");
 insert into review(comment, score,item_idx,member_idx,member_id) values ("별로... 추천 안함",1,1,7,"user5");
 insert into review(comment, score,item_idx,member_idx,member_id) values ("굳.",5,2,2,"admin");
+
+insert into cart(amount,item_idx,member_idx) values(2,1,2);
+insert into cart(amount,item_idx,member_idx) values(2,2,2);
+insert into cart(amount,item_idx,member_idx) values(2,3,2);
+insert into cart(amount,item_idx,member_idx) values(2,4,2);
+insert into cart(amount,item_idx,member_idx) values(2,5,2);
+insert into cart(amount,item_idx,member_idx) values(2,6,2);
+insert into cart(amount,item_idx,member_idx) values(2,7,2);
+insert into cart(amount,item_idx,member_idx) values(2,8,2);
+insert into cart(amount,item_idx,member_idx) values(2,9,2);
+insert into cart(amount,item_idx,member_idx) values(2,10,2);
+insert into cart(amount,item_idx,member_idx) values(2,11,2);
+insert into cart(amount,item_idx,member_idx) values(2,12,2);
+insert into cart(amount,item_idx,member_idx) values(2,13,2);
+insert into cart(amount,item_idx,member_idx) values(2,14,2);
+insert into cart(amount,item_idx,member_idx) values(2,15,2);
+insert into cart(amount,item_idx,member_idx) values(2,16,2);
+insert into cart(amount,item_idx,member_idx) values(2,17,2);
+insert into cart(amount,item_idx,member_idx) values(2,18,2);
+insert into cart(amount,item_idx,member_idx) values(2,19,2);
+insert into cart(amount,item_idx,member_idx) values(2,20,2);
+insert into cart(amount,item_idx,member_idx) values(2,21,2);
+insert into cart(amount,item_idx,member_idx) values(2,22,2);

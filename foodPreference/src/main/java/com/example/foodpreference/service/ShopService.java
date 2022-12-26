@@ -94,4 +94,42 @@ public class ShopService {
       return false;
     }
   }
+
+  @Transactional
+  public boolean deleteAllCart(User user) {
+    try {
+      Member member = memberRepository.findById(user.getUsername()).orElseThrow();
+      cartRepository.deleteCartByMember(member.getIdx());
+      return true;
+    } catch (IllegalArgumentException e) {
+      log.error("delete cart : no cart");
+      return false;
+    } catch (RuntimeException e) {
+      log.error("delete cart - "+e.getMessage());
+      return false;
+    }
+  }
+
+  @Transactional
+  public boolean deleteCartList(List<Long> itemIdxList) {
+    try {
+      cartRepository.deleteCartByList(itemIdxList);
+      return true;
+    } catch (RuntimeException e) {
+      log.error("delete cart list error - "+e.getMessage());
+    }
+    return false;
+  }
+
+  public int countCart(User user) {
+    try {
+      Member member = memberRepository.findById(user.getUsername()).orElseThrow(()->new UsernameNotFoundException("not user"));
+      return cartRepository.countByMember(member);
+    } catch (NullPointerException | UsernameNotFoundException e) {
+      log.error("cart count error - not user");
+    } catch (RuntimeException e) {
+      log.error("cart count error");
+    }
+    return 0;
+  }
 }

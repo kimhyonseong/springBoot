@@ -166,7 +166,9 @@
                     success: function (data) {
                         console.log(data);
                         // 전체 점수
-                        reviewFrom = reviewFrom.replace("TOTAL_SCORE",data.totalScore.avg.toFixed(2))
+                        let avg = data.totalScore.avg === null ? '아직 평가되지 않았습니다.' : data.totalScore.avg.toFixed(2);
+
+                        reviewFrom = reviewFrom.replace("TOTAL_SCORE",avg)
                             .replace("TOTAL_COUNT",data.totalScore.count);
                         $(".review-total").append(reviewFrom);
 

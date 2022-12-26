@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class CartRepositoryTest {
@@ -42,5 +42,30 @@ class CartRepositoryTest {
     System.out.println(saveCart.get(0).getItemImg());
     System.out.println(saveCart.get(0).getCart());
     System.out.println(saveCart.get(0));
+  }
+
+  @Test
+  void count() {
+    Member member = memberRepository.findById("admin").orElseThrow();
+    System.out.println(cartRepository.countByMember(member));
+  }
+
+  @Test
+  @Transactional
+  void deleteAllByIdx() {
+    Member member = memberRepository.findById("admin").orElseThrow();
+    cartRepository.deleteCartByMember(member.getIdx());
+    System.out.println(cartRepository.findAllByMember(member, Pageable.unpaged()));
+  }
+
+  @Test
+  @Transactional
+  void deleteCartList() {
+    List<Long> list = new ArrayList<>();
+    list.add(1L);
+    list.add(2L);
+    System.out.println(cartRepository.findAll());
+    cartRepository.deleteCartByList(list);
+    System.out.println(cartRepository.findAll());
   }
 }
