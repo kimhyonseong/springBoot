@@ -69,7 +69,7 @@ public class CartRestController {
     return makeResult(memberService.isLogin(user),shopService.deleteCartList(itemIdxList));
   }
 
-  private Map<String, Object> makeResult(boolean login, boolean service) {
+  private Map<String, Object> makeResult(boolean login, int service) {
     int code;
     String message;
     Map<String, Object> map = new HashMap<>();
@@ -79,9 +79,12 @@ public class CartRestController {
       code = 400;
       message = "로그인이 필요합니다.";
     } else {
-      if (service) {
+      if (service == 200) {
         code = 200;
         message = "정상처리 되었습니다.";
+      } else if(service == 501) {
+        code = 401;
+        message = "아이템 갯수가 재고보다 많습니다.";
       } else {
         code = 500;
         message = "에러가 발생하였습니다.";

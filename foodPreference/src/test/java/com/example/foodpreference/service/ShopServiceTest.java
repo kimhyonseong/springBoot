@@ -184,10 +184,10 @@ class ShopServiceTest {
       when(cartRepository.save(any())).thenReturn(cart);
 
       //when
-      boolean result = shopService.addCart(cartDto,user);
+      int result = shopService.addCart(cartDto,user);
 
       //then
-      assertTrue(result);
+      assertEquals(result,200);
     }
 
     @Test
@@ -197,10 +197,10 @@ class ShopServiceTest {
       when(memberRepository.findById(anyString())).thenThrow(new UsernameNotFoundException("no login"));
 
       //when
-      boolean result = shopService.addCart(cartDto,user);
+      int result = shopService.addCart(cartDto,user);
 
       //then
-      assertFalse(result);
+      assertNotEquals(200, result);
     }
 
     @Test
@@ -211,10 +211,10 @@ class ShopServiceTest {
       when(itemRepository.findByIdx(anyLong())).thenReturn(null);
 
       //when
-      boolean result = shopService.addCart(cartDto,user);
+      int result = shopService.addCart(cartDto,user);
 
       //then
-      assertFalse(result);
+      assertNotEquals(200, result);
     }
   }
 
@@ -226,10 +226,10 @@ class ShopServiceTest {
       when(cartRepository.findById(anyLong())).thenReturn(Optional.ofNullable(cart));
 
       //when
-      boolean result = shopService.updateCart(1L,5);
+      int result = shopService.updateCart(1L,5);
 
       //then
-      assertTrue(result);
+      assertEquals(200, result);
     }
 
     @Test
@@ -238,10 +238,10 @@ class ShopServiceTest {
       when(cartRepository.findById(anyLong())).thenThrow(new IllegalArgumentException("no cart"));
 
       //when
-      boolean result = shopService.updateCart(1L,5);
+      int result = shopService.updateCart(1L,5);
 
       //then
-      assertFalse(result);
+      assertNotEquals(result,200);
     }
   }
 
@@ -253,10 +253,10 @@ class ShopServiceTest {
       when(cartRepository.findById(anyLong())).thenReturn(Optional.ofNullable(cart));
 
       //when
-      boolean result = shopService.deleteCart(1L);
+      int result = shopService.deleteCart(1L);
 
       //then
-      assertTrue(result);
+      assertEquals(200,result);
     }
 
     @Test
@@ -265,10 +265,10 @@ class ShopServiceTest {
       when(cartRepository.findById(anyLong())).thenThrow(new IllegalArgumentException("no cart"));
 
       //when
-      boolean result = shopService.deleteCart(1L);
+      int result = shopService.deleteCart(1L);
 
       //then
-      assertFalse(result);
+      assertNotEquals(200,result);
     }
   }
 }

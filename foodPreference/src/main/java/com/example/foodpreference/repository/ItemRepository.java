@@ -51,4 +51,9 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
           "FROM Item AS i LEFT JOIN ItemImg AS img ON i.idx = img.item.idx " +
           "WHERE i.state = 10")
   int countItemJoinImg();
+
+  @Query(value = "SELECT i AS item, img AS itemImg " +
+          "FROM Item AS i LEFT JOIN ItemImg AS img ON i.idx = img.item.idx " +
+          "WHERE i.idx = :itemIdx")
+  ItemJoinImg itemJoinImg(@Param("itemIdx") Long itemIdx);
 }

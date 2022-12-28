@@ -1,16 +1,45 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="layout/base">
+      layout:decorate="~{layout/base}">
 <head>
     <meta charset="UTF-8">
     <title>Item Buy</title>
 </head>
 <body>
 <th:block layout:fragment="content">
-    <form>
-        <img th:src="">
-    </form>
+    <div>
+        <form>
+            <p th:text="${item.get()?.name}"></p>
+            <img th:src="${itemImg.get()?.imgPath+itemImg.get()?.fileName ?: 'https://via.placeholder.com/150'}">
+            <p th:text="|구매수량 : ${amount}|"></p>
+            <div>
+                <p>배송지 정보</p>
+                <label>
+                    배송받을 사람 이름 :
+                    <input type="text" name="addressee">
+                </label>
+                <label>
+                    배송지 :
+                    <input type="text" name="memberAddress">
+                </label>
+            </div>
+        </form>
+        <button id="buy">구매하기</button>
+    </div>
+    <script>
+        document.querySelector("#buy").addEventListener('click',buy);
+
+        function buy() {
+            $.ajax({
+                url:``,
+                type:'POST',
+                success: function (result) {
+
+                }
+            })
+        }
+    </script>
 </th:block>
 </body>
 </html>

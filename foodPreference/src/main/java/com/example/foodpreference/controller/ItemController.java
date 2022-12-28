@@ -1,10 +1,14 @@
 package com.example.foodpreference.controller;
 
 import com.example.foodpreference.domain.Item;
+import com.example.foodpreference.dto.ItemDto;
+import com.example.foodpreference.dto.ItemJoinImg;
 import com.example.foodpreference.service.ItemService;
 import com.example.foodpreference.service.ReviewService;
+import com.example.foodpreference.service.ShopService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -19,6 +23,7 @@ import java.util.Map;
 public class ItemController {
   private final ItemService itemService;
   private final ReviewService reviewService;
+  private final ShopService shopService;
 
   @GetMapping("/itemList")
   public String list() {
@@ -41,8 +46,15 @@ public class ItemController {
   }
 
   @GetMapping("/item/buy")
-  public String itemBuy() {
+  public String itemBuy(Long itemIdx, int amount, Model model, @AuthenticationPrincipal User user) {
+    shopService.tmpBuy(itemIdx,amount,user);
 
+    Map<String, Object> map = itemService.showItemWithImg(itemIdx);
+    map.put("amount",amount);
+
+    System.out.println(map.get("item"));
+    System.out.println(map.get("itemImg"));
+    model.addAllAttributes(map);
     return "item/itemBuy";
   }
 }

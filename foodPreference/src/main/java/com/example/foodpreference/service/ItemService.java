@@ -152,4 +152,20 @@ public class ItemService {
     }
     return returnMap;
   }
+
+  public Map<String,Object> showItemWithImg(Long itemIdx) {
+    Map<String, Object> returnMap = new HashMap<>();
+    ItemJoinImg itemImg = null;
+    Map<String, Object> pageMap = new HashMap<>();
+
+    try {
+      itemImg = itemRepository.itemJoinImg(itemIdx);
+
+      returnMap.put("item",itemImg.getItem());
+      returnMap.put("itemImg",itemImg.getItemImg());
+    } catch (RuntimeException e) {
+      log.error("itemJoinImgList error");
+    }
+    return returnMap;
+  }
 }
