@@ -9,33 +9,52 @@
 <body>
 <th:block layout:fragment="content">
     <div>
-        <form>
+        <div>
+            <input type="hidden" id="itemIdx" th:value="${item.get()?.idx}">
             <p th:text="${item.get()?.name}"></p>
             <img th:src="${itemImg.get()?.imgPath+itemImg.get()?.fileName ?: 'https://via.placeholder.com/150'}">
-            <p th:text="|구매수량 : ${amount}|"></p>
+            <label>구매수량 :
+                <input type="text" id="amount" th:value="${amount}" />
+            </label>
             <div>
                 <p>배송지 정보</p>
                 <label>
                     배송받을 사람 이름 :
-                    <input type="text" name="addressee">
+                    <input type="text" id="addressee" name="addressee">
                 </label>
                 <label>
                     배송지 :
-                    <input type="text" name="memberAddress">
+                    <input type="text" id="memberAddress" name="memberAddress">
                 </label>
             </div>
-        </form>
+        </div>
         <button id="buy">구매하기</button>
+        <button id="cancel">취소</button>
     </div>
     <script>
         document.querySelector("#buy").addEventListener('click',buy);
 
         function buy() {
-            $.ajax({
-                url:``,
-                type:'POST',
-                success: function (result) {
+            const itemIdx = document.querySelector("#itemIdx").value;
+            const item = {
+                amount : document.querySelector("#amount").value,
+                addressee : document.querySelector("#addressee").value,
+                memberAddress : document.querySelector("#memberAddress").value,
+            }
 
+            $.ajax({
+                url:`/item/buy/${itemIdx}`,
+                type:'POST',
+                data:JSON.stringify(item),
+                contentType: 'application/json',
+                success: function (result) {
+                    if (result === 200) {
+                        alert("구매 완료");
+                        // 구매 내역 페이지로 이동하기
+                    } else {
+                        alert("오류가 발생하였습니다.");
+                    }
+                    console.log(result);
                 }
             })
         }

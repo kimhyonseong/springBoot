@@ -1,15 +1,12 @@
 package com.example.foodpreference.service;
 
-import com.example.foodpreference.domain.Cart;
-import com.example.foodpreference.domain.Item;
-import com.example.foodpreference.domain.Member;
-import com.example.foodpreference.domain.OrderTmp;
+import com.example.foodpreference.domain.*;
 import com.example.foodpreference.dto.CartDto;
 import com.example.foodpreference.dto.CartItem;
+import com.example.foodpreference.dto.OrderDto;
 import com.example.foodpreference.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.criterion.Order;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -151,23 +148,25 @@ public class ShopService {
     return 0;
   }
 
+  // 수량 확보를 위한 임시 주문 생성
   @Transactional
   public void tmpBuy(Long itemIdx,int amount, User user) {
     try {
       Item item = itemRepository.findByIdx(itemIdx).orElseThrow();
+      Member member = memberRepository.findById(user.getUsername()).orElseThrow();
+      OrderTmp orderTmp = orderTmpRepository.findByItemAndMember(item,member).orElse(new OrderTmp());
+
+      // 재고가 0이거나 초과 검사
       if (item.getQuantity() < 1) {
         throw new IllegalStateException("sold out");
       } else {
         if (item.getQuantity() - amount < 0) {
-          throw new IllegalStateException("");
+          throw new IllegalStateException("amount over");
         }
-        item.setQuantity(item.getQuantity() - amount);
+        item.setQuantity(item.getQuantity() + orderTmp.getAmount() - amount);
+        itemRepository.save(item);
       }
-      itemRepository.save(item);
 
-      Member member = memberRepository.findById(user.getUsername()).orElseThrow();
-
-      OrderTmp orderTmp = orderTmpRepository.findByItemAndMember(item,member).orElse(new OrderTmp());
       orderTmp.setItem(item);
       orderTmp.setMember(member);
       orderTmp.setAmount(amount);
@@ -178,12 +177,41 @@ public class ShopService {
   }
 
   @Transactional
-  public void buyItem(Long itemIdx, User user) {
-    Member member = memberRepository.findById(user.getUsername()).orElseThrow();
-    Item item = itemRepository.findByIdx(itemIdx).orElseThrow();
-    OrderTmp orderTmp = orderTmpRepository.findByItemAndMember(item, member).orElseThrow();
+  public int buyOneItem(OrderDto orderDto, Long itemIdx, User user) {
+    try {
+      // 회원 및 아이템 확인
+      Member member = memberRepository.findById(user.getUsername()).orElseThrow(()->new UsernameNotFoundException("not user"));
+      Item item = itemRepository.findByIdx(itemIdx).orElseThrow();
 
-    orderHistoryRepository.save();
-    orderItemRepository.save();
+      // 임시 주문 목록 삭제
+      OrderTmp orderTmp = orderTmpRepository.findByItemAndMember(item, member).orElseThrow(()->new IllegalArgumentException(""));
+      orderTmpRepository.delete(orderTmp);
+
+      // 주문내역 저장
+      OrderHistory orderHistory = new OrderHistory();
+      orderHistory.setAddressee(orderDto.getAddressee());
+      orderHistory.setMemberAddress(orderDto.getMemberAddress());
+      orderHistory.setMember(member);
+      orderHistory.setDeliverCost(2500);
+      OrderHistory saveHistory = orderHistoryRepository.save(orderHistory);
+
+      // 주문 내역 속 아이템 저장
+      OrderItem orderItem = new OrderItem();
+      orderItem.setItem(item);
+      orderItem.setItemAmount(orderDto.getAmount());
+      orderItem.setItemPrice(orderDto.getAmount() * item.getPrice());
+      orderItem.setOrderHistory(saveHistory);
+      orderItemRepository.save(orderItem);
+    } catch (IllegalArgumentException e) {
+      log.error("buyItem error - not normal path or no have tmp order");
+      return 402;
+    } catch (NullPointerException | UsernameNotFoundException e) {
+      log.error("buyItem error - no member");
+      return 401;
+    } catch (RuntimeException e) {
+      log.error("buyItem error");
+      return 400;
+    }
+    return 200;
   }
 }

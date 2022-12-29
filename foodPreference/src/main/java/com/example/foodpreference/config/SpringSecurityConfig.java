@@ -38,6 +38,7 @@ public class SpringSecurityConfig {
             .and()
             .csrf().ignoringAntMatchers("/h2-console/**","/admin/item/**","/admin/imgUpload","/itemRest/**","/review/**") // Rest Api
             .ignoringAntMatchers("/api/**")
+            .ignoringAntMatchers("/item/buy/**")
             .and()
             .headers()
             .addHeaderWriter(new XFrameOptionsHeaderWriter(

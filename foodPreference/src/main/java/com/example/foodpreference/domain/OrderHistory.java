@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -32,8 +33,9 @@ public class OrderHistory extends BaseEntity{
   @Comment("배송지")
   private String memberAddress;
 
-  @Comment("배송 중, 배송준비 중, 배송완료, 배송 취소")
-  private String orderState;
+  @Comment("배송 준비 중 : 10, 배송 중 : 20, 배송완료 : 30, 배송 취소 : 90")
+  @ColumnDefault("'10'")
+  private int orderState;
 
   @Comment("배송비")
   private int deliverCost;

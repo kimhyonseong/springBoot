@@ -1,6 +1,5 @@
 package com.example.foodpreference.dto;
 
-import com.example.foodpreference.domain.ItemImg;
 import lombok.*;
 
 @Getter
