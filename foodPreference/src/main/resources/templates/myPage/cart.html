@@ -25,22 +25,23 @@
                             <img src="_IMG" alt="_ITEM_NAME">
                         </div>
                         <div class="item-info">
-                            <div>_ITEM_NAME</div>
+                            <div><a href="/item/_ITEM_NUM">_ITEM_NAME</a></div>
                             <div>_ITEM_QUANTITY</div>
                             <div>_DETAIL</div>
                             <div class="delete-item" data-idx="_CART_INDEX">삭제</div>
                         </div></div>`;
 
         showCart();
-        document.querySelector(".show-more").addEventListener("click",showCart);
-        document.querySelector(".delete-all").addEventListener("click",deleteAll);
-        document.querySelector(".delete-check").addEventListener("click",deleteChecked);
+        document.querySelector(".show-more")?.addEventListener("click",showCart);
+        document.querySelector(".delete-all")?.addEventListener("click",deleteAll);
+        document.querySelector(".delete-check")?.addEventListener("click",deleteChecked);
         document.querySelector(".cart-item-box")?.addEventListener("click",deleteCart);
 
         function showCart() {
             $.ajax({
                 url : `/api/shopping/cart?page=${page}`,
                 success:function (data) {
+                    console.log(data);
                     let html = "";
 
                     Array.from(data.cart).forEach((result) => {
@@ -52,6 +53,7 @@
                             .replace("_ITEM_QUANTITY",result.cart.amount)
                             .replace("_DETAIL",result.cart.item.description)
                             .replace("_IMG",imgSrc)
+                            .replace("_ITEM_NUM",result.cart.item.idx);
                     })
 
                     if (data.totalPage <= data.currentPage) {
@@ -81,6 +83,11 @@
         function deleteChecked() {
             let arr = [];
             let itemIdxList = document.querySelectorAll(".itemCheck:checked");
+
+            if (itemIdxList.length < 1) {
+                alert("삭제할 아이템을 선택해주세요");
+                return false;
+            }
 
             itemIdxList.forEach((ele) => {
                 arr.push(ele.value);
@@ -116,6 +123,25 @@
                     })
                 }
             }
+        }
+
+        function buyAll() {
+            const itemIdxList = {
+
+            }
+
+            $.ajax({
+                url : '',
+                type: 'POST',
+                data: JSON.stringify(itemIdxList),
+                success : function (result) {
+
+                }
+            })
+        }
+
+        function buyCheck() {
+
         }
     </script>
 </th:block>
