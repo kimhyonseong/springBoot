@@ -18,6 +18,6 @@ public class TmpOrderScheduler {
   @Async
   @Scheduled(cron = "0 * * * * *")
   public void deleteTmpOrder() {
-    //
+    orderTmpRepository.deleteTmpOrderByTime(1);
   }
 }

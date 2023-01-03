@@ -44,9 +44,13 @@ class TmpOrderSchedulerTest {
     order2.setRegDate(LocalDateTime.now());
     orderTmpRepository.save(order2);
 
+    List<OrderTmp> list1 = orderTmpRepository.findAll();
+    System.out.println(list1);
+
     System.out.println("시작");
-    // N+1 에러
-    List<OrderTmp> list1 = orderTmpRepository.tmpOrderList(LocalDateTime.now().plusMinutes(1));
+    orderTmpRepository.deleteTmpOrderByTime(1);
+
+    list1 = orderTmpRepository.findAll();
     System.out.println(list1);
   }
 }

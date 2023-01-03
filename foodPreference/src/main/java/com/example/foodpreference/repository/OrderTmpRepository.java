@@ -15,7 +15,6 @@ import java.util.Optional;
 public interface OrderTmpRepository extends JpaRepository<OrderTmp,Long> {
   Optional<OrderTmp> findByItemAndMember(Item item, Member member);
 
-  @Query(value = "SELECT tmp FROM OrderTmp AS tmp WHERE tmp.regDate <= :regDate")
-  List<OrderTmp> tmpOrderList(@Param("regDate") LocalDateTime dateTime);
-  List<OrderTmp> findAllByRegDateLessThanEqual(LocalDateTime dateTime);
+  @Query(value = "DELETE FROM order_tmp WHERE DATE_FORMAT(reg_date,'%Y-%m-%d %H:%i:%s') <= (now() - INTERVAL :minute MINUTE)", nativeQuery = true)
+  void deleteTmpOrderByTime(@Param("minute") int minute);
 }
