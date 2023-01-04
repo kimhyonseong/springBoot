@@ -2,6 +2,8 @@ package com.example.foodpreference.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,4 +16,6 @@ public class OrderDto {
   private int deliverCost;
   private int amount;
   private int itemPrice;
+  private List<Long> cartIdxList;
+  private String mode;
 }

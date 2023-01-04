@@ -5,6 +5,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Cart</title>
+    <style>
+        .cover {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 50%;
+            right: 50%;
+            transform: translate(50%,-50%);
+            background-color: #898484;
+            display: none;
+        }
+    </style>
 </head>
 <body>
 <th:block layout:fragment="content">
@@ -15,20 +27,20 @@
         <div class="order-check">체크항목 구매</div>
         <div class="order-all">전체 구매</div>
         <div class="delete-all">전체 삭제</div>
-
-        <div class="orderInfo" style="display: none; position: absolute;">
-            <input type="hidden" id="mode" value="all">
-            <p>배송지 정보</p>
-            <label>
-                배송받을 사람 이름 :
-                <input type="text" id="addressee" name="addressee">
-            </label>
-            <label>
-                배송지 :
-                <input type="text" id="memberAddress" name="memberAddress">
-            </label>
-            <button class="buy-cart">구매</button>
-        </div>
+    </div>
+    <div class="cover"></div>
+    <div class="orderInfo" style="display: none; position: absolute;">
+        <input type="hidden" id="mode" value="all">
+        <p>배송지 정보</p>
+        <label>
+            배송받을 사람 이름 :
+            <input type="text" id="addressee" name="addressee">
+        </label>
+        <label>
+            배송지 :
+            <input type="text" id="memberAddress" name="memberAddress">
+        </label>
+        <button class="buy-cart">구매</button>
     </div>
     <script>
         let page = 0;
@@ -57,6 +69,7 @@
         function showOrderInfo(e) {
             console.log(e.target)
             document.querySelector(".orderInfo").style.display = "block";
+            document.querySelector(".cover").style.display = "block";
 
             if (e.target.classList.contains("")) {
                 document.querySelector("#mode").value = "";
@@ -153,20 +166,23 @@
 
         function buyAll() {
             // 구분 할수 있어야함 - mode
+            let mode = document.querySelector("#mode").value;
             let arr = [];
-            let itemIdxList = document.querySelectorAll(".itemCheck:checked");
+            let cartIdxList = document.querySelectorAll(".itemCheck:checked");
 
-            itemIdxList.forEach((ele) => {
+            cartIdxList.forEach((ele) => {
                 arr.push(ele.value);
             })
 
             const item = {
+                mode:mode,
                 addressee : document.querySelector("#addressee").value,
                 memberAddress : document.querySelector("#memberAddress").value,
+                cartIdxList : arr
             }
 
             $.ajax({
-                url:`/api/shopping/cart`,
+                url:`/api/shopping/cart/buy`,
                 type:'POST',
                 data:JSON.stringify(item),
                 contentType: 'application/json',

@@ -3,6 +3,7 @@ package com.example.foodpreference.restController;
 import com.example.foodpreference.domain.Cart;
 import com.example.foodpreference.dto.CartDto;
 import com.example.foodpreference.dto.CartItem;
+import com.example.foodpreference.dto.OrderDto;
 import com.example.foodpreference.service.MemberService;
 import com.example.foodpreference.service.ShopService;
 import lombok.RequiredArgsConstructor;
@@ -97,9 +98,11 @@ public class CartRestController {
     return map;
   }
 
-  @PostMapping("/cart")
-  public int buyAllItem(@AuthenticationPrincipal User user,@RequestBody(required = false) List<Long> itemIdxList) {
+  @PostMapping("/cart/buy")
+  public int buyAllItem(@AuthenticationPrincipal User user,
+                        @RequestBody(required = false) OrderDto orderDto) {
     try {
+      System.out.println(orderDto);
       return shopService.buyAllItem(user);
     } catch (RuntimeException e) {
       log.error("item buy all error - "+e.getMessage());
