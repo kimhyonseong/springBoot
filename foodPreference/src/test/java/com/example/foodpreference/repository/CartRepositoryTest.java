@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -67,5 +68,13 @@ class CartRepositoryTest {
     System.out.println(cartRepository.findAll());
     cartRepository.deleteCartByList(list);
     System.out.println(cartRepository.findAll());
+  }
+
+  @Test
+  void findAllByMember() {
+    Member member = memberRepository.findById("admin").orElseThrow(()->new UsernameNotFoundException("not User"));
+    List<CartItem> cartList = cartRepository.findAllJoinMember(member.getIdx(),Pageable.unpaged());
+
+    System.out.println(cartList.size());
   }
 }

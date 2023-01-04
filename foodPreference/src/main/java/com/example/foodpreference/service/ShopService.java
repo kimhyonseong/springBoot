@@ -7,6 +7,7 @@ import com.example.foodpreference.dto.OrderDto;
 import com.example.foodpreference.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.criterion.Order;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -213,5 +214,39 @@ public class ShopService {
       return 400;
     }
     return 200;
+  }
+
+  @Transactional
+  public int buyAllItem(User user) {
+    try {
+      Member member = memberRepository.findById(user.getUsername()).orElseThrow(()->new UsernameNotFoundException("not Member"));
+      List<CartItem> cartItems = cartRepository.findAllJoinMember(member.getIdx(),Pageable.unpaged());
+
+      if (cartItems.size() > 0) {
+        // 주문내역 저장
+//        OrderHistory orderHistory = new OrderHistory();
+//        orderHistory.setAddressee(orderDto.getAddressee());
+//        orderHistory.setMemberAddress(orderDto.getMemberAddress());
+//        orderHistory.setMember(member);
+//        orderHistory.setDeliverCost(2500);
+//        OrderHistory saveHistory = orderHistoryRepository.save(orderHistory);
+//
+//        for (CartItem cartItem : cartItems) {
+//          // 주문 내역 속 아이템 저장
+//          OrderItem orderItem = new OrderItem();
+//          orderItem.setItem(item);
+//          orderItem.setItemAmount(orderDto.getAmount());
+//          orderItem.setItemPrice(orderDto.getAmount() * item.getPrice());
+//          orderItem.setOrderHistory(saveHistory);
+//          orderItemRepository.save(orderItem);
+//        }
+      }
+
+      return 200;
+    } catch (NullPointerException | UsernameNotFoundException e) {
+      return 401;
+    } catch (RuntimeException e) {
+      return 400;
+    }
   }
 }

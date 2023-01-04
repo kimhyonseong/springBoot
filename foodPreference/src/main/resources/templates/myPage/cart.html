@@ -15,6 +15,20 @@
         <div class="order-check">체크항목 구매</div>
         <div class="order-all">전체 구매</div>
         <div class="delete-all">전체 삭제</div>
+
+        <div class="orderInfo" style="display: none; position: absolute;">
+            <input type="hidden" id="mode" value="all">
+            <p>배송지 정보</p>
+            <label>
+                배송받을 사람 이름 :
+                <input type="text" id="addressee" name="addressee">
+            </label>
+            <label>
+                배송지 :
+                <input type="text" id="memberAddress" name="memberAddress">
+            </label>
+            <button class="buy-cart">구매</button>
+        </div>
     </div>
     <script>
         let page = 0;
@@ -36,6 +50,18 @@
         document.querySelector(".delete-all")?.addEventListener("click",deleteAll);
         document.querySelector(".delete-check")?.addEventListener("click",deleteChecked);
         document.querySelector(".cart-item-box")?.addEventListener("click",deleteCart);
+        document.querySelector(".order-all")?.addEventListener("click",showOrderInfo);
+        document.querySelector(".order-check")?.addEventListener("click",showOrderInfo);
+        document.querySelector(".buy-cart")?.addEventListener("click",buyAll);
+
+        function showOrderInfo(e) {
+            console.log(e.target)
+            document.querySelector(".orderInfo").style.display = "block";
+
+            if (e.target.classList.contains("")) {
+                document.querySelector("#mode").value = "";
+            }
+        }
 
         function showCart() {
             $.ajax({
@@ -126,22 +152,52 @@
         }
 
         function buyAll() {
-            const itemIdxList = {
+            // 구분 할수 있어야함 - mode
+            let arr = [];
+            let itemIdxList = document.querySelectorAll(".itemCheck:checked");
 
+            itemIdxList.forEach((ele) => {
+                arr.push(ele.value);
+            })
+
+            const item = {
+                addressee : document.querySelector("#addressee").value,
+                memberAddress : document.querySelector("#memberAddress").value,
             }
 
             $.ajax({
-                url : '',
+                url:`/api/shopping/cart`,
+                type:'POST',
+                data:JSON.stringify(item),
+                contentType: 'application/json',
+                success: function (result) {
+                    if (result === 200) {
+                        alert("구매 완료");
+                        // 구매 내역 페이지로 이동하기
+                    } else {
+                        alert("오류가 발생하였습니다.");
+                    }
+                    console.log(result);
+                }
+            })
+        }
+
+        function buyCheck() {
+            let arr = [];
+            let itemIdxList = document.querySelectorAll(".itemCheck:checked");
+
+            itemIdxList.forEach((ele) => {
+                arr.push(ele.value);
+            })
+
+            $.ajax({
+                url : '/item/buy/cart',
                 type: 'POST',
                 data: JSON.stringify(itemIdxList),
                 success : function (result) {
 
                 }
             })
-        }
-
-        function buyCheck() {
-
         }
     </script>
 </th:block>

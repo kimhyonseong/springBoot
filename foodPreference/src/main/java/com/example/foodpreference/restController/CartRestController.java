@@ -96,4 +96,14 @@ public class CartRestController {
 
     return map;
   }
+
+  @PostMapping("/cart")
+  public int buyAllItem(@AuthenticationPrincipal User user,@RequestBody(required = false) List<Long> itemIdxList) {
+    try {
+      return shopService.buyAllItem(user);
+    } catch (RuntimeException e) {
+      log.error("item buy all error - "+e.getMessage());
+      return 400;
+    }
+  }
 }

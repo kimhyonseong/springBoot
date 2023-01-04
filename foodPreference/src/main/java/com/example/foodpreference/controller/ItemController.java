@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -49,6 +50,12 @@ public class ItemController {
     Map<String, Object> map = itemService.showItemWithImg(itemIdx);
     map.put("amount",amount);
     model.addAllAttributes(map);
+    return "item/itemBuy";
+  }
+
+  @PostMapping("/item/buy/cart")
+  public String itemBuyAll(Model model, @AuthenticationPrincipal User user, @RequestBody(required = false) List<Long> itemIdxList) {
+    System.out.println(itemIdxList);
     return "item/itemBuy";
   }
 }
