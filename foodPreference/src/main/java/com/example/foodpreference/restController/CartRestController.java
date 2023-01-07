@@ -103,7 +103,7 @@ public class CartRestController {
                         @RequestBody(required = false) OrderDto orderDto) {
     try {
       System.out.println(orderDto);
-      return shopService.buyAllItem(user);
+      return shopService.buyAllItem(orderDto, user);
     } catch (RuntimeException e) {
       log.error("item buy all error - "+e.getMessage());
       return 400;

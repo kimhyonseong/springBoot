@@ -7,11 +7,11 @@ insert into member(id,name,password,role) values("user4","user","1234","ROLE_USE
 insert into member(id,name,password,role) values("user5","user","1234","ROLE_USER");
 
 -- 리스트 테스트
-insert into item(code,description,state,name,price,quantity,member_idx) values ("A002","M사",10,"감자튀김1",9900,1000,1);
+insert into item(code,description,state,name,price,quantity,member_idx) values ("A002","M사",10,"감자튀김1",990,1000,1);
 insert into item(code,description,state,name,price,quantity,member_idx) values ("A002","M사",10,"감자튀김2",9900,1000,1);
-insert into item(code,description,state,name,price,quantity,member_idx) values ("A002","M사",10,"감자튀김3",9900,1000,1);
-insert into item(code,description,state,name,price,quantity,member_idx) values ("A002","M사",10,"감자튀김4",9900,1000,1);
-insert into item(code,description,state,name,price,quantity,member_idx) values ("A002","M사",10,"감자튀김5",9900,1000,1);
+insert into item(code,description,state,name,price,quantity,member_idx) values ("A002","M사",10,"감자튀김3",2000,1000,1);
+insert into item(code,description,state,name,price,quantity,member_idx) values ("A002","M사",10,"감자튀김4",1900,1000,1);
+insert into item(code,description,state,name,price,quantity,member_idx) values ("A002","M사",10,"감자튀김5",1990,1000,1);
 insert into item(code,description,state,name,price,quantity,member_idx) values ("A002","M사",10,"감자튀김6",9900,1000,1);
 insert into item(code,description,state,name,price,quantity,member_idx) values ("A002","M사",10,"감자튀김7",9900,1000,1);
 insert into item(code,description,state,name,price,quantity,member_idx) values ("A002","M사",10,"감자튀김8",9900,1000,1);
@@ -42,7 +42,7 @@ insert into review(comment, score,item_idx,member_idx) values ("중간",3,1,6);
 insert into review(comment, score,item_idx,member_idx) values ("별로... 추천 안함",1,1,7);
 insert into review(comment, score,item_idx,member_idx) values ("굳.",5,2,2);
 
-insert into cart(amount,item_idx,member_idx) values(2,1,2);
+insert into cart(amount,item_idx,member_idx) values(10,1,2);
 insert into cart(amount,item_idx,member_idx) values(2,2,2);
 insert into cart(amount,item_idx,member_idx) values(2,3,2);
 insert into cart(amount,item_idx,member_idx) values(2,4,2);
@@ -50,7 +50,7 @@ insert into cart(amount,item_idx,member_idx) values(2,5,2);
 insert into cart(amount,item_idx,member_idx) values(2,6,2);
 insert into cart(amount,item_idx,member_idx) values(2,7,2);
 insert into cart(amount,item_idx,member_idx) values(2,8,2);
-insert into cart(amount,item_idx,member_idx) values(2,9,2);
+insert into cart(amount,item_idx,member_idx) values(5,9,2);
 insert into cart(amount,item_idx,member_idx) values(2,10,2);
 insert into cart(amount,item_idx,member_idx) values(2,11,2);
 insert into cart(amount,item_idx,member_idx) values(2,12,2);
@@ -61,6 +61,6 @@ insert into cart(amount,item_idx,member_idx) values(2,16,2);
 insert into cart(amount,item_idx,member_idx) values(2,17,2);
 insert into cart(amount,item_idx,member_idx) values(2,18,2);
 insert into cart(amount,item_idx,member_idx) values(2,19,2);
-insert into cart(amount,item_idx,member_idx) values(2,20,2);
+insert into cart(amount,item_idx,member_idx) values(7,20,2);
 insert into cart(amount,item_idx,member_idx) values(2,21,2);
 insert into cart(amount,item_idx,member_idx) values(2,22,2);

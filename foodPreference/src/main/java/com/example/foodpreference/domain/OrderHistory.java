@@ -46,9 +46,9 @@ public class OrderHistory extends BaseEntity{
   @JoinColumn(name = "member_idx")
   private Member member;
 
-  @OneToMany
-  @ToString.Exclude
-  @JsonManagedReference
-  @JoinColumn(name = "order_idx")
-  private List<OrderItem> orderItemList = new ArrayList<>();
+//  @OneToMany
+//  @ToString.Exclude
+//  @JsonManagedReference
+//  @JoinColumn(name = "order_idx")
+//  private List<OrderItem> orderItemList = new ArrayList<>();
 }

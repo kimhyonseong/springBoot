@@ -7,14 +7,16 @@ import com.example.foodpreference.dto.OrderDto;
 import com.example.foodpreference.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.criterion.Order;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -217,29 +219,38 @@ public class ShopService {
   }
 
   @Transactional
-  public int buyAllItem(User user) {
+  public int buyAllItem(OrderDto orderDto,User user) {
     try {
       Member member = memberRepository.findById(user.getUsername()).orElseThrow(()->new UsernameNotFoundException("not Member"));
-      List<CartItem> cartItems = cartRepository.findAllJoinMember(member.getIdx(),Pageable.unpaged());
+      List<Cart> cartItems;
+
+      log.info("모드 = "+orderDto.getMode());
+      if (Objects.equals(orderDto.getMode(), "all")) {
+        cartItems = cartRepository.findCartAllByMember(member, Pageable.unpaged());
+      } else {
+        cartItems = cartRepository.findAllByCartIdxList(orderDto.getCartIdxList());
+      }
 
       if (cartItems.size() > 0) {
         // 주문내역 저장
-//        OrderHistory orderHistory = new OrderHistory();
-//        orderHistory.setAddressee(orderDto.getAddressee());
-//        orderHistory.setMemberAddress(orderDto.getMemberAddress());
-//        orderHistory.setMember(member);
-//        orderHistory.setDeliverCost(2500);
-//        OrderHistory saveHistory = orderHistoryRepository.save(orderHistory);
-//
-//        for (CartItem cartItem : cartItems) {
-//          // 주문 내역 속 아이템 저장
-//          OrderItem orderItem = new OrderItem();
-//          orderItem.setItem(item);
-//          orderItem.setItemAmount(orderDto.getAmount());
-//          orderItem.setItemPrice(orderDto.getAmount() * item.getPrice());
-//          orderItem.setOrderHistory(saveHistory);
-//          orderItemRepository.save(orderItem);
-//        }
+        OrderHistory orderHistory = new OrderHistory();
+        orderHistory.setAddressee(orderDto.getAddressee());
+        orderHistory.setMemberAddress(orderDto.getMemberAddress());
+        orderHistory.setMember(member);
+        orderHistory.setDeliverCost(2500);
+        OrderHistory saveHistory = orderHistoryRepository.save(orderHistory);
+
+        for (Cart cartItem : cartItems) {
+          // 주문 내역 속 아이템 저장
+          OrderItem orderItem = new OrderItem();
+          orderItem.setItem(cartItem.getItem());
+          orderItem.setItemAmount(cartItem.getAmount());
+          orderItem.setItemPrice(cartItem.getAmount() * cartItem.getItem().getPrice());
+          orderItem.setOrderHistory(saveHistory);
+          orderItemRepository.save(orderItem);
+        }
+
+        cartRepository.deleteAll(cartItems);
       }
 
       return 200;
@@ -247,6 +258,16 @@ public class ShopService {
       return 401;
     } catch (RuntimeException e) {
       return 400;
+    }
+  }
+
+  public Page<OrderItem> showOrderItems(User user, Pageable pageable) {
+    try {
+      //return orderItemRepository.showOrderItemDesc(user.getUsername());
+      return orderItemRepository.showOrderItemDesc(user.getUsername(),pageable);
+    } catch (RuntimeException e) {
+      log.error(e.getMessage());
+      return null;
     }
   }
 }

@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
@@ -34,7 +35,7 @@ class CartRepositoryTest {
     cart.setMember(member);
     cartRepository.save(cart);
 
-    List<Cart> cartList = cartRepository.findAllByMember(member, Pageable.unpaged());
+    List<Cart> cartList = cartRepository.findCartAllByMember(member, Pageable.unpaged());
     System.out.println(cartList);
     System.out.println(member);
 
@@ -56,7 +57,7 @@ class CartRepositoryTest {
   void deleteAllByIdx() {
     Member member = memberRepository.findById("admin").orElseThrow();
     cartRepository.deleteCartByMember(member.getIdx());
-    System.out.println(cartRepository.findAllByMember(member, Pageable.unpaged()));
+    System.out.println(cartRepository.findCartAllByMember(member, Pageable.unpaged()));
   }
 
   @Test
@@ -71,10 +72,29 @@ class CartRepositoryTest {
   }
 
   @Test
-  void findAllByMember() {
+  void findAllJoinMember() {
     Member member = memberRepository.findById("admin").orElseThrow(()->new UsernameNotFoundException("not User"));
     List<CartItem> cartList = cartRepository.findAllJoinMember(member.getIdx(),Pageable.unpaged());
 
     System.out.println(cartList.size());
+  }
+
+  @Test
+  void findCartAllByMember() {
+    Member member = memberRepository.findById("admin").orElseThrow(()->new UsernameNotFoundException("not User"));
+    List<Cart> cartList = cartRepository.findCartAllByMember(member,Pageable.unpaged());
+
+    System.out.println("카트 리스트 : "+cartList);
+    System.out.println(cartList.get(0).getItem());
+  }
+
+  @Test
+  void findAllByCartIdxList() {
+    List<Long> cartIdxList = Arrays.asList(1L,2L,3L,4L);
+
+    List<Cart> cartList = cartRepository.findAllByCartIdxList(cartIdxList);
+
+    System.out.println(cartList);
+    System.out.println(cartList.get(0).getItem());
   }
 }

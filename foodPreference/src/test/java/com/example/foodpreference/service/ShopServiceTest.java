@@ -78,45 +78,6 @@ class ShopServiceTest {
     cart.setAmount(5);
     cart.setItem(item);
 
-//    class CartItem() {
-//      private Cart cart;
-//      private Item item;
-//      private ItemImg itemImg;
-//
-//      public void setCart(Cart cart) {
-//        this.cart = cart;
-//      }
-//
-//      public void setItem(Item item) {
-//        this.item = item;
-//      }
-//
-//      public void setItemImg(ItemImg itemImg) {
-//        this.itemImg = itemImg;
-//      }
-//
-//      @Override
-//      public Item getItem() {
-//        return item;
-//      }
-//
-//      @Override
-//      public Cart getCart() {
-//        return cart;
-//      }
-//
-//      @Override
-//      public ItemImg getItemImg() {
-//        return itemImg;
-//      }
-//    };
-//
-//    cartItem.setCart(cart);
-//    cartItem.setItem(item);
-//    cartItem.setItemImg(itemImg);
-
-//    cartList.add(cartItem);
-
     cartDto = new CartDto();
 
     user = mock(User.class);

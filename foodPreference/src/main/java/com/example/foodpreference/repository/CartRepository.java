@@ -16,13 +16,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CartRepository extends JpaRepository<Cart,Long> {
-  List<Cart> findAllByMember(Member member, Pageable pageable);
+  @Query("SELECT c AS cart FROM Cart AS c JOIN FETCH c.item WHERE c.member = :member")
+  List<Cart> findCartAllByMember(@Param("member") Member member, Pageable pageable);
+
   Optional<Cart> findByMemberAndItem(Member member, Item item);
 
   @Query("SELECT c AS cart,img AS itemImg FROM Cart AS c JOIN FETCH c.member JOIN FETCH c.item " +
           "LEFT JOIN FETCH ItemImg AS img ON c.item.idx = img.item.idx " +
           "WHERE c.member.idx= :memberIdx")
-  //List<Cart> findAllJoinMember(@Param("memberIdx") Long memberIdx, Pageable pageable);
   List<CartItem> findAllJoinMember(@Param("memberIdx") Long memberIdx, Pageable pageable);
 
   int countByMember(Member member);
@@ -34,4 +35,7 @@ public interface CartRepository extends JpaRepository<Cart,Long> {
   @Modifying
   @Query("DELETE FROM Cart AS c where c.item.idx in (:list)")
   void deleteCartByList(@Param("list") List<Long> list);
+
+  @Query("SELECT c AS cart FROM Cart AS c JOIN FETCH c.item WHERE c.idx IN (:cartIdx)")
+  List<Cart> findAllByCartIdxList(@Param("cartIdx") List<Long> cartIdx);
 }

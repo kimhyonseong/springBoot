@@ -67,11 +67,11 @@
         document.querySelector(".buy-cart")?.addEventListener("click",buyAll);
 
         function showOrderInfo(e) {
-            console.log(e.target)
             document.querySelector(".orderInfo").style.display = "block";
             document.querySelector(".cover").style.display = "block";
 
-            if (e.target.classList.contains("")) {
+            if (e.target.classList.contains("order-check")) {
+                console.log("선택 항목 구매")
                 document.querySelector("#mode").value = "";
             }
         }
@@ -80,7 +80,6 @@
             $.ajax({
                 url : `/api/shopping/cart?page=${page}`,
                 success:function (data) {
-                    console.log(data);
                     let html = "";
 
                     Array.from(data.cart).forEach((result) => {
@@ -111,7 +110,6 @@
                     url: '/api/shopping/cart',
                     type: 'DELETE',
                     success: function (e) {
-                        console.log(e);
                         alert(e.message);
                         location.reload();
                     }
@@ -148,8 +146,6 @@
 
         function deleteCart(e) {
             if (e.target.classList.contains("delete-item")) {
-                console.log(e.target.dataset.idx);
-
                 if (confirm("선택된 아이템을 삭제하시겠습니까?")) {
                     $.ajax({
                         url: `/api/shopping/cart/${e.target.dataset.idx}`,
@@ -165,7 +161,6 @@
         }
 
         function buyAll() {
-            // 구분 할수 있어야함 - mode
             let mode = document.querySelector("#mode").value;
             let arr = [];
             let cartIdxList = document.querySelectorAll(".itemCheck:checked");
@@ -189,29 +184,11 @@
                 success: function (result) {
                     if (result === 200) {
                         alert("구매 완료");
-                        // 구매 내역 페이지로 이동하기
+                        location.href = "/myPage/order";
                     } else {
                         alert("오류가 발생하였습니다.");
                     }
                     console.log(result);
-                }
-            })
-        }
-
-        function buyCheck() {
-            let arr = [];
-            let itemIdxList = document.querySelectorAll(".itemCheck:checked");
-
-            itemIdxList.forEach((ele) => {
-                arr.push(ele.value);
-            })
-
-            $.ajax({
-                url : '/item/buy/cart',
-                type: 'POST',
-                data: JSON.stringify(itemIdxList),
-                success : function (result) {
-
                 }
             })
         }
