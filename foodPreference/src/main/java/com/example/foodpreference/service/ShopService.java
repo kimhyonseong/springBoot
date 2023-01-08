@@ -263,7 +263,8 @@ public class ShopService {
 
   public Page<OrderItem> showOrderItems(User user, Pageable pageable) {
     try {
-      //return orderItemRepository.showOrderItemDesc(user.getUsername());
+      log.info("showOrderItemDesc 시작");
+      //return orderItemRepository.showOrderItemDesc(user.getUsername(),pageable);
       return orderItemRepository.showOrderItemDesc(user.getUsername(),pageable);
     } catch (RuntimeException e) {
       log.error(e.getMessage());

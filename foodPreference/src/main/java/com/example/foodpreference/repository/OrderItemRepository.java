@@ -15,7 +15,23 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
   Optional<OrderItem> findByIdx(Long idx);
   Optional<OrderItem> findByItem(Item item);
 
-  @Query(value = "SELECT o FROM OrderItem AS o JOIN FETCH OrderHistory AS h ON o.orderHistory.idx = h.idx "+
-          "JOIN FETCH o.item WHERE h.member.id = :member order by o.regDate desc")
-  Page<OrderItem> showOrderItemDesc(@Param("member") String memberId, Pageable pageable);
+//  @Query(value = "SELECT o FROM OrderItem AS o JOIN FETCH OrderHistory AS h ON o.orderHistory.idx = h.idx "+
+//          "JOIN FETCH Item AS i ON o.item.idx = i.idx " +
+//          "WHERE h.member.id = :member order by o.regDate desc")
+//  @Query(value = "SELECT o FROM OrderItem AS o "+
+//          "JOIN FETCH o.item " +
+//          "WHERE o.orderHistory.member.id = :member order by o.regDate desc")
+  @Query(value = "SELECT o FROM OrderItem AS o " +
+          "JOIN OrderHistory AS h " +
+          "ON o.orderHistory.idx = h.idx " +
+          "JOIN Item AS i " +
+          "ON o.item.idx = i.idx " +
+          "WHERE h.member.id = :member " +
+          "ORDER BY o.regDate")
+//  @Query(value = "SELECT o FROM OrderItem AS o " +
+//        "JOIN FETCH o.orderHistory h " +
+//        "JOIN FETCH o.item i " +
+//        "WHERE h.member.id = :member " +
+//        "ORDER BY o.regDate")
+  Page<OrderItem> showOrderItemDesc(@Param("member") String memberId,Pageable pageable);
 }
