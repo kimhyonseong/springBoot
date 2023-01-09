@@ -20,7 +20,7 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
           "FROM order_item o " +
           "JOIN order_history h ON o.order_idx = h.idx " +
           "JOIN item i ON o.item_idx = i.idx " +
-          "JOIN item_img img ON i.idx = img.item_idx " +
+          "LEFT JOIN item_img img ON i.idx = img.item_idx " +
           "WHERE h.member_idx = :member ", nativeQuery = true)
   Page<AboutOrder> showOrderItemDesc(@Param("member") Long memberIdx, Pageable pageable);
 
@@ -29,7 +29,7 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
           "FROM order_item o " +
           "JOIN order_history h ON o.order_idx = h.idx " +
           "JOIN item i ON o.item_idx = i.idx " +
-          "JOIN item_img img ON i.idx = img.item_idx " +
+          "LEFT JOIN item_img img ON i.idx = img.item_idx " +
           "WHERE h.member_idx = :member ", nativeQuery = true)
   List<AboutOrder> showOrderItemList(@Param("member") Long memberIdx, Pageable pageable);
 }
