@@ -1,6 +1,7 @@
 package com.example.foodpreference.restController;
 
 import com.example.foodpreference.domain.OrderItem;
+import com.example.foodpreference.dto.AboutOrder;
 import com.example.foodpreference.service.ShopService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ public class OrderRestController {
   private final ShopService shopService;
 
   @GetMapping("/api/order")
-  public Page<OrderItem> showOrderItems(@AuthenticationPrincipal User user, Pageable pageable) {
+  public Page<AboutOrder> showOrderItems(@AuthenticationPrincipal User user, Pageable pageable) {
     try {
       return shopService.showOrderItems(user, pageable);
     } catch (RuntimeException e) {

@@ -9,7 +9,9 @@
 <body>
 <th:block layout:fragment="content">
     <div class="order-box">
-        <div class="order-item-box"></div>
+        <div class="order-item-box">
+            <ul class="order-item-list"></ul>
+        </div>
         <div class="order-page"></div>
     </div>
 
@@ -18,10 +20,20 @@
 
         function showOrderItems() {
             let page = [[${page}]];
+            let listForm = `<li>
+                            <a href="/item/ITEM_NUM">
+                            <p><img src="IMG_SRC" alt="ITEM_NAME"></p>
+                            <p>ITEM_NAME</p>
+                            <p>ORDER_AMOUNT</p>
+                            <p>ORDER_PRICE</p>
+                            </a>
+                            </li>`;
+
             $.ajax({
                 url:`/api/order?page=${page}`,
                 type:`GET`,
                 success:function (data) {
+                    console.log(data.content);
                     console.log(data);
                 }
             })

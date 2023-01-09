@@ -1,6 +1,7 @@
 package com.example.foodpreference.service;
 
 import com.example.foodpreference.domain.*;
+import com.example.foodpreference.dto.AboutOrder;
 import com.example.foodpreference.dto.CartDto;
 import com.example.foodpreference.dto.CartItem;
 import com.example.foodpreference.dto.OrderDto;
@@ -261,11 +262,11 @@ public class ShopService {
     }
   }
 
-  public Page<OrderItem> showOrderItems(User user, Pageable pageable) {
+  public Page<AboutOrder> showOrderItems(User user, Pageable pageable) {
     try {
       log.info("showOrderItemDesc 시작");
-      //return orderItemRepository.showOrderItemDesc(user.getUsername(),pageable);
-      return orderItemRepository.showOrderItemDesc(user.getUsername(),pageable);
+      Member member = memberRepository.findById(user.getUsername()).orElseThrow();
+      return orderItemRepository.showOrderItemDesc(member.getIdx(),pageable);
     } catch (RuntimeException e) {
       log.error(e.getMessage());
       return null;
