@@ -10,14 +10,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -262,11 +261,17 @@ public class ShopService {
     }
   }
 
-  public Page<AboutOrder> showOrderItems(User user, Pageable pageable) {
+  public Map<String,Object> showOrderItems(User user, Pageable pageable) {
+    Map<String, Object> map = new HashMap<>();
     try {
       log.info("showOrderItemDesc 시작");
       Member member = memberRepository.findById(user.getUsername()).orElseThrow();
-      return orderItemRepository.showOrderItemDesc(member.getIdx(),pageable);
+      Slice<AboutOrder> orders = orderHistoryRepository.showOrderHistory(member.getIdx(),pageable);
+
+      System.out.println(orders.getContent().get(0));
+      System.out.println(orders.getContent().get(0).getOrderItem());
+      map.put("contents",orders.getContent());
+      return map;
     } catch (RuntimeException e) {
       log.error(e.getMessage());
       return null;

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
@@ -62,24 +63,11 @@ class OrderItemRepositoryTest {
     orderItemRepository.save(orderItem3);
 
     System.out.println("시작");
-    List<AboutOrder> orderItem = orderItemRepository.showOrderItemList(2L, Pageable.unpaged());
-//    System.out.println(orderItem.get(0).getIdx());
-//    System.out.println(orderItem.get(0).getItemIdx());
-//    System.out.println(orderItem.get(0).getItemAmount());
-//    System.out.println(orderItem.get(0).getItemPrice());
-//    System.out.println(orderItem.get(0).getFileName());
-//    System.out.println(orderItem.get(0).getImgPath());
-//    System.out.println(orderItem.get(0).getName());
-//
-//    System.out.println(orderItem.get(1).getIdx());
-//    System.out.println(orderItem.get(1).getItemIdx());
-//    System.out.println(orderItem.get(1).getItemAmount());
-//    System.out.println(orderItem.get(1).getItemPrice());
-//    System.out.println(orderItem.get(1).getFileName());
-//    System.out.println(orderItem.get(1).getImgPath());
-//    System.out.println(orderItem.get(1).getName());
 
-    Page<AboutOrder> order = orderItemRepository.showOrderItemDesc(2L,Pageable.unpaged());
-    System.out.println(order.getContent().get(1).getName());
+    Slice<AboutOrder> orderItems = orderItemRepository.showOrderItemDesc(2L,Pageable.unpaged());
+    System.out.println(orderItems.getNumberOfElements());
+
+    assertNotNull(orderItems);
+    assertEquals(3, orderItems.getNumberOfElements());
   }
 }
