@@ -8,16 +8,14 @@ import com.example.foodpreference.dto.OrderDto;
 import com.example.foodpreference.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -262,11 +260,34 @@ public class ShopService {
     }
   }
 
-  public Page<AboutOrder> showOrderItems(User user, Pageable pageable) {
+  public Map<String,Object> showOrderItems(User user, Pageable pageable) {
+    Map<String, Object> map = new HashMap<>();
     try {
+      // content - orderHistory : {...,list : {}}
       log.info("showOrderItemDesc 시작");
+      Map<String,Object> content = new HashMap<>();
+      List<Object> orderItem = new ArrayList<>();
+      List<Object> itemImg = new ArrayList<>();
+      Set<Object> orderHistory = new HashSet<>();
+      List<Object> item = new ArrayList<>();
       Member member = memberRepository.findById(user.getUsername()).orElseThrow();
-      return orderItemRepository.showOrderItemDesc(member.getIdx(),pageable);
+      Slice<AboutOrder> orders = orderHistoryRepository.showOrderHistory(member.getIdx(),pageable);
+
+      for (int i=0; i<orders.getContent().size(); i++) {
+        orderHistory.add(orders.getContent().get(i).getOrderHistoryDto());
+        orderItem.add(orders.getContent().get(i).getOrderItem());
+        itemImg.add(orders.getContent().get(i).getItemImg());
+        item.add(orders.getContent().get(i).getItem());
+      }
+
+      content.put("orderHistory",orderHistory);
+      content.put("orderItem",orderItem);
+      content.put("itemImg",itemImg);
+      content.put("item",item);
+
+      map.put("contents",content);
+      map.put("nextPage",orders.isLast());
+      return map;
     } catch (RuntimeException e) {
       log.error(e.getMessage());
       return null;

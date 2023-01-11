@@ -9,7 +9,7 @@
         .cover {
             width: 100%;
             height: 100%;
-            position: absolute;
+            position: fixed;
             top: 50%;
             right: 50%;
             transform: translate(50%,-50%);
@@ -29,7 +29,7 @@
         <div class="delete-all">전체 삭제</div>
     </div>
     <div class="cover"></div>
-    <div class="orderInfo" style="display: none; position: absolute;">
+    <div class="orderInfo" style="display: none; position: fixed;">
         <input type="hidden" id="mode" value="all">
         <p>배송지 정보</p>
         <label>
