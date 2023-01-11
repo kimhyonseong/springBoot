@@ -8,10 +8,20 @@ import com.example.foodpreference.dto.AboutOrder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+<<<<<<< HEAD
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 import java.util.*;
+=======
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+>>>>>>> fea91f8504707c804b1f9a13c072962dac5e71c7
 
 @SpringBootTest
 class OrderHistoryRepositoryTest {
@@ -94,6 +104,7 @@ class OrderHistoryRepositoryTest {
     System.out.println("시작");
 
     Slice<AboutOrder> orderHistory = orderHistoryRepository.showOrderHistory(2L, Pageable.unpaged());
+<<<<<<< HEAD
     //System.out.println(orderHistory.getContent().get(0).getOrderHistoryDto());
     //System.out.println(orderHistory.getContent().get(0).getOrderItem());
 
@@ -120,5 +131,9 @@ class OrderHistoryRepositoryTest {
 
     map.put("contents",content);
     System.out.println(map);
+=======
+    System.out.println(orderHistory.getContent().get(0).getOrderHistory());
+    System.out.println(orderHistory.getContent().get(0).getOrderItem());
+>>>>>>> fea91f8504707c804b1f9a13c072962dac5e71c7
   }
 }
