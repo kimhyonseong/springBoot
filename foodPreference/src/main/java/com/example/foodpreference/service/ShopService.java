@@ -268,21 +268,13 @@ public class ShopService {
       Map<String,Object> content = new HashMap<>();
       List<Object> orderItem = new ArrayList<>();
       List<Object> itemImg = new ArrayList<>();
-<<<<<<< HEAD
       Set<Object> orderHistory = new HashSet<>();
-=======
-      List<Object> orderHistory = new ArrayList<>();
->>>>>>> fea91f8504707c804b1f9a13c072962dac5e71c7
       List<Object> item = new ArrayList<>();
       Member member = memberRepository.findById(user.getUsername()).orElseThrow();
       Slice<AboutOrder> orders = orderHistoryRepository.showOrderHistory(member.getIdx(),pageable);
 
       for (int i=0; i<orders.getContent().size(); i++) {
-<<<<<<< HEAD
         orderHistory.add(orders.getContent().get(i).getOrderHistoryDto());
-=======
-        orderHistory.add(orders.getContent().get(i).getOrderHistory());
->>>>>>> fea91f8504707c804b1f9a13c072962dac5e71c7
         orderItem.add(orders.getContent().get(i).getOrderItem());
         itemImg.add(orders.getContent().get(i).getItemImg());
         item.add(orders.getContent().get(i).getItem());
