@@ -9,9 +9,7 @@
 <body>
 <th:block layout:fragment="content">
     <div class="order-box">
-        <div class="order-item-box">
-            <ul class="order-item-list"></ul>
-        </div>
+        <div class="order-item-box"></div>
         <div class="order-page"></div>
     </div>
 
@@ -33,8 +31,16 @@
                 url:`/api/order?page=${page}`,
                 type:`GET`,
                 success:function (data) {
-                    console.log(data.content);
+                    let html = "";
+                    console.log(data.contents.orderItem);
+                    console.log(data.contents.item);
+                    console.log(data.contents.orderHistory);
+                    console.log(data.contents.itemImg);
                     console.log(data);
+
+                    html = listForm.replace();
+                    document.querySelector(".order-item-box").append();
+                    //'<ul class="order-item-list"></ul>'
                 }
             })
         }

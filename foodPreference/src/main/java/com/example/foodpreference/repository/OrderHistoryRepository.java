@@ -21,7 +21,7 @@ public interface OrderHistoryRepository extends JpaRepository<OrderHistory,Long>
           "JOIN FETCH OrderItem o ON h.idx = o.orderHistory.idx " +
           "JOIN FETCH h.member " +
           "JOIN FETCH Item i ON i.idx = o.item.idx " +
-          "JOIN FETCH ItemImg img ON i.idx = img.item.idx " +
+          "LEFT JOIN FETCH ItemImg img ON i.idx = img.item.idx " +
           "WHERE h.member.idx = :member")
   Slice<AboutOrder> showOrderHistory(@Param("member") Long memberIdz, Pageable pageable);
 }

@@ -265,12 +265,28 @@ public class ShopService {
     Map<String, Object> map = new HashMap<>();
     try {
       log.info("showOrderItemDesc 시작");
+      Map<String,Object> content = new HashMap<>();
+      List<Object> orderItem = new ArrayList<>();
+      List<Object> itemImg = new ArrayList<>();
+      List<Object> orderHistory = new ArrayList<>();
+      List<Object> item = new ArrayList<>();
       Member member = memberRepository.findById(user.getUsername()).orElseThrow();
       Slice<AboutOrder> orders = orderHistoryRepository.showOrderHistory(member.getIdx(),pageable);
 
-      System.out.println(orders.getContent().get(0));
-      System.out.println(orders.getContent().get(0).getOrderItem());
-      map.put("contents",orders.getContent());
+      for (int i=0; i<orders.getContent().size(); i++) {
+        orderHistory.add(orders.getContent().get(i).getOrderHistory());
+        orderItem.add(orders.getContent().get(i).getOrderItem());
+        itemImg.add(orders.getContent().get(i).getItemImg());
+        item.add(orders.getContent().get(i).getItem());
+      }
+
+      content.put("orderHistory",orderHistory);
+      content.put("orderItem",orderItem);
+      content.put("itemImg",itemImg);
+      content.put("item",item);
+
+      map.put("contents",content);
+      map.put("nextPage",orders.isLast());
       return map;
     } catch (RuntimeException e) {
       log.error(e.getMessage());
