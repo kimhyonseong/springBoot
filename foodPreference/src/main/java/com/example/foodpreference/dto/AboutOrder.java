@@ -8,6 +8,6 @@ import com.example.foodpreference.domain.OrderItem;
 public interface AboutOrder {
   Item getItem();
   ItemImg getItemImg();
-  OrderHistoryDto getOrderHistoryDto();
+  OrderHistory getOrderHistory();
   OrderItem getOrderItem();
 }

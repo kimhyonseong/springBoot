@@ -274,14 +274,12 @@ public class ShopService {
       Slice<AboutOrder> orders = orderHistoryRepository.showOrderHistory(member.getIdx(),pageable);
 
       for (int i=0; i<orders.getContent().size(); i++) {
-        orderHistory.add(orders.getContent().get(i).getOrderHistoryDto());
-        orderItem.add(orders.getContent().get(i).getOrderItem());
+        orderHistory.add(orders.getContent().get(i).getOrderHistory());
         itemImg.add(orders.getContent().get(i).getItemImg());
         item.add(orders.getContent().get(i).getItem());
       }
 
       content.put("orderHistory",orderHistory);
-      content.put("orderItem",orderItem);
       content.put("itemImg",itemImg);
       content.put("item",item);
 

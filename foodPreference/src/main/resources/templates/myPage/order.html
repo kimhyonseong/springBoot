@@ -22,8 +22,8 @@
                             <a href="/item/ITEM_NUM">
                             <p><img src="IMG_SRC" alt="ITEM_NAME"></p>
                             <p>ITEM_NAME</p>
-                            <p>ORDER_AMOUNT</p>
-                            <p>ORDER_PRICE</p>
+                            <p>구매 수량 : ORDER_AMOUNT</p>
+                            <p>총 금액 : ORDER_PRICE</p>
                             </a>
                             </li>`;
 
@@ -31,17 +31,31 @@
                 url:`/api/order?page=${page}`,
                 type:`GET`,
                 success:function (data) {
-                    let html = "";
-                    console.log(data.contents.orderItem);
-                    console.log(data.contents.item);
-                    console.log(data.contents.orderHistory);
-                    console.log(data.contents.itemImg);
-                    console.log(data);
+                    let html = document.querySelector(".order-item-box").innerHTML;
 
+                    Array.from(data.contents.orderHistory).forEach(function (ele) {
+                        html += "<ul>";
+                        html += `<li class='order-date'>${ele.regDate}</li>`;
 
+                        for (let i=0; i<ele.orderItemList.length; i++) {
+                            let imgPath = data.contents.itemImg[i]?.imgPath;
+                            let fileName = data.contents.itemImg[i]?.fileName;
+                            let imgSrc = imgPath + fileName;
 
-                    html += listForm.replace("ITEM_NUM",);
-                    document.querySelector(".order-item-box").append();
+                            if (fileName === null || fileName === undefined) {
+                                imgSrc = "https://via.placeholder.com/150";
+                            }
+
+                            html += listForm.replace("ITEM_NUM",data.contents.item[i].idx)
+                                .replace("IMG_SRC",imgSrc)
+                                .replaceAll("ITEM_NAME",data.contents.item[i].name)
+                                .replace("ORDER_AMOUNT",ele.orderItemList[i].itemAmount)
+                                .replace("ORDER_PRICE",ele.orderItemList[i].itemPrice)
+                            ;
+                        }
+                        html += "</ul>";
+                    })
+                    document.querySelector(".order-item-box").innerHTML = html;
                     //'<ul class="order-item-list"></ul>'
                 }
             })

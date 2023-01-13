@@ -94,11 +94,8 @@ class OrderHistoryRepositoryTest {
     System.out.println("시작");
 
     Slice<AboutOrder> orderHistory = orderHistoryRepository.showOrderHistory(2L, Pageable.unpaged());
-    //System.out.println(orderHistory.getContent().get(0).getOrderHistoryDto());
-    //System.out.println(orderHistory.getContent().get(0).getOrderItem());
 
     Map<String,Object> content = new HashMap<>();
-    List<Object> orderItem = new ArrayList<>();
     List<Object> itemImg = new ArrayList<>();
     Set<Object> orderHistorySet = new HashSet<>();
     List<Object> item = new ArrayList<>();
@@ -106,15 +103,12 @@ class OrderHistoryRepositoryTest {
     Map<String, Object> map = new HashMap<>();
 
     for (int i=0; i<orderHistory.getContent().size(); i++) {
-      orderHistorySet.add(orderHistory.getContent().get(i).getOrderHistoryDto());
-//      orderHistorySet.add(orderHistory.getContent().get(i));
-      orderItem.add(orderHistory.getContent().get(i).getOrderItem());
+      orderHistorySet.add(orderHistory.getContent().get(i).getOrderHistory());
       itemImg.add(orderHistory.getContent().get(i).getItemImg());
       item.add(orderHistory.getContent().get(i).getItem());
     }
 
     content.put("orderHistory",orderHistorySet);
-    content.put("orderItem",orderItem);
     content.put("itemImg",itemImg);
     content.put("item",item);
 

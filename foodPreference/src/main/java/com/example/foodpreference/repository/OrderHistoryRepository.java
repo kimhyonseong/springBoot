@@ -16,7 +16,7 @@ import java.util.Optional;
 public interface OrderHistoryRepository extends JpaRepository<OrderHistory,Long> {
   Optional<OrderHistory> findByIdx(Long idx);
 
-  @Query(value = "SELECT h AS orderHistoryDto, o AS orderItem, i AS item, img AS itemImg "+
+  @Query(value = "SELECT h AS orderHistory, o AS orderItem, i AS item, img AS itemImg "+
           "FROM OrderHistory h " +
           "JOIN FETCH OrderItem o ON h.idx = o.orderHistory.idx " +
           "JOIN FETCH h.member " +
