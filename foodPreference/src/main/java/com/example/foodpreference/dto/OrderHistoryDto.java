@@ -1,21 +1,12 @@
 package com.example.foodpreference.dto;
 
-import com.example.foodpreference.domain.BaseEntity;
-import lombok.*;
+import java.time.LocalDateTime;
 
-import java.util.HashMap;
-import java.util.Map;
-
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
-public class OrderHistoryDto extends BaseEntity {
-  private Long idx;
-  private String addressee;
-  private String memberAddress;
-  private int orderState;
-  private int deliverCost;
-  //private Map<String, Object> lists = new HashMap<>();
+public interface OrderHistoryDto {
+  Long getIdx();
+  String getAddressee();
+  String getMember_address();
+  int getOrder_state();
+  int getDeliver_cost();
+  LocalDateTime getReg_date();
 }

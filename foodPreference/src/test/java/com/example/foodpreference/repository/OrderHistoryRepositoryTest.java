@@ -4,7 +4,10 @@ import com.example.foodpreference.domain.Item;
 import com.example.foodpreference.domain.Member;
 import com.example.foodpreference.domain.OrderHistory;
 import com.example.foodpreference.domain.OrderItem;
-import com.example.foodpreference.dto.AboutOrder;
+import com.example.foodpreference.dto.OrderDto;
+import com.example.foodpreference.dto.OrderHistoryDto;
+import com.example.foodpreference.dto.OrderItemDto;
+import com.example.foodpreference.dto.OrderItemImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -93,26 +96,68 @@ class OrderHistoryRepositoryTest {
 
     System.out.println("시작");
 
-    Slice<AboutOrder> orderHistory = orderHistoryRepository.showOrderHistory(2L, Pageable.unpaged());
+    Slice<OrderHistoryDto> orderHistory = orderHistoryRepository.showOrderHistory(2L, Pageable.unpaged());
 
-    Map<String,Object> content = new HashMap<>();
-    List<Object> itemImg = new ArrayList<>();
-    Set<Object> orderHistorySet = new HashSet<>();
-    List<Object> item = new ArrayList<>();
-
-    Map<String, Object> map = new HashMap<>();
+    /*
+    {
+        order : [
+          {
+            주소 : "주소",
+            받는 사람: "이름",
+            orderItem : [
+              {
+                수량 : 10,
+                총 가격 : 10000,
+                이름 : "사과",
+                이미지 : "http://img.co.kr/image1.jpg",
+                아이템 링크(아이템 스퀀스) : 1L
+              },
+              {
+                수량 : 20,
+                총 가격 : 20000,
+                이름 : "바나나",
+                이미지 : "http://img.co.kr/image2.jpg",
+                아이템 링크(아이템 스퀀스) : 2L
+              }
+            ]
+          }, {}, {}
+        ]
+    }
+     */
+    Map<String,Object> order = new HashMap<>();
+    List<Object> orderList = new ArrayList<>();
+    List<Object> dtoList = new ArrayList<>();
 
     for (int i=0; i<orderHistory.getContent().size(); i++) {
-      orderHistorySet.add(orderHistory.getContent().get(i).getOrderHistory());
-      itemImg.add(orderHistory.getContent().get(i).getItemImg());
-      item.add(orderHistory.getContent().get(i).getItem());
+      OrderDto orderDto = new OrderDto();
+      orderDto.setOrderState(orderHistory.getContent().get(i).getOrder_state());
+      orderDto.setAddressee(orderHistory.getContent().get(i).getAddressee());
+      orderDto.setMemberAddress(orderHistory.getContent().get(i).getMember_address());
+      orderDto.setDeliverCost(orderHistory.getContent().get(i).getDeliver_cost());
+
+      List<OrderItemImpl> orderItemDtoList = orderItemRepository.orderItemList(orderHistory.getContent().get(i).getIdx());
+
+      for (OrderItemImpl orderItem : orderItemDtoList) {
+        OrderItemDto orderItemDto = new OrderItemDto();
+
+        orderItemDto.setIdx(orderItem.getIdx());
+        orderItemDto.setItemIdx(orderItem.getItemIdx());
+        orderItemDto.setName(orderItem.getName());
+        orderItemDto.setPath(orderItem.getPath());
+        orderItemDto.setImgName(orderItem.getImgName());
+        orderItemDto.setAmount(orderItem.getAmount());
+        orderItemDto.setPrice(orderItem.getPrice());
+
+        System.out.println(orderItem.getName());
+
+        dtoList.add(orderItemDto);
+      }
+      orderDto.setList(dtoList);
+
+      orderList.add(orderDto);
     }
 
-    content.put("orderHistory",orderHistorySet);
-    content.put("itemImg",itemImg);
-    content.put("item",item);
-
-    map.put("contents",content);
-    System.out.println(map);
+    order.put("order",orderList);
+    System.out.println(order);
   }
 }

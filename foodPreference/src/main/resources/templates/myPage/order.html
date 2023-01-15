@@ -33,24 +33,24 @@
                 success:function (data) {
                     let html = document.querySelector(".order-item-box").innerHTML;
 
-                    Array.from(data.contents.orderHistory).forEach(function (ele) {
+                    Array.from(data.contents).forEach(function (ele) {
                         html += "<ul>";
                         html += `<li class='order-date'>${ele.regDate}</li>`;
 
-                        for (let i=0; i<ele.orderItemList.length; i++) {
-                            let imgPath = data.contents.itemImg[i]?.imgPath;
-                            let fileName = data.contents.itemImg[i]?.fileName;
+                        for (let i=0; i<ele.list.length; i++) {
+                            let imgPath = ele.list[i]?.path;
+                            let fileName = ele.list[i]?.imgName;
                             let imgSrc = imgPath + fileName;
 
                             if (fileName === null || fileName === undefined) {
                                 imgSrc = "https://via.placeholder.com/150";
                             }
 
-                            html += listForm.replace("ITEM_NUM",data.contents.item[i].idx)
+                            html += listForm.replace("ITEM_NUM",ele.list[i].itemIdx)
                                 .replace("IMG_SRC",imgSrc)
-                                .replaceAll("ITEM_NAME",data.contents.item[i].name)
-                                .replace("ORDER_AMOUNT",ele.orderItemList[i].itemAmount)
-                                .replace("ORDER_PRICE",ele.orderItemList[i].itemPrice)
+                                .replaceAll("ITEM_NAME",ele.list[i].name)
+                                .replace("ORDER_AMOUNT",ele.list[i].amount)
+                                .replace("ORDER_PRICE",ele.list[i].price)
                             ;
                         }
                         html += "</ul>";

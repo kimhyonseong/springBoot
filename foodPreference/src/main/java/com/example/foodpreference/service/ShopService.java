@@ -1,10 +1,7 @@
 package com.example.foodpreference.service;
 
 import com.example.foodpreference.domain.*;
-import com.example.foodpreference.dto.AboutOrder;
-import com.example.foodpreference.dto.CartDto;
-import com.example.foodpreference.dto.CartItem;
-import com.example.foodpreference.dto.OrderDto;
+import com.example.foodpreference.dto.*;
 import com.example.foodpreference.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -262,28 +259,45 @@ public class ShopService {
 
   public Map<String,Object> showOrderItems(User user, Pageable pageable) {
     Map<String, Object> map = new HashMap<>();
+
     try {
-      // content - orderHistory : {...,list : {}}
       log.info("showOrderItemDesc 시작");
-      Map<String,Object> content = new HashMap<>();
-      List<Object> orderItem = new ArrayList<>();
-      List<Object> itemImg = new ArrayList<>();
-      Set<Object> orderHistory = new HashSet<>();
-      List<Object> item = new ArrayList<>();
+      List<Object> orderList = new ArrayList<>();
+
+
       Member member = memberRepository.findById(user.getUsername()).orElseThrow();
-      Slice<AboutOrder> orders = orderHistoryRepository.showOrderHistory(member.getIdx(),pageable);
+      Slice<OrderHistoryDto> orders = orderHistoryRepository.showOrderHistory(member.getIdx(),pageable);
 
       for (int i=0; i<orders.getContent().size(); i++) {
-        orderHistory.add(orders.getContent().get(i).getOrderHistory());
-        itemImg.add(orders.getContent().get(i).getItemImg());
-        item.add(orders.getContent().get(i).getItem());
+        List<Object> dtoList = new ArrayList<>();
+        OrderDto orderDto = new OrderDto();
+        orderDto.setOrderState(orders.getContent().get(i).getOrder_state());
+        orderDto.setAddressee(orders.getContent().get(i).getAddressee());
+        orderDto.setMemberAddress(orders.getContent().get(i).getMember_address());
+        orderDto.setDeliverCost(orders.getContent().get(i).getDeliver_cost());
+        orderDto.setRegDate(orders.getContent().get(i).getReg_date());
+
+        List<OrderItemImpl> orderItemDtoList = orderItemRepository.orderItemList(orders.getContent().get(i).getIdx());
+
+        for (OrderItemImpl orderItem : orderItemDtoList) {
+          OrderItemDto orderItemDto = new OrderItemDto();
+
+          orderItemDto.setIdx(orderItem.getIdx());
+          orderItemDto.setItemIdx(orderItem.getItemIdx());
+          orderItemDto.setName(orderItem.getName());
+          orderItemDto.setPath(orderItem.getPath());
+          orderItemDto.setImgName(orderItem.getImgName());
+          orderItemDto.setAmount(orderItem.getAmount());
+          orderItemDto.setPrice(orderItem.getPrice());
+
+          dtoList.add(orderItemDto);
+        }
+        orderDto.setList(dtoList);
+
+        orderList.add(orderDto);
       }
 
-      content.put("orderHistory",orderHistory);
-      content.put("itemImg",itemImg);
-      content.put("item",item);
-
-      map.put("contents",content);
+      map.put("contents",orderList);
       map.put("nextPage",orders.isLast());
       return map;
     } catch (RuntimeException e) {
